@@ -34,19 +34,14 @@
         "jsx-a11y/anchor-is-valid": 0,
         "prefer-destructuring": 0,
         "no-shadow": 0,
-        "no-unused-vars": [
-            0,
-            {
-                "ignoreRestSiblings": false
-            }
-        ],
+        "no-unused-vars": "off",
         "prettier/prettier": [
-            2,
+            0,
             {
                 "bracketSpacing": true,
                 "printWidth": 140,
-                "singleQuote": true,
-                "trailingComma": "none",
+                "singleQuote": false,
+                "trailingComma": "true",
                 "tabWidth": 4,
                 "useTabs": false,
                 "endOfLine": "auto"
