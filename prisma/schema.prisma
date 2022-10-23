@@ -1,0 +1,175 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int        @id @default(autoincrement())
+  email       String     @unique
+  password    String
+  name        String?
+  phone       String?
+  created     DateTime?  @default(now())
+  isActive    Boolean    @default(true)
+  lastActive  DateTime   @updatedAt
+  prefs       UserPrefs?
+  cart        Cart?
+  wishlist    Wishlist?
+  wishlistId  Int?
+  userGroup   UserGroup  @relation(fields: [userGroupId], references: [id])
+  userGroupId Int        @default(1)
+  order       Order[]
+}
+
+model UserGroup {
+  id    Int    @id @default(autoincrement())
+  title String
+  user  User[]
+}
+
+model UserPrefs {
+  id     Int   @id @default(autoincrement())
+  prefs  Json?
+  user   User  @relation(fields: [userId], references: [id])
+  userId Int   @unique
+}
+
+model Cart {
+  id      Int           @id @default(autoincrement())
+  details CartDetails[]
+  user    User          @relation(fields: [userId], references: [id])
+  userId  Int           @unique
+}
+
+model CartDetails {
+  id        Int      @id @default(autoincrement())
+  product   Product? @relation(fields: [productId], references: [id])
+  productId Int?
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  cartId    Int      @unique
+}
+
+model Wishlist {
+  id      Int               @id @default(autoincrement())
+  details WishlistDetails[]
+  user    User              @relation(fields: [userId], references: [id])
+  userId  Int               @unique
+}
+
+model WishlistDetails {
+  id         Int      @id @default(autoincrement())
+  product    Product? @relation(fields: [productId], references: [id])
+  productId  Int?
+  wishlist   Wishlist @relation(fields: [wishlistId], references: [id])
+  wishlistId Int      @unique
+}
+
+model Product {
+  id              Int               @id @default(autoincrement())
+  sku             String            @unique
+  price           Int               @default(0)
+  priceBefore     Int?
+  discount        Int?
+  created         DateTime?         @default(now())
+  updated         DateTime?         @updatedAt
+  isActive        Boolean           @default(true)
+  title           String?
+  description     String?
+  text            String?
+  seoH1           String?
+  seoTitle        String?
+  seoDescription  String?
+  images          Json?
+  brand           Brand             @relation(fields: [brandId], references: [id])
+  brandId         Int               @default(1)
+  category        Category          @relation(fields: [categoryId], references: [id])
+  categoryId      Int               @default(1)
+  WishlistDetails WishlistDetails[]
+  CartDetails     CartDetails[]
+  OrderProducts   OrderProducts[]
+}
+
+model Category {
+  id             Int       @id @default(autoincrement())
+  created        DateTime? @default(now())
+  updated        DateTime? @updatedAt
+  isActive       Boolean   @default(true)
+  title          String
+  seoH1          String?
+  seoTitle       String?
+  seoDescription String?
+  text           String?
+  thumbnail      String?
+  parentCategory Int       @default(1)
+  Product        Product[]
+}
+
+model Brand {
+  id             Int       @id @default(autoincrement())
+  created        DateTime? @default(now())
+  updated        DateTime? @updatedAt
+  isActive       Boolean   @default(true)
+  title          String
+  seoH1          String?
+  seoTitle       String?
+  seoDescription String?
+  text           String?
+  thumbnail      String?
+  logo           String?
+  Product        Product[]
+}
+
+model Order {
+  id            Int           @id @default(autoincrement())
+  created       DateTime?     @default(now())
+  updated       DateTime?     @updatedAt
+  User          User          @relation(fields: [userId], references: [id])
+  userId        Int
+  total         Int
+  status        OrderStatus   @relation(fields: [statusId], references: [id])
+  statusId      Int           @default(1)
+  discount      Int?
+  deliveryPrice Int           @default(0)
+  details       OrderDetails?
+
+  OrderProducts   OrderProducts @relation(fields: [orderProductsId], references: [id])
+  orderProductsId Int           @unique
+}
+
+model OrderStatus {
+  id       Int     @id @default(autoincrement())
+  title    String
+  isActive Boolean @default(true)
+  Order    Order[]
+}
+
+model OrderDetails {
+  id             Int       @id @default(autoincrement())
+  created        DateTime? @default(now())
+  updated        DateTime? @updatedAt
+  clientComment  String?
+  managerComment String?
+  city           String?
+  adress         String?
+  phone          String?
+  recipient      String?
+  promocode      String?
+  order          Order     @relation(fields: [orderId], references: [id])
+  orderId        Int       @unique
+}
+
+model OrderProducts {
+  id        Int     @id @default(autoincrement())
+  orderId   Int     @unique
+  productId Int     @unique
+  quantity  Int
+  Product   Product @relation(fields: [productId], references: [id])
+  Order     Order?
+}
