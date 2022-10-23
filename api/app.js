@@ -2,28 +2,23 @@ import createError from 'http-errors';
 import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
-import logger from 'morgan';
+// import logger from 'morgan';
 import { fileURLToPath } from 'url';
-import prisma from '/lib/prisma';
+const morgan = require('morgan');
 
-// var indexRouter from ./routes/index');
-// var usersRouter from ./routes/users');
+import router  from './routes/user';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const start = async () => {
     var app = express();
-    app.use(logger('dev'));
+    app.use(morgan('dev'));
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
     app.use(cookieParser());
-
-    const PORT = 3000;
-
-    app.listen(PORT, () => {
-        console.log();
-    });
+  
+    app.use('/api/user', router);
 
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {
@@ -38,8 +33,16 @@ const start = async () => {
 
         // render the error page
         res.status(err.status || 500);
-        res.render('error');
+        res.json({
+            message: err.message,
+            error: err
+          });
     });
+       
+    const PORT = 3000;
+    app.listen(PORT, () => {
+      console.log();
+  });
 };
 
 start();

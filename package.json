@@ -13,10 +13,12 @@
         "@mui/styles": "^5.8.6",
         "@mui/system": "^5.8.6",
         "@mui/utils": "^5.8.6",
+        "@prisma/client": "^4.5.0",
         "@tabler/icons": "^1.72.0",
         "apexcharts": "^3.35.3",
         "cookie-parser": "^1.4.6",
         "debug": "^4.3.4",
+        "esm": "^3.2.25",
         "express": "^4.18.2",
         "express-formidable": "^1.2.0",
         "express-session": "^1.17.3",
@@ -26,6 +28,7 @@
         "material-ui-popup-state": "^4.0.1",
         "morgan": "^1.10.0",
         "prisma": "^4.5.0",
+        "prisma-dbml-generator": "^0.9.1",
         "prop-types": "^15.8.1",
         "react": "^18.2.0",
         "react-apexcharts": "^1.4.0",
@@ -43,7 +46,8 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "server": "node server.js"
     },
     "eslintConfig": {
         "extends": [

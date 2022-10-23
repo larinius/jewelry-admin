@@ -1,5 +1,8 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
 
 generator client {
   provider = "prisma-client-js"
@@ -13,8 +16,8 @@ datasource db {
 model User {
   id          Int        @id @default(autoincrement())
   email       String     @unique
-  password    String
-  name        String?
+  password    String     @db.VarChar(255)
+  name        String?    @db.VarChar(255)
   phone       String?
   created     DateTime?  @default(now())
   isActive    Boolean    @default(true)
@@ -73,27 +76,37 @@ model WishlistDetails {
 
 model Product {
   id              Int               @id @default(autoincrement())
-  sku             String            @unique
+  sku             String            @unique @db.VarChar(32)
   price           Int               @default(0)
   priceBefore     Int?
   discount        Int?
   created         DateTime?         @default(now())
   updated         DateTime?         @updatedAt
   isActive        Boolean           @default(true)
-  title           String?
-  description     String?
-  text            String?
-  seoH1           String?
-  seoTitle        String?
-  seoDescription  String?
-  images          Json?
+  title           String?           @db.VarChar(128)
+  description     String?           @db.VarChar(1024)
+  text            String?           @db.Text
+  seoH1           String?           @db.VarChar(128)
+  seoTitle        String?           @db.VarChar(255)
+  seoDescription  String?           @db.VarChar(1024)
   brand           Brand             @relation(fields: [brandId], references: [id])
   brandId         Int               @default(1)
   category        Category          @relation(fields: [categoryId], references: [id])
   categoryId      Int               @default(1)
+  Image           Image[]
   WishlistDetails WishlistDetails[]
   CartDetails     CartDetails[]
   OrderProducts   OrderProducts[]
+}
+
+model Image {
+  id        Int     @id @default(autoincrement())
+  title     String? @db.VarChar(255)
+  alt       String? @db.VarChar(255)
+  order     Int     @default(0)
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+  path      String? @db.VarChar(512)
 }
 
 model Category {
@@ -101,11 +114,12 @@ model Category {
   created        DateTime? @default(now())
   updated        DateTime? @updatedAt
   isActive       Boolean   @default(true)
-  title          String
-  seoH1          String?
-  seoTitle       String?
-  seoDescription String?
-  text           String?
+  title          String?   @db.VarChar(128)
+  description    String?   @db.VarChar(1024)
+  text           String?   @db.Text
+  seoH1          String?   @db.VarChar(128)
+  seoTitle       String?   @db.VarChar(255)
+  seoDescription String?   @db.VarChar(1024)
   thumbnail      String?
   parentCategory Int       @default(1)
   Product        Product[]
@@ -116,11 +130,12 @@ model Brand {
   created        DateTime? @default(now())
   updated        DateTime? @updatedAt
   isActive       Boolean   @default(true)
-  title          String
-  seoH1          String?
-  seoTitle       String?
-  seoDescription String?
-  text           String?
+  title          String?   @db.VarChar(128)
+  description    String?   @db.VarChar(1024)
+  text           String?   @db.Text
+  seoH1          String?   @db.VarChar(128)
+  seoTitle       String?   @db.VarChar(255)
+  seoDescription String?   @db.VarChar(1024)
   thumbnail      String?
   logo           String?
   Product        Product[]
@@ -154,8 +169,8 @@ model OrderDetails {
   id             Int       @id @default(autoincrement())
   created        DateTime? @default(now())
   updated        DateTime? @updatedAt
-  clientComment  String?
-  managerComment String?
+  clientComment  String?   @db.VarChar(1024)
+  managerComment String?   @db.VarChar(1024)
   city           String?
   adress         String?
   phone          String?
@@ -172,4 +187,23 @@ model OrderProducts {
   quantity  Int
   Product   Product @relation(fields: [productId], references: [id])
   Order     Order?
+}
+
+model Settings {
+  id            Int             @id @default(autoincrement())
+  SettingsItems SettingsItems[]
+}
+
+model SettingsItems {
+  id         Int       @id @default(autoincrement())
+  Settings   Settings? @relation(fields: [settingsId], references: [id])
+  settingsId Int?
+}
+
+model Localisation {
+  id  Int     @id @default(autoincrement())
+  key String? @db.VarChar(64)
+  en  String? @db.Text
+  he  String? @db.Text
+  ru  String? @db.Text
 }
