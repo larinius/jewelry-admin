@@ -21,7 +21,7 @@ const sales = {
             type: 'item',
             url: '/sales/orders',
             icon: icons.IconReportMoney,
-            breadcrumbs: false
+            breadcrumbs: true
         },
         {
             id: 'sales-customers',
@@ -29,7 +29,7 @@ const sales = {
             type: 'item',
             url: '/sales/customers',
             icon: icons.IconUsers,
-            breadcrumbs: false
+            breadcrumbs: true
         },
         {
             id: 'sales-carts',
@@ -37,7 +37,7 @@ const sales = {
             type: 'item',
             url: '/sales/carts',
             icon: icons.IconShoppingCart,
-            breadcrumbs: false
+            breadcrumbs: true
         }
     ]
 };

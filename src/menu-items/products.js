@@ -19,25 +19,25 @@ const products = {
             id: 'product-items',
             title: 'Products',
             type: 'item',
-            url: '/product/items',
+            url: '/products/items',
             icon: icons.IconDiamond,
-            breadcrumbs: false
+            breadcrumbs: true
         },
         {
             id: 'product-categories',
             title: 'Categories',
             type: 'item',
-            url: '/product/categories',
+            url: '/products/categories',
             icon: icons.IconBoxMultiple,
-            breadcrumbs: false
+            breadcrumbs: true
         },
         {
             id: 'product-brands',
             title: 'Brands',
             type: 'item',
-            url: '/product/brands',
+            url: '/products/brands',
             icon: icons.IconTrademark,
-            breadcrumbs: false
+            breadcrumbs: true
         }
     ]
 };

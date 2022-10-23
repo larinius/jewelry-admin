@@ -1,91 +1,111 @@
-import { lazy } from 'react';
+import { lazy } from "react";
 
 // project imports
-import MainLayout from 'layout/MainLayout';
-import Loadable from 'ui-component/Loadable';
+import MainLayout from "layout/MainLayout";
+import Loadable from "ui-component/Loadable";
 
 // dashboard routing
-const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
+const DashboardDefault = Loadable(lazy(() => import("views/dashboard/Default")));
 
 // utilities routing
-const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
-const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
-const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
-const UtilsMaterialIcons = Loadable(lazy(() => import('views/utilities/MaterialIcons')));
-const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
+const UtilsTypography = Loadable(lazy(() => import("views/utilities/Typography")));
+const UtilsColor = Loadable(lazy(() => import("views/utilities/Color")));
+const UtilsShadow = Loadable(lazy(() => import("views/utilities/Shadow")));
+const UtilsMaterialIcons = Loadable(lazy(() => import("views/utilities/MaterialIcons")));
+const UtilsTablerIcons = Loadable(lazy(() => import("views/utilities/TablerIcons")));
+
+const ProductList = Loadable(lazy(() => import("views/products/ProductList")));
+const CategoriesList = Loadable(lazy(() => import("views/categories/CategoriesList")));
+const BrandsList = Loadable(lazy(() => import("views/brands/BrandsList")));
+const CartsList = Loadable(lazy(() => import("views/carts/CartsList")));
+const CustomersList = Loadable(lazy(() => import("views/customers/CustomersList")));
+const OrdersList = Loadable(lazy(() => import("views/orders/OrdersList")));
 
 // sample page routing
-const SamplePage = Loadable(lazy(() => import('views/sample-page')));
+const SamplePage = Loadable(lazy(() => import("views/sample-page")));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
-    path: '/',
+    path: "/",
     element: <MainLayout />,
     children: [
         {
-            path: '/',
-            element: <DashboardDefault />
+            path: "/",
+            element: <DashboardDefault />,
         },
         {
-            path: 'dashboard',
+            path: "dashboard",
             children: [
                 {
-                    path: 'default',
-                    element: <DashboardDefault />
-                }
-            ]
+                    path: "default",
+                    element: <DashboardDefault />,
+                },
+            ],
         },
         {
-            path: 'utils',
+            path: "products",
             children: [
                 {
-                    path: 'util-typography',
-                    element: <UtilsTypography />
-                }
-            ]
+                    path: "items",
+                    element: <ProductList />,
+                },
+            ],
         },
         {
-            path: 'utils',
+            path: "products",
             children: [
                 {
-                    path: 'util-color',
-                    element: <UtilsColor />
-                }
-            ]
+                    path: "categories",
+                    element: <CategoriesList />,
+                },
+            ],
         },
         {
-            path: 'utils',
+            path: "products",
             children: [
                 {
-                    path: 'util-shadow',
-                    element: <UtilsShadow />
-                }
-            ]
+                    path: "brands",
+                    element: <BrandsList />,
+                },
+            ],
         },
         {
-            path: 'icons',
+            path: "sales",
             children: [
                 {
-                    path: 'tabler-icons',
-                    element: <UtilsTablerIcons />
-                }
-            ]
+                    path: "carts",
+                    element: <CartsList />,
+                },
+            ],
         },
         {
-            path: 'icons',
+            path: "sales",
             children: [
                 {
-                    path: 'material-icons',
-                    element: <UtilsMaterialIcons />
-                }
-            ]
+                    path: "customers",
+                    element: <CustomersList />,
+                },
+            ],
         },
         {
-            path: 'sample-page',
-            element: <SamplePage />
-        }
-    ]
+            path: "sales",
+            children: [
+                {
+                    path: "orders",
+                    element: <OrdersList />,
+                },
+            ],
+        },
+        {
+            path: "sample-page",
+            element: <SamplePage />,
+        },
+        {
+            path: "product-list",
+            element: <ProductList />,
+        },
+    ],
 };
 
 export default MainRoutes;

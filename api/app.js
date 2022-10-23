@@ -1,15 +1,10 @@
 import createError from 'http-errors';
 import express from 'express';
-import path from 'path';
 import cookieParser from 'cookie-parser';
-// import logger from 'morgan';
-import { fileURLToPath } from 'url';
 const morgan = require('morgan');
 
-import router  from './routes/user';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import userRouter  from './routes/user';
+import productRouter  from './routes/product';
 
 const start = async () => {
     var app = express();
@@ -18,7 +13,8 @@ const start = async () => {
     app.use(express.urlencoded({ extended: false }));
     app.use(cookieParser());
   
-    app.use('/api/user', router);
+    app.use('/api/user', userRouter);
+    app.use('/api/product', productRouter);
 
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {
