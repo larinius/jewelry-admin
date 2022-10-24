@@ -6,7 +6,8 @@ import prisma from "./../../lib/prisma";
 router.get("/", async function (req, res, next) {
     const products = await prisma.product.findMany({
         include: {
-          category: true
+          category: true,
+          Image: true,
         }
       });
     res.json(products);

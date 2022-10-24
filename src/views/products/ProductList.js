@@ -5,7 +5,6 @@ import { Box, Paper } from "@mui/material";
 import { DataGrid, GridToolbar, GridColDef, GridValue, GetterParams } from "@mui/x-data-grid";
 
 const ProductList = () => {
-
     const apiUrl = "http://192.168.0.104:3000/api/product";
 
     const { isLoading, error, data } = useQuery([apiUrl], () => fetch(apiUrl).then((res) => res.json()));
@@ -16,7 +15,7 @@ const ProductList = () => {
                 <DataGrid
                     rows={!isLoading && !error ? data : []}
                     columns={columns}
-                    pageSize={100}
+                    pageSize={50}
                     rowsPerPageOptions={[50]}
                     checkboxSelection
                     disableSelectionOnClick
@@ -33,7 +32,14 @@ const ProductList = () => {
             field: "sku",
             headerName: "SKU",
             width: 150,
-            editable: true,
+            editable: false,
+        },
+        {
+            field: "Image",
+            headerName: "Photo",
+            width: 150,
+            editable: false,
+            renderCell: (params) => <>{params.value[0].path}</>,
         },
         {
             field: "title",
@@ -56,10 +62,11 @@ const ProductList = () => {
             editable: true,
         },
         {
-            field: "category.title",
+            field: "category",
             headerName: "Category",
             width: 150,
             editable: true,
+            renderCell: (params) => <>{params.value.title}</>,
         },
     ];
 
@@ -72,6 +79,6 @@ const ProductList = () => {
             </Paper>
         </>
     );
-}
+};
 
 export default ProductList;
