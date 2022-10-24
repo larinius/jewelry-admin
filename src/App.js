@@ -12,12 +12,25 @@ import themes from 'themes';
 // project imports
 import NavigationScroll from 'layout/NavigationScroll';
 
+
+import {
+    useQuery,
+    useMutation,
+    useQueryClient,
+    QueryClient,
+    QueryClientProvider,
+  } from "@tanstack/react-query";
+  import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
 // ==============================|| APP ||============================== //
+
+const queryClient = new QueryClient();
 
 const App = () => {
     const customization = useSelector((state) => state.customization);
 
     return (
+        <QueryClientProvider client={queryClient}>
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={themes(customization)}>
                 <CssBaseline />
@@ -26,6 +39,8 @@ const App = () => {
                 </NavigationScroll>
             </ThemeProvider>
         </StyledEngineProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
     );
 };
 
