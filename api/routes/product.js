@@ -1,16 +1,32 @@
 var express = require("express");
 var router = express.Router();
 
-import prisma from "./../../lib/prisma";
+import prisma from "../prisma";
 
-router.get("/", async function (req, res, next) {
-    const products = await prisma.product.findMany({
-        include: {
-          category: true,
-          Image: true,
-        }
-      });
-    res.json(products);
-});
+router
+    .get("/:id", async function (req, res, next) {
+        const id = parseInt(req.params.id) || 0;
+
+        const data = await prisma.product.findUnique({
+            where: {
+                id: id,
+            },
+            include: {
+                category: true,
+                Image: true,
+            },
+        });
+        console.log(id, data)
+        res.json(data);
+    })
+    .get("/", async function (req, res, next) {
+        const data = await prisma.product.findMany({
+            include: {
+                category: true,
+                Image: true,
+            },
+        });
+        res.json(data);
+    });
 
 export default router;
