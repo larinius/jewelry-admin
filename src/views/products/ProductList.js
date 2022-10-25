@@ -1,18 +1,27 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 // import Img from 'react-optimized-image';
 import Image from "mui-image";
 import { useTheme } from "@mui/material/styles";
-import { Box, Paper, Button, Stack, Grid, Container } from "@mui/material";
+import { Box, Paper, Button, Stack, Grid, Container, IconButton } from "@mui/material";
 import AnimateButton from "ui-component/extended/AnimateButton";
-
+import { IconEdit, IconTrash, IconCopy } from "@tabler/icons";
 import { DataGrid, GridToolbar, GridColDef, GridValue, GetterParams } from "@mui/x-data-grid";
+import products from "menu-items/products";
 
 const ProductList = () => {
     const apiUrl = "http://192.168.0.104:3000/api/product";
+    
 
     const { isLoading, error, data } = useQuery([apiUrl], () => fetch(apiUrl).then((res) => res.json()));
+
+
+    useEffect(() => {
+        console.log(data)
+    }, [data]);
+
     const theme = useTheme();
     const Thumb = ({ src, size }) => {
         return (
@@ -68,35 +77,57 @@ const ProductList = () => {
         );
     };
 
+    const ToolsButtons = () => {
+        return (
+            <>
+                <Stack spacing={2} direction="row" justifyContent="end">
+                    <IconButton>
+                        <IconTrash />
+                    </IconButton>
+
+                    <IconButton>
+                        <IconCopy />
+                    </IconButton>
+
+                    <IconButton>
+                        <IconEdit />
+                    </IconButton>
+                </Stack>
+            </>
+        );
+    };
+
     const columns = [
         { field: "id", headerName: "ID", width: 50 },
         {
             field: "sku",
             headerName: "SKU",
-            width: 150,
+            width: 100,
             editable: false,
         },
         {
             field: "Image",
             headerName: "Photo",
-            width: 150,
+            width: 90,
             editable: false,
             renderCell: (params) => (
                 <>
-                    <Thumb src={params.value[0].path} size={75} />
+                    <Link to={`/products/item/${params.value[0].productId}`}>
+                        <Thumb src={params.value[0].path} size={75} />
+                    </Link>
                 </>
             ),
         },
         {
             field: "title",
             headerName: "Title",
-            width: 150,
+            width: 200,
             editable: true,
         },
         {
             field: "isActive",
-            headerName: "Is active",
-            width: 100,
+            headerName: "Active",
+            width: 70,
             type: "boolean",
             editable: true,
         },
@@ -104,15 +135,26 @@ const ProductList = () => {
             field: "price",
             headerName: "Price",
             type: "number",
-            width: 110,
+            width: 75,
             editable: true,
         },
         {
             field: "category",
             headerName: "Category",
-            width: 150,
+            width: 90,
             editable: true,
             renderCell: (params) => <>{params.value.title}</>,
+        },
+        {
+            field: "tools",
+            headerName: "Tools",
+            width: 200,
+            editable: true,
+            renderCell: (params) => (
+                <>
+                    <ToolsButtons />
+                </>
+            ),
         },
     ];
 

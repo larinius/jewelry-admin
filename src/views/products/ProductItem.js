@@ -1,5 +1,24 @@
 /* eslint-disable react/prop-types */
-import { Box, Paper, Button, Stack, Grid, Container, TextField, Tabs, Tab, Typography, MenuItem, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
+import {
+    Box,
+    Paper,
+    Button,
+    Stack,
+    Grid,
+    Container,
+    TextField,
+    Tabs,
+    Tab,
+    Typography,
+    MenuItem,
+    FormLabel,
+    FormGroup,
+    FormControl,
+    FormControlLabel,
+    Checkbox,
+    Radio,
+    RadioGroup,
+} from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useTheme } from "@mui/material/styles";
@@ -41,7 +60,7 @@ const ProductItem = () => {
     useEffect(() => {
         console.log("URL:", id);
         console.log(product);
-        setCategory(product?.category.title)
+        setCategory(product?.category.title);
     }, [id, product]);
 
     const Thumb = ({ src, size }) => {
@@ -64,20 +83,37 @@ const ProductItem = () => {
         color: theme.palette.text.secondary,
     }));
 
+    const LanguageSelect = () => {
+        return (
+            <>
+                <Box display="flex" justifyContent="flex-end">
+                    <FormControl>
+                        <FormLabel id="language-select">Language</FormLabel>
+                        <RadioGroup row name="language-select">
+                            <FormControlLabel value="en" control={<Radio />} label="En" />
+                            <FormControlLabel value="he" control={<Radio />} label="He" />
+                            <FormControlLabel value="ru" control={<Radio />} label="Ru" />
+                        </RadioGroup>
+                    </FormControl>
+                </Box>
+            </>
+        );
+    };
+
     const MainParamsForm = () => {
         return (
             <>
                 <Box
                     component="form"
                     sx={{
-                        "& .MuiTextField-root": { m: 1, width: "25ch" },
+                        "& .MuiTextField-root": { m: 1 },
                     }}
                     noValidate
                     autoComplete="off"
                 >
                     <Stack spacing={2} direction="column" justifyContent="start">
                         <TextField required id="sku" label="SKU" defaultValue={product?.sku} />
-                        <TextField id="title"  label="Title" defaultValue={product?.title} />
+                        <TextField id="title" label="Title" defaultValue={product?.title} />
                         <TextField
                             id="pricer"
                             label="Price"
@@ -113,20 +149,26 @@ const ProductItem = () => {
                 <Box
                     component="form"
                     sx={{
-                        "& .MuiTextField-root": { m: 1, width: "25ch" },
+                        "& .MuiTextField-root": { m: 1 },
                     }}
                     noValidate
                     autoComplete="off"
                 >
+                    <LanguageSelect />
                     <Stack spacing={2} direction="column" justifyContent="start">
-
                         <TextField id="seo_h1" fullWidth label="H1" defaultValue={product?.seoH1} />
-                        <TextField id="seo_title" fullWidth label="Title" defaultValue={product?.seoTitle} />
-                        <TextField id="seo_descr" fullWidth label="Descr." defaultValue={product?.seoDescription} />
-                        <FormControlLabel control={<Checkbox />} label="Noindex" />
+                        <TextField id="seo_title" multiline rows={2} fullWidth label="Title" defaultValue={product?.seoTitle} />
+                        <TextField id="seo_descr" multiline rows={3} fullWidth label="Descr." defaultValue={product?.seoDescription} />
                     </Stack>
-                    <TinyMCE/>
-
+                    <Box mt={5}>
+                        <Typography m={1} variant="h3" component="h3">
+                            Full product discription
+                        </Typography>
+                        <TinyMCE />
+                    </Box>
+                    <Box m={2}>
+                        <FormControlLabel control={<Checkbox />} label="Noindex" />
+                    </Box>
                 </Box>
             </>
         );
@@ -135,18 +177,29 @@ const ProductItem = () => {
     const Characteristics = () => {
         return (
             <>
-                <Grid container spacing={2}>
-                    <Grid xs={8}>
-                        <Item>
-                            <MainParamsForm />
-                        </Item>
+                <Box sx={{ flexGrow: 1 }}>
+                    <Grid container spacing={4}>
+                        <Grid item xs={12} sm={8} md={8} lg={6} xl={6}>
+                            <Item>
+                                <Paper variant="outlined" elevation={0}>
+                                    <MainParamsForm />
+                                </Paper>
+                            </Item>
+                        </Grid>
+                        <Grid item xs={12} sm={4} md={4} lg={6} xl={6}>
+                            <Item>
+                                <Box display="flex" justifyContent="flex-end">
+                                    <Paper elevation={3}>
+                                        <Image
+                                            src={product ? product.Image[0].path : Dummy}
+                                            sx={{ maxHeight: 300, maxWidth: 300, display: { xs: "none", md: "inline" }, fit: "contain" }}
+                                        />
+                                    </Paper>
+                                </Box>
+                            </Item>
+                        </Grid>
                     </Grid>
-                    <Grid xs={4}>
-                        <Item>
-                            <Thumb src={product ? product.Image[0].path : Dummy} size={300} />
-                        </Item>
-                    </Grid>
-                </Grid>
+                </Box>
             </>
         );
     };
@@ -168,7 +221,7 @@ const ProductItem = () => {
                                 <Characteristics />
                             </TabPanel>
                             <TabPanel value="2">
-                                <SEOParamsForm/>
+                                <SEOParamsForm />
                             </TabPanel>
                             <TabPanel value="3">
                                 <Box sx={{ height: 500, width: "100%" }}>

@@ -13,8 +13,9 @@ const TinyMCE = () => {
         <>
             <>
                 <Editor
+                    apiKey="3qbmgq849vj55cwykzp3mu8glhfo78cffzbbjffp84hrh4gc"
                     onInit={(evt, editor) => (editorRef.current = editor)}
-                    initialValue="<p>This is the initial content of the editor.</p>"
+                    initialValue="<p></p>"
                     init={{
                         height: 500,
                         menubar: false,
