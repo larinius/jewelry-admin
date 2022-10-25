@@ -18,21 +18,30 @@ import {
     Checkbox,
     Radio,
     RadioGroup,
+    IconButton,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useTheme } from "@mui/material/styles";
 import AnimateButton from "ui-component/extended/AnimateButton";
 import Image from "mui-image";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { styled } from "@mui/material/styles";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Dummy from "../../assets/images/dummy.jpg";
 import TinyMCE from "ui-component/TinyMCE";
-
 import useProduct from "./../../lib/useProduct";
+import Dropzone, { useDropzone } from "react-dropzone";
+import { Container as ContainerDnd, Draggable } from "react-smooth-dnd";
+import { arrayMoveImmutable as arrayMove } from "array-move";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
+import { IconGripHorizontal, IconPlus } from "@tabler/icons";
 
 const ProductItem = () => {
     const [value, setValue] = React.useState("1");
@@ -63,6 +72,48 @@ const ProductItem = () => {
         setCategory(product?.category.title);
     }, [id, product]);
 
+    const [items, setItems] = useState([
+        { id: "1", text: "Item 1" },
+        { id: "2", text: "Item 2" },
+        { id: "3", text: "Item 3" },
+        { id: "4", text: "Item 4" },
+    ]);
+
+    const onDrop = ({ removedIndex, addedIndex }) => {
+        console.log({ removedIndex, addedIndex });
+        setItems((items) => arrayMove(items, removedIndex, addedIndex));
+    };
+
+    const onDropFile = useCallback((acceptedFiles) => {
+        // Do something with the files
+    }, []);
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDropFile });
+
+    const SortableThumbs = () => {
+        return (
+            <ContainerDnd orientation="horizontal" dragHandleSelector=".drag-handle" onDrop={onDrop}>
+                {items.map(({ id, text }) => (
+                    <Draggable key={id}>
+                        <Item>
+                            <Paper elevation={3} justifycontent="center" sx={{ width: 100 }}>
+                                <Stack>
+                                    <Paper variant="outlined" m={5}>
+                                        <Image src={Dummy} />
+                                        {text}
+                                    </Paper>
+                                    <IconButton sx={{ height: 50, width: 50 }} className="drag-handle">
+                                        <IconGripHorizontal />
+                                    </IconButton>
+                                </Stack>
+                            </Paper>
+                        </Item>
+                    </Draggable>
+                ))}
+            </ContainerDnd>
+        );
+    };
+
     const Thumb = ({ src, size }) => {
         return (
             <>
@@ -86,7 +137,7 @@ const ProductItem = () => {
     const LanguageSelect = () => {
         return (
             <>
-                <Box display="flex" justifyContent="flex-end">
+                <Box display="flex" justifycontent="flex-end">
                     <FormControl>
                         <FormLabel id="language-select">Language</FormLabel>
                         <RadioGroup row name="language-select">
@@ -95,6 +146,27 @@ const ProductItem = () => {
                             <FormControlLabel value="ru" control={<Radio />} label="Ru" />
                         </RadioGroup>
                     </FormControl>
+                </Box>
+            </>
+        );
+    };
+
+    const DropArea = () => {
+        return (
+            <>
+                <Box p={1}>
+                    <Paper variant="outlined" sx={{ width: 120, height: 170 }}>
+                        <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
+                            {({ getRootProps, getInputProps }) => (
+                                <section>
+                                    <Box {...getRootProps()} m={2} display="flex" alignItems="center" justifycontent="center">
+                                        <input {...getInputProps()} />
+                                        <IconPlus size={100} />
+                                    </Box>
+                                </section>
+                            )}
+                        </Dropzone>
+                    </Paper>
                 </Box>
             </>
         );
@@ -111,7 +183,7 @@ const ProductItem = () => {
                     noValidate
                     autoComplete="off"
                 >
-                    <Stack spacing={2} direction="column" justifyContent="start">
+                    <Stack spacing={2} direction="column" justifycontent="start">
                         <TextField required id="sku" label="SKU" defaultValue={product?.sku} />
                         <TextField id="title" label="Title" defaultValue={product?.title} />
                         <TextField
@@ -155,7 +227,7 @@ const ProductItem = () => {
                     autoComplete="off"
                 >
                     <LanguageSelect />
-                    <Stack spacing={2} direction="column" justifyContent="start">
+                    <Stack spacing={2} direction="column" justifycontent="start">
                         <TextField id="seo_h1" fullWidth label="H1" defaultValue={product?.seoH1} />
                         <TextField id="seo_title" multiline rows={2} fullWidth label="Title" defaultValue={product?.seoTitle} />
                         <TextField id="seo_descr" multiline rows={3} fullWidth label="Descr." defaultValue={product?.seoDescription} />
@@ -188,7 +260,7 @@ const ProductItem = () => {
                         </Grid>
                         <Grid item xs={12} sm={4} md={4} lg={6} xl={6}>
                             <Item>
-                                <Box display="flex" justifyContent="flex-end">
+                                <Box display="flex" justifycontent="flex-end">
                                     <Paper elevation={3}>
                                         <Image
                                             src={product ? product.Image[0].path : Dummy}
@@ -199,6 +271,16 @@ const ProductItem = () => {
                             </Item>
                         </Grid>
                     </Grid>
+                </Box>
+            </>
+        );
+    };
+
+    const PhotosArea = () => {
+        return (
+            <>
+                <Box>
+                    <SortableThumbs />
                 </Box>
             </>
         );
@@ -224,9 +306,21 @@ const ProductItem = () => {
                                 <SEOParamsForm />
                             </TabPanel>
                             <TabPanel value="3">
-                                <Box sx={{ height: 500, width: "100%" }}>
-                                    <Thumb src={product?.Image[0].path} size={300} />
-                                </Box>
+                                <Container>
+                                    <Box>
+                                        <Box m={2}>
+                                            <Stack direction="row">
+                                                <DropArea />
+                                                <PhotosArea />
+                                            </Stack>
+                                        </Box>
+                                        <Box m={2}>
+                                            <Paper variant="outlined">
+                                                <Image src={product ? product.Image[0].path : Dummy} sx={{ fit: "contain" }} />
+                                            </Paper>
+                                        </Box>
+                                    </Box>
+                                </Container>
                             </TabPanel>
                         </TabContext>
                     </Paper>
@@ -241,7 +335,7 @@ const ProductItem = () => {
     const ButtonsArea = () => {
         return (
             <>
-                <Stack spacing={2} direction="row" justifyContent="end">
+                <Stack spacing={2} direction="row" justifycontent="end">
                     <AnimateButton>
                         <Button disableElevation size="small" variant="contained" sx={{ background: theme.palette.error.main }}>
                             Delete
