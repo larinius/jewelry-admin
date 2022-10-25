@@ -15,6 +15,7 @@ const UtilsMaterialIcons = Loadable(lazy(() => import("views/utilities/MaterialI
 const UtilsTablerIcons = Loadable(lazy(() => import("views/utilities/TablerIcons")));
 
 const ProductList = Loadable(lazy(() => import("views/products/ProductList")));
+const ProductItem = Loadable(lazy(() => import("views/products/ProductItem")));
 const CategoriesList = Loadable(lazy(() => import("views/categories/CategoriesList")));
 const BrandsList = Loadable(lazy(() => import("views/brands/BrandsList")));
 const CartsList = Loadable(lazy(() => import("views/carts/CartsList")));
@@ -47,8 +48,17 @@ const MainRoutes = {
             path: "products",
             children: [
                 {
-                    path: "items",
+                    path: "list",
                     element: <ProductList />,
+                },
+            ],
+        },
+        {
+            path: "products",
+            children: [
+                {
+                    path: "item/:id",
+                    element: <ProductItem />,
                 },
             ],
         },

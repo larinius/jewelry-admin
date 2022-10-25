@@ -19,7 +19,7 @@ const products = {
             id: 'product-items',
             title: 'Products',
             type: 'item',
-            url: '/products/items',
+            url: '/products/list',
             icon: icons.IconDiamond,
             breadcrumbs: true
         },
