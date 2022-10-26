@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 function useCategory(id) {
-    const apiUrl = "http://192.168.0.104:3000/api/category";
+    const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/category`;
 
     const query = id ? `${apiUrl}/${id}` : `${apiUrl}`;
 
