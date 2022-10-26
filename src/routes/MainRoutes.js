@@ -16,7 +16,8 @@ const UtilsTablerIcons = Loadable(lazy(() => import("views/utilities/TablerIcons
 
 const ProductList = Loadable(lazy(() => import("views/products/ProductList")));
 const ProductItem = Loadable(lazy(() => import("views/products/ProductItem")));
-const CategoriesList = Loadable(lazy(() => import("views/categories/CategoriesList")));
+const CategoriesList = Loadable(lazy(() => import("views/category/CategoryList")));
+const CategoryItem = Loadable(lazy(() => import("views/category/CategoryItem")));
 const BrandsList = Loadable(lazy(() => import("views/brands/BrandsList")));
 const CartsList = Loadable(lazy(() => import("views/carts/CartsList")));
 const CustomersList = Loadable(lazy(() => import("views/customers/CustomersList")));
@@ -45,7 +46,7 @@ const MainRoutes = {
             ],
         },
         {
-            path: "products",
+            path: "product",
             children: [
                 {
                     path: "list",
@@ -54,7 +55,7 @@ const MainRoutes = {
             ],
         },
         {
-            path: "products",
+            path: "product",
             children: [
                 {
                     path: "item/:id",
@@ -63,19 +64,28 @@ const MainRoutes = {
             ],
         },
         {
-            path: "products",
+            path: "category",
             children: [
                 {
-                    path: "categories",
+                    path: "list",
                     element: <CategoriesList />,
                 },
             ],
         },
         {
-            path: "products",
+            path: "category",
             children: [
                 {
-                    path: "brands",
+                    path: "item/:id",
+                    element: <CategoryItem />,
+                },
+            ],
+        },
+        {
+            path: "brand",
+            children: [
+                {
+                    path: "list",
                     element: <BrandsList />,
                 },
             ],

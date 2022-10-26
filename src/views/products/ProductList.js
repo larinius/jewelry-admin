@@ -10,13 +10,11 @@ import AnimateButton from "ui-component/extended/AnimateButton";
 import { IconEdit, IconTrash, IconCopy } from "@tabler/icons";
 import { DataGrid, GridToolbar, GridColDef, GridValue, GetterParams } from "@mui/x-data-grid";
 import products from "menu-items/products";
+import useProduct from "./../../lib/useProduct"
 
 const ProductList = () => {
-    const apiUrl = "http://192.168.0.104:3000/api/product";
-    
 
-    const { isLoading, error, data } = useQuery([apiUrl], () => fetch(apiUrl).then((res) => res.json()));
-
+    const data = useProduct();
 
     useEffect(() => {
         console.log(data)
@@ -40,7 +38,7 @@ const ProductList = () => {
             <>
                 <DataGrid
                     rowHeight={80}
-                    rows={!isLoading && !error ? data : []}
+                    rows={data || []}
                     columns={columns}
                     pageSize={50}
                     rowsPerPageOptions={[50]}

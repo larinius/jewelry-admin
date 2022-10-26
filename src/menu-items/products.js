@@ -19,7 +19,7 @@ const products = {
             id: 'product-items',
             title: 'Products',
             type: 'item',
-            url: '/products/list',
+            url: '/product/list',
             icon: icons.IconDiamond,
             breadcrumbs: true
         },
@@ -27,7 +27,7 @@ const products = {
             id: 'product-categories',
             title: 'Categories',
             type: 'item',
-            url: '/products/categories',
+            url: '/category/list',
             icon: icons.IconBoxMultiple,
             breadcrumbs: true
         },
@@ -35,7 +35,7 @@ const products = {
             id: 'product-brands',
             title: 'Brands',
             type: 'item',
-            url: '/products/brands',
+            url: '/brand/list',
             icon: icons.IconTrademark,
             breadcrumbs: true
         }

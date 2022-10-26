@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-function useProduct(id) {
-    const apiUrl = "http://192.168.0.104:3000/api/product";
+function useCategory(id) {
+    const apiUrl = "http://192.168.0.104:3000/api/category";
 
     const query = id ? `${apiUrl}/${id}` : `${apiUrl}`;
 
@@ -9,4 +9,4 @@ function useProduct(id) {
     return !isLoading && !error ? data : null;
 }
 
-export default useProduct;
+export default useCategory;

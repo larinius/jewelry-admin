@@ -1,13 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-
-import { Box, Paper } from "@mui/material";
+import { IconEdit, IconTrash, IconCopy } from "@tabler/icons";
+import { Box, Paper, Button, Stack, Grid, Container, IconButton } from "@mui/material";
 import { DataGrid, GridToolbar, GridColDef, GridValue, GetterParams } from "@mui/x-data-grid";
+import useCategory from "../../lib/useCategory"
+import { Link } from "react-router-dom";
 
 const CategoriesList = () => {
-    const apiUrl = "http://192.168.0.104:3000/api/category";
 
-    const { isLoading, error, data } = useQuery([apiUrl], () => fetch(apiUrl).then((res) => res.json()));
+    const data  = useCategory();
+
+    const ToolsButtons = ({category}) => {
+
+        console.log(category);
+
+        return (
+            <>
+                <Stack spacing={2} direction="row" justifyContent="end">
+                    <IconButton>
+                        <IconTrash />
+                    </IconButton>
+
+                    <IconButton>
+                        <IconCopy />
+                    </IconButton>
+
+                    <IconButton>
+                    <Link to={`/category/item/${category.id}`}>                        
+                        <IconEdit />
+                    </Link>
+                    </IconButton>
+                </Stack>
+            </>
+        );
+    };
 
     const columns = [
         { field: "id", headerName: "ID", width: 90 },
@@ -31,13 +57,25 @@ const CategoriesList = () => {
             width: 110,
             editable: true,
         },
+        {
+            field: "tools",
+            headerName: "Tools",
+            width: 200,
+            editable: true,
+            renderCell: (params) => (
+                <>
+                    <ToolsButtons category={params.row} />
+                    {/* {params.value.id} */}
+                </>
+            ),
+        },
     ];
 
     const Grid = () => {
         return (
             <>
                 <DataGrid
-                    rows={!isLoading && !error ? data : []}
+                    rows={ data || []}
                     columns={columns}
                     pageSize={100}
                     rowsPerPageOptions={[50]}
