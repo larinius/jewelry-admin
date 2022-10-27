@@ -41,30 +41,19 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import { IconGripHorizontal, IconPlus } from "@tabler/icons";
-import useCategory from "../../lib/useCategory";
+import useBrand from "../../lib/useBrand";
 
-const CategoryItem = () => {
-    
+const BrandItem = () => {
     const theme = useTheme();
     let { id } = useParams();
-    let category = useCategory(id);
-    
+    let brand = useBrand(id);
+
     const [value, setValue] = React.useState("1");
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
-    const handleCategory = (e) => {
-        setCategory(e.target.value);
-    };
-
-    const categories = [
-        { id: 1, title: "Rings" },
-        { id: 2, title: "Earrings" },
-        { id: 3, title: "Pendants" },
-    ];
-
-    const Thumb = ({ src, size }) => {
+    const Logo = ({ src, size }) => {
         return (
             <>
                 <Paper elevation={3}>
@@ -113,21 +102,7 @@ const CategoryItem = () => {
                     autoComplete="off"
                 >
                     <Stack spacing={2} direction="column" justifycontent="start">
-                        <TextField id="title" label="Title" defaultValue={category?.title} />
-                        <TextField
-                            id="select-category"
-                            select
-                            label="Parent category"
-                            value={category}
-                            onChange={handleCategory}
-                            helperText="Can be empty or select existing category from list"
-                        >
-                            {categories.map((option) => (
-                                <MenuItem key={option.id} value={option.title}>
-                                    {option.title}
-                                </MenuItem>
-                            ))}
-                        </TextField>
+                        <TextField id="title" label="Title" defaultValue={brand?.title} />
                     </Stack>
                 </Box>
             </>
@@ -147,9 +122,9 @@ const CategoryItem = () => {
                 >
                     <LanguageSelect />
                     <Stack spacing={2} direction="column" justifycontent="start">
-                        <TextField id="seo_h1" fullWidth label="H1" defaultValue={category?.seoH1} />
-                        <TextField id="seo_title" multiline rows={2} fullWidth label="Title" defaultValue={category?.seoTitle} />
-                        <TextField id="seo_descr" multiline rows={3} fullWidth label="Descr." defaultValue={category?.seoDescription} />
+                        <TextField id="seo_h1" fullWidth label="H1" defaultValue={brand?.seoH1} />
+                        <TextField id="seo_title" multiline rows={2} fullWidth label="Title" defaultValue={brand?.seoTitle} />
+                        <TextField id="seo_descr" multiline rows={3} fullWidth label="Descr." defaultValue={brand?.seoDescription} />
                     </Stack>
                     <Box mt={5}>
                         <Typography m={1} variant="h3" component="h3">
@@ -185,7 +160,7 @@ const CategoryItem = () => {
                                 <Box display="flex" justifycontent="flex-end">
                                     <Paper elevation={3}>
                                         <Image
-                                            src={category ? category.thumb : Dummy}
+                                            src={brand ? brand.logo : Dummy}
                                             sx={{ maxHeight: 300, maxWidth: 300, display: { xs: "none", md: "inline" }, fit: "contain" }}
                                         />
                                     </Paper>
@@ -257,4 +232,4 @@ const CategoryItem = () => {
     );
 };
 
-export default CategoryItem;
+export default BrandItem;

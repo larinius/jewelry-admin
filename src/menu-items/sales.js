@@ -27,7 +27,7 @@ const sales = {
             id: 'sales-customers',
             title: 'Customers',
             type: 'item',
-            url: '/sales/customers',
+            url: '/user/list',
             icon: icons.IconUsers,
             breadcrumbs: true
         },

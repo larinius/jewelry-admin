@@ -14,14 +14,16 @@ const UtilsShadow = Loadable(lazy(() => import("views/utilities/Shadow")));
 const UtilsMaterialIcons = Loadable(lazy(() => import("views/utilities/MaterialIcons")));
 const UtilsTablerIcons = Loadable(lazy(() => import("views/utilities/TablerIcons")));
 
-const ProductList = Loadable(lazy(() => import("views/products/ProductList")));
-const ProductItem = Loadable(lazy(() => import("views/products/ProductItem")));
+const ProductList = Loadable(lazy(() => import("views/product/ProductList")));
+const ProductItem = Loadable(lazy(() => import("views/product/ProductItem")));
 const CategoriesList = Loadable(lazy(() => import("views/category/CategoryList")));
 const CategoryItem = Loadable(lazy(() => import("views/category/CategoryItem")));
-const BrandsList = Loadable(lazy(() => import("views/brands/BrandsList")));
+const BrandsList = Loadable(lazy(() => import("views/brand/BrandsList")));
+const BrandItem = Loadable(lazy(() => import("views/brand/BrandItem")));
 const CartsList = Loadable(lazy(() => import("views/carts/CartsList")));
-const CustomersList = Loadable(lazy(() => import("views/customers/CustomersList")));
-const OrdersList = Loadable(lazy(() => import("views/orders/OrdersList")));
+const CustomersList = Loadable(lazy(() => import("views/customer/CustomersList")));
+const CustomerItem = Loadable(lazy(() => import("views/customer/CustomerItem")));
+const OrdersList = Loadable(lazy(() => import("views/order/OrdersList")));
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import("views/sample-page")));
@@ -42,6 +44,24 @@ const MainRoutes = {
                 {
                     path: "default",
                     element: <DashboardDefault />,
+                },
+            ],
+        },
+        {
+            path: "user",
+            children: [
+                {
+                    path: "list",
+                    element: <CustomersList />,
+                },
+            ],
+        },
+        {
+            path: "user",
+            children: [
+                {
+                    path: "item/:id",
+                    element: <CustomerItem />,
                 },
             ],
         },
@@ -87,6 +107,15 @@ const MainRoutes = {
                 {
                     path: "list",
                     element: <BrandsList />,
+                },
+            ],
+        },
+        {
+            path: "brand",
+            children: [
+                {
+                    path: "item/:id",
+                    element: <BrandItem />,
                 },
             ],
         },

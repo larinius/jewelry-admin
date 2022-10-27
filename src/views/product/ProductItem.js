@@ -32,7 +32,7 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Dummy from "../../assets/images/dummy.jpg";
 import TinyMCE from "ui-component/TinyMCE";
-import useProduct from "./../../lib/useProduct";
+import useProduct from "../../lib/useProduct";
 import Dropzone, { useDropzone } from "react-dropzone";
 import { Container as ContainerDnd, Draggable } from "react-smooth-dnd";
 import { arrayMoveImmutable as arrayMove } from "array-move";
@@ -234,7 +234,10 @@ const ProductItem = () => {
                     </Stack>
                     <Box mt={5}>
                         <Typography m={1} variant="h3" component="h3">
-                            Full product discription
+                            Full description
+                        </Typography>
+                        <Typography m={1} variant="subtitle2" component="p">
+                            shown on page bottom (seo text)
                         </Typography>
                         <TinyMCE />
                     </Box>
@@ -306,21 +309,19 @@ const ProductItem = () => {
                                 <SEOParamsForm />
                             </TabPanel>
                             <TabPanel value="3">
-                                <Container>
-                                    <Box>
-                                        <Box m={2}>
-                                            <Stack direction="row">
-                                                <DropArea />
-                                                <PhotosArea />
-                                            </Stack>
-                                        </Box>
-                                        <Box m={2}>
-                                            <Paper variant="outlined">
-                                                <Image src={product ? product.Image[0].path : Dummy} sx={{ fit: "contain" }} />
-                                            </Paper>
-                                        </Box>
+                                <Box>
+                                    <Box m={2}>
+                                        <Stack direction="row">
+                                            <DropArea />
+                                            <PhotosArea />
+                                        </Stack>
                                     </Box>
-                                </Container>
+                                    <Box m={2}>
+                                        <Paper variant="outlined">
+                                            <Image src={product ? product.Image[0].path : Dummy} sx={{ fit: "contain" }} />
+                                        </Paper>
+                                    </Box>
+                                </Box>
                             </TabPanel>
                         </TabContext>
                     </Paper>

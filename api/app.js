@@ -3,9 +3,13 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 const morgan = require('morgan');
 
-import userRouter  from './routes/user';
-import productRouter  from './routes/product';
+import brandRouter  from './routes/brand';
+import cartRouter  from './routes/cart';
 import categoryRouter  from './routes/category';
+import orderRouter  from './routes/order';
+import productRouter  from './routes/product';
+import userRouter  from './routes/user';
+import dummyRouter  from './routes/dummy';
 
 const start = async () => {
     var app = express();
@@ -21,9 +25,13 @@ const start = async () => {
     app.use(express.urlencoded({ extended: false }));
     app.use(cookieParser());
   
-    app.use('/api/user', userRouter);
-    app.use('/api/product', productRouter);
+    app.use('/api/brand', brandRouter);
+    app.use('/api/cart', cartRouter);
     app.use('/api/category', categoryRouter);
+    app.use('/api/order', orderRouter);
+    app.use('/api/product', productRouter);
+    app.use('/api/user', userRouter);
+    app.use('/api/dummy', dummyRouter);
 
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {

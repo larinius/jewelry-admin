@@ -3,25 +3,19 @@ import { useQuery } from "@tanstack/react-query";
 import { IconEdit, IconTrash, IconCopy } from "@tabler/icons";
 import { Box, Paper, Button, Stack, Grid, Container, IconButton } from "@mui/material";
 import { DataGrid, GridToolbar, GridColDef, GridValue, GetterParams } from "@mui/x-data-grid";
-import useCategory from "../../lib/useCategory";
+import useCustomer from "../../lib/useCustomer";
 import { useNavigate, Link } from "react-router-dom";
 
-const CategoriesList = () => {
-    const data = useCategory();
+const CustomerList = () => {
+    const data = useCustomer();
     let navigate = useNavigate();
 
-    const handleOpenCategory = (category) => {
-        const url = `/category/item/${category.id}`;
-        console.log("CLICK:", category.id);
+    const handleOpenCategory = (customer) => {
+        const url = `/user/item/${customer.id}`;
         navigate(url, { replace: false });
     };
 
-
-
-    const ToolsButtons = ({ category }) => {
-
-        console.log(category);
-
+    const ToolsButtons = ({ customer }) => {
         return (
             <>
                 <Stack spacing={2} direction="row" justifyContent="end">
@@ -33,7 +27,7 @@ const CategoriesList = () => {
                         <IconCopy />
                     </IconButton>
 
-                    <IconButton onClick={() => handleOpenCategory(category)}>
+                    <IconButton onClick={() => handleOpenCategory(customer)}>
                         <IconEdit />
                     </IconButton>
                 </Stack>
@@ -44,8 +38,8 @@ const CategoriesList = () => {
     const columns = [
         { field: "id", headerName: "ID", width: 90 },
         {
-            field: "title",
-            headerName: "Title",
+            field: "name",
+            headerName: "Name",
             width: 150,
             editable: true,
         },
@@ -58,10 +52,18 @@ const CategoriesList = () => {
         },
         {
             field: "order",
-            headerName: "Order",
+            headerName: "Orders",
             type: "number",
             width: 110,
             editable: true,
+        },
+        {
+            field: "group",
+            headerName: "Group",
+            width: 110,
+            editable: true,
+            // {/* {params.value.id} */}
+            renderCell: (params) => <>{params.row.userGroup.title}</>,
         },
         {
             field: "tools",
@@ -70,8 +72,7 @@ const CategoriesList = () => {
             editable: true,
             renderCell: (params) => (
                 <>
-                    <ToolsButtons category={params.row} />
-                    {/* {params.value.id} */}
+                    <ToolsButtons customer={params.row} />
                 </>
             ),
         },
@@ -105,4 +106,4 @@ const CategoriesList = () => {
     );
 };
 
-export default CategoriesList;
+export default CustomerList;

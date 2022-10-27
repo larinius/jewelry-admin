@@ -10,7 +10,7 @@ import AnimateButton from "ui-component/extended/AnimateButton";
 import { IconEdit, IconTrash, IconCopy } from "@tabler/icons";
 import { DataGrid, GridToolbar, GridColDef, GridValue, GetterParams } from "@mui/x-data-grid";
 import products from "menu-items/products";
-import useProduct from "./../../lib/useProduct"
+import useProduct from "../../lib/useProduct"
 
 const ProductList = () => {
 
@@ -110,7 +110,7 @@ const ProductList = () => {
             editable: false,
             renderCell: (params) => (
                 <>
-                    <Link to={`/products/item/${params.value[0].productId}`}>
+                    <Link to={`/product/item/${params.value[0].productId}`}>
                         <Thumb src={params.value[0].path} size={75} />
                     </Link>
                 </>

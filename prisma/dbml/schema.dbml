@@ -12,17 +12,18 @@ Table User {
   isActive Boolean [not null, default: true]
   lastActive DateTime [not null]
   prefs UserPrefs
-  cart Cart
+  cart Cart [not null]
   wishlist Wishlist
-  wishlistId Int
   userGroup UserGroup [not null]
   userGroupId Int [not null, default: 1]
   order Order [not null]
+  userPrefsId Int
+  wishlistId Int
 }
 
 Table UserGroup {
   id Int [pk, increment]
-  title String [not null]
+  title String [unique, not null]
   user User [not null]
 }
 
@@ -30,37 +31,31 @@ Table UserPrefs {
   id Int [pk, increment]
   prefs Json
   user User [not null]
-  userId Int [unique, not null]
 }
 
 Table Cart {
   id Int [pk, increment]
   details CartDetails [not null]
-  user User [not null]
-  userId Int [unique, not null]
+  user User
+  userId Int
+  created DateTime [default: `now()`]
+  updated DateTime
+  order Order
+  orderId Int [unique]
 }
 
 Table CartDetails {
   id Int [pk, increment]
-  product Product
-  productId Int
+  product Product [not null]
+  quantity Int [not null, default: 1]
   cart Cart [not null]
   cartId Int [unique, not null]
 }
 
 Table Wishlist {
   id Int [pk, increment]
-  details WishlistDetails [not null]
+  product Product [not null]
   user User [not null]
-  userId Int [unique, not null]
-}
-
-Table WishlistDetails {
-  id Int [pk, increment]
-  product Product
-  productId Int
-  wishlist Wishlist [not null]
-  wishlistId Int [unique, not null]
 }
 
 Table Product {
@@ -82,10 +77,10 @@ Table Product {
   brandId Int [not null, default: 1]
   category Category [not null]
   categoryId Int [not null, default: 1]
-  Image Image [not null]
-  WishlistDetails WishlistDetails [not null]
-  CartDetails CartDetails [not null]
-  OrderProducts OrderProducts [not null]
+  image Image [not null]
+  wishlist Wishlist [not null]
+  cartDetails CartDetails [not null]
+  orderProducts OrderProducts [not null]
 }
 
 Table Image {
@@ -93,9 +88,9 @@ Table Image {
   title String
   alt String
   order Int [not null, default: 0]
-  product Product [not null]
-  productId Int [not null]
   path String
+  product Product
+  productId Int
 }
 
 Table Category {
@@ -111,7 +106,7 @@ Table Category {
   seoDescription String
   thumbnail String
   parentCategory Int [not null, default: 1]
-  Product Product [not null]
+  product Product [not null]
 }
 
 Table Brand {
@@ -127,33 +122,34 @@ Table Brand {
   seoDescription String
   thumbnail String
   logo String
-  Product Product [not null]
+  product Product [not null]
 }
 
 Table Order {
   id Int [pk, increment]
   created DateTime [default: `now()`]
   updated DateTime
-  User User [not null]
+  user User [not null]
   userId Int [not null]
   total Int [not null]
   status OrderStatus [not null]
   statusId Int [not null, default: 1]
   discount Int
   deliveryPrice Int [not null, default: 0]
-  details OrderDetails
-  OrderProducts OrderProducts [not null]
-  orderProductsId Int [unique, not null]
+  details Details [not null]
+  products OrderProducts [not null]
+  detailsId Int [not null]
+  cart Cart
 }
 
 Table OrderStatus {
   id Int [pk, increment]
   title String [not null]
   isActive Boolean [not null, default: true]
-  Order Order [not null]
+  order Order [not null]
 }
 
-Table OrderDetails {
+Table Details {
   id Int [pk, increment]
   created DateTime [default: `now()`]
   updated DateTime
@@ -165,26 +161,25 @@ Table OrderDetails {
   recipient String
   promocode String
   order Order [not null]
-  orderId Int [unique, not null]
 }
 
 Table OrderProducts {
   id Int [pk, increment]
   orderId Int [unique, not null]
   productId Int [unique, not null]
-  quantity Int [not null]
-  Product Product [not null]
-  Order Order
+  quantity Int [not null, default: 1]
+  product Product [not null]
+  order Order [not null]
 }
 
 Table Settings {
   id Int [pk, increment]
-  SettingsItems SettingsItems [not null]
+  settingsItems SettingsItems [not null]
 }
 
 Table SettingsItems {
   id Int [pk, increment]
-  Settings Settings
+  settings Settings
   settingsId Int
 }
 
@@ -196,21 +191,27 @@ Table Localisation {
   ru String
 }
 
+Table CartDetailsToProduct {
+  productId Int [ref: > Product.id]
+  cartdetailsId Int [ref: > CartDetails.id]
+}
+
+Table ProductToWishlist {
+  productId Int [ref: > Product.id]
+  wishlistId Int [ref: > Wishlist.id]
+}
+
+Ref: User.userPrefsId > UserPrefs.id
+
+Ref: User.wishlistId > Wishlist.id
+
 Ref: User.userGroupId > UserGroup.id
 
-Ref: UserPrefs.userId - User.id
+Ref: Cart.userId > User.id
 
-Ref: Cart.userId - User.id
-
-Ref: CartDetails.productId > Product.id
+Ref: Cart.orderId - Order.id
 
 Ref: CartDetails.cartId > Cart.id
-
-Ref: Wishlist.userId - User.id
-
-Ref: WishlistDetails.productId > Product.id
-
-Ref: WishlistDetails.wishlistId > Wishlist.id
 
 Ref: Product.brandId > Brand.id
 
@@ -222,10 +223,10 @@ Ref: Order.userId > User.id
 
 Ref: Order.statusId > OrderStatus.id
 
-Ref: Order.orderProductsId - OrderProducts.id
-
-Ref: OrderDetails.orderId - Order.id
+Ref: Order.detailsId > Details.id
 
 Ref: OrderProducts.productId > Product.id
+
+Ref: OrderProducts.orderId > Order.id
 
 Ref: SettingsItems.settingsId > Settings.id

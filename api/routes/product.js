@@ -16,7 +16,6 @@ router
                 Image: true,
             },
         });
-        console.log(id, data)
         res.json(data);
     })
     .get("/", async function (req, res, next) {

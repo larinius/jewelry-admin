@@ -1,26 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { IconEdit, IconTrash, IconCopy } from "@tabler/icons";
 import { Box, Paper, Button, Stack, Grid, Container, IconButton } from "@mui/material";
 import { DataGrid, GridToolbar, GridColDef, GridValue, GetterParams } from "@mui/x-data-grid";
-import useCategory from "../../lib/useCategory";
+import useBrand from "../../lib/useBrand";
 import { useNavigate, Link } from "react-router-dom";
 
-const CategoriesList = () => {
-    const data = useCategory();
+const BrandsList = () => {
+    const data = useBrand();
     let navigate = useNavigate();
 
-    const handleOpenCategory = (category) => {
-        const url = `/category/item/${category.id}`;
-        console.log("CLICK:", category.id);
+    const handleOpen = (brand) => {
+        const url = `/brand/item/${brand.id}`;
         navigate(url, { replace: false });
     };
 
 
-
-    const ToolsButtons = ({ category }) => {
-
-        console.log(category);
+    const ToolsButtons = ({ brand }) => {
 
         return (
             <>
@@ -33,7 +28,7 @@ const CategoriesList = () => {
                         <IconCopy />
                     </IconButton>
 
-                    <IconButton onClick={() => handleOpenCategory(category)}>
+                    <IconButton onClick={() => handleOpen(brand)}>
                         <IconEdit />
                     </IconButton>
                 </Stack>
@@ -70,7 +65,7 @@ const CategoriesList = () => {
             editable: true,
             renderCell: (params) => (
                 <>
-                    <ToolsButtons category={params.row} />
+                    <ToolsButtons brand={params.row} />
                     {/* {params.value.id} */}
                 </>
             ),
@@ -105,4 +100,4 @@ const CategoriesList = () => {
     );
 };
 
-export default CategoriesList;
+export default BrandsList;
