@@ -84,7 +84,7 @@ const CustomerList = () => {
                 <DataGrid
                     rows={data || []}
                     columns={columns}
-                    pageSize={100}
+                    // pageSize={100}
                     rowsPerPageOptions={[50]}
                     checkboxSelection
                     disableSelectionOnClick
@@ -98,7 +98,7 @@ const CustomerList = () => {
     return (
         <>
             <Paper sx={{ p: 1 }}>
-                <Box sx={{ height: 500, width: "100%" }}>
+                <Box sx={{ height: 1200, width: "100%" }}>
                     <Grid />
                 </Box>
             </Paper>
