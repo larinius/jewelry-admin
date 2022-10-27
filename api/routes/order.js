@@ -12,8 +12,8 @@ router
                 id: id,
             },
             include: {
-                User: true,
-                OrderProducts: true,
+                user: true,
+                orderProducts: true,
             },
         });
         res.json(data);
@@ -21,8 +21,8 @@ router
     .get("/", async function (req, res, next) {
         const data = await prisma.order.findMany({
             include: {
-                User: true,
-                OrderProducts: true,
+                user: true,
+                orderProducts: true,
             },
         });
         res.json(data);

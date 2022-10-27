@@ -13,7 +13,7 @@ router
             },
             include: {
                 category: true,
-                Image: true,
+                image: true,
             },
         });
         res.json(data);
@@ -22,7 +22,7 @@ router
         const data = await prisma.product.findMany({
             include: {
                 category: true,
-                Image: true,
+                image: true,
             },
         });
         res.json(data);

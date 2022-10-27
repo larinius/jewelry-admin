@@ -24,6 +24,7 @@ Table User {
 Table UserGroup {
   id Int [pk, increment]
   title String [unique, not null]
+  discount Decimal
   user User [not null]
 }
 
@@ -60,10 +61,16 @@ Table Wishlist {
 
 Table Product {
   id Int [pk, increment]
-  sku String [unique, not null]
-  price Int [not null, default: 0]
-  priceBefore Int
-  discount Int
+  sku String [not null]
+  code String [unique, not null]
+  barcode String [unique, not null]
+  caratage String [not null]
+  weight Decimal
+  price Decimal
+  priceBefore Decimal
+  cost Decimal
+  discount Decimal
+  margin Decimal
   created DateTime [default: `now()`]
   updated DateTime
   isActive Boolean [not null, default: true]
@@ -77,6 +84,8 @@ Table Product {
   brandId Int [not null, default: 1]
   category Category [not null]
   categoryId Int [not null, default: 1]
+  supplier Supplier [not null]
+  supplierId Int [not null, default: 1]
   image Image [not null]
   wishlist Wishlist [not null]
   cartDetails CartDetails [not null]
@@ -125,18 +134,31 @@ Table Brand {
   product Product [not null]
 }
 
+Table Supplier {
+  id Int [pk, increment]
+  created DateTime [default: `now()`]
+  updated DateTime
+  isActive Boolean [not null, default: true]
+  title String
+  description String
+  text String
+  thumbnail String
+  logo String
+  product Product [not null]
+}
+
 Table Order {
   id Int [pk, increment]
   created DateTime [default: `now()`]
   updated DateTime
   user User [not null]
   userId Int [not null]
-  total Int [not null]
+  total Decimal [not null]
+  discount Decimal [not null]
+  deliveryPrice Decimal [not null]
   status OrderStatus [not null]
   statusId Int [not null, default: 1]
-  discount Int
-  deliveryPrice Int [not null, default: 0]
-  details Details [not null]
+  details OrderDetails [not null]
   products OrderProducts [not null]
   detailsId Int [not null]
   cart Cart
@@ -149,7 +171,7 @@ Table OrderStatus {
   order Order [not null]
 }
 
-Table Details {
+Table OrderDetails {
   id Int [pk, increment]
   created DateTime [default: `now()`]
   updated DateTime
@@ -174,6 +196,7 @@ Table OrderProducts {
 
 Table Settings {
   id Int [pk, increment]
+  title String [not null]
   settingsItems SettingsItems [not null]
 }
 
@@ -201,9 +224,9 @@ Table ProductToWishlist {
   wishlistId Int [ref: > Wishlist.id]
 }
 
-Ref: User.userPrefsId > UserPrefs.id
+Ref: User.userPrefsId > UserPrefs.id [delete: Cascade]
 
-Ref: User.wishlistId > Wishlist.id
+Ref: User.wishlistId > Wishlist.id [delete: Cascade]
 
 Ref: User.userGroupId > UserGroup.id
 
@@ -217,16 +240,18 @@ Ref: Product.brandId > Brand.id
 
 Ref: Product.categoryId > Category.id
 
+Ref: Product.supplierId > Supplier.id
+
 Ref: Image.productId > Product.id
 
 Ref: Order.userId > User.id
 
 Ref: Order.statusId > OrderStatus.id
 
-Ref: Order.detailsId > Details.id
+Ref: Order.detailsId > OrderDetails.id [delete: Cascade]
 
 Ref: OrderProducts.productId > Product.id
 
-Ref: OrderProducts.orderId > Order.id
+Ref: OrderProducts.orderId > Order.id [delete: Cascade]
 
 Ref: SettingsItems.settingsId > Settings.id

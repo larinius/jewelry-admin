@@ -24,7 +24,7 @@ router.put("/", async function (req, res, next) {
                     connectOrCreate: {
                         where: {
                             title: "Customer",
-                        },
+                        }, 
                         create: {
                             title: "Customer",
                         },
