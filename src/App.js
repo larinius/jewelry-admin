@@ -12,6 +12,7 @@ import themes from 'themes';
 // project imports
 import NavigationScroll from 'layout/NavigationScroll';
 
+import Uploady from "@rpldy/uploady";
 
 import {
     useQuery,
@@ -30,6 +31,7 @@ const App = () => {
     const customization = useSelector((state) => state.customization);
 
     return (
+        <Uploady destination={{ url: "http://localhost:3000/api/priceupload" }}>
         <QueryClientProvider client={queryClient}>
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={themes(customization)}>
@@ -41,6 +43,7 @@ const App = () => {
         </StyledEngineProvider>
         <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
+        </Uploady>
     );
 };
 

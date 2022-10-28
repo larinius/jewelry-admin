@@ -2,6 +2,7 @@ import createError from 'http-errors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 const morgan = require('morgan');
+import fileUpload from "express-fileupload"
 
 import brandRouter  from './routes/brand';
 import cartRouter  from './routes/cart';
@@ -10,6 +11,7 @@ import orderRouter  from './routes/order';
 import productRouter  from './routes/product';
 import userRouter  from './routes/user';
 import dummyRouter  from './routes/dummy';
+import priceuploadRouter  from './routes/priceupload';
 
 const start = async () => {
     var app = express();
@@ -24,7 +26,7 @@ const start = async () => {
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
     app.use(cookieParser());
-  
+    app.use(fileUpload());
     app.use('/api/brand', brandRouter);
     app.use('/api/cart', cartRouter);
     app.use('/api/category', categoryRouter);
@@ -32,6 +34,7 @@ const start = async () => {
     app.use('/api/product', productRouter);
     app.use('/api/user', userRouter);
     app.use('/api/dummy', dummyRouter);
+    app.use('/api/priceupload', priceuploadRouter);
 
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {

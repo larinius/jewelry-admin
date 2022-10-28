@@ -266,7 +266,7 @@ const ProductItem = () => {
                                 <Box display="flex" justifycontent="flex-end">
                                     <Paper elevation={3}>
                                         <Image
-                                            src={product ? product.image[0].path : Dummy}
+                                            src={product.image[0].path ? product.image[0].path : Dummy}
                                             sx={{ maxHeight: 300, maxWidth: 300, display: { xs: "none", md: "inline" }, fit: "contain" }}
                                         />
                                     </Paper>
@@ -318,7 +318,8 @@ const ProductItem = () => {
                                     </Box>
                                     <Box m={2}>
                                         <Paper variant="outlined">
-                                            <Image src={product ? product.image[0].path : Dummy} sx={{ fit: "contain" }} />
+                                            {/* <Image src={product.image[0].path? product.image[0].path: Dummy} sx={{ fit: "contain" }} /> */}
+                                            <Image src={ Dummy} sx={{ fit: "contain" }} />
                                         </Paper>
                                     </Box>
                                 </Box>

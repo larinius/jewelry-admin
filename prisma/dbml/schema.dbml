@@ -63,8 +63,8 @@ Table Product {
   id Int [pk, increment]
   sku String [not null]
   code String [unique, not null]
-  barcode String [unique, not null]
-  caratage String [not null]
+  barcode String [unique]
+  caratage String
   weight Decimal
   price Decimal
   priceBefore Decimal
@@ -97,7 +97,7 @@ Table Image {
   title String
   alt String
   order Int [not null, default: 0]
-  path String
+  path String [unique]
   product Product
   productId Int
 }
@@ -107,7 +107,7 @@ Table Category {
   created DateTime [default: `now()`]
   updated DateTime
   isActive Boolean [not null, default: true]
-  title String
+  title String [unique]
   description String
   text String
   seoH1 String
@@ -123,7 +123,7 @@ Table Brand {
   created DateTime [default: `now()`]
   updated DateTime
   isActive Boolean [not null, default: true]
-  title String
+  title String [unique]
   description String
   text String
   seoH1 String

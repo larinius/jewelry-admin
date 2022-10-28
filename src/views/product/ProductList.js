@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import React, { useState, useEffect } from "react";
+
 // import Img from 'react-optimized-image';
 import Image from "mui-image";
 import { useTheme } from "@mui/material/styles";
@@ -10,23 +11,32 @@ import AnimateButton from "ui-component/extended/AnimateButton";
 import { IconEdit, IconTrash, IconCopy } from "@tabler/icons";
 import { DataGrid, GridToolbar, GridColDef, GridValue, GetterParams } from "@mui/x-data-grid";
 import products from "menu-items/products";
-import useProduct from "../../lib/useProduct"
+import useProduct from "../../lib/useProduct";
+import UploadButton from "@rpldy/upload-button";
+import Dummy from "../../assets/images/dummy.jpg";
 
 const ProductList = () => {
-
     const data = useProduct();
+    let navigate = useNavigate();
 
-    useEffect(() => {
-        console.log(data)
-    }, [data]);
+    useEffect(() => {}, [data]);
+
+    const handleOpenProduct = (product) => {
+        console.log(product);
+        const url = `/product/item/${product.id}`;
+        navigate(url, { replace: false });
+    };
 
     const theme = useTheme();
+
     const Thumb = ({ src, size }) => {
+        const p = src !== null ? src : Dummy;
+
         return (
             <>
                 <Paper elevation={3}>
                     <Box sx={{ height: size, width: size }}>
-                        <Image src={src} height={size - 3} width={size - 3} />
+                        <Image src={p} height={size - 3} width={size - 3} />
                     </Box>
                 </Paper>
             </>
@@ -61,6 +71,9 @@ const ProductList = () => {
                         </Button>
                     </AnimateButton>
                     <AnimateButton>
+                        <UploadButton />
+                    </AnimateButton>
+                    <AnimateButton>
                         <Button disableElevation size="small" variant="contained" sx={{ background: theme.palette.primary.main }}>
                             Import from CSV
                         </Button>
@@ -75,7 +88,7 @@ const ProductList = () => {
         );
     };
 
-    const ToolsButtons = () => {
+    const ToolsButtons = ({ product }) => {
         return (
             <>
                 <Stack spacing={2} direction="row" justifyContent="end">
@@ -87,7 +100,7 @@ const ProductList = () => {
                         <IconCopy />
                     </IconButton>
 
-                    <IconButton>
+                    <IconButton onClick={() => handleOpenProduct(product)}>
                         <IconEdit />
                     </IconButton>
                 </Stack>
@@ -98,23 +111,32 @@ const ProductList = () => {
     const columns = [
         { field: "id", headerName: "ID", width: 50 },
         {
+            field: "image",
+            headerName: "Photo",
+            width: 90,
+            editable: false,
+            renderCell: (params) => {
+                console.log(params.row);
+                return (
+                    <>
+                        <Link to={`/product/item/${params.row.id}`}>
+                            <Thumb src={params.row.image ? params.row.image[0]?.path.replace('/product/', "/thumb/") : Dummy  } size={75} />
+                        </Link>
+                    </>
+                );
+            },
+        },
+        {
             field: "sku",
             headerName: "SKU",
             width: 100,
             editable: false,
         },
         {
-            field: "Image",
-            headerName: "Photo",
-            width: 90,
+            field: "code",
+            headerName: "Code",
+            width: 100,
             editable: false,
-            renderCell: (params) => (
-                <>
-                    <Link to={`/product/item/${params.value[0].productId}`}>
-                        <Thumb src={params.value[0].path} size={75} />
-                    </Link>
-                </>
-            ),
         },
         {
             field: "title",
@@ -123,11 +145,11 @@ const ProductList = () => {
             editable: true,
         },
         {
-            field: "isActive",
-            headerName: "Active",
-            width: 70,
-            type: "boolean",
-            editable: true,
+            field: "weight",
+            headerName: "Weight",
+            width: 100,
+            type: "number",
+            editable: false,
         },
         {
             field: "price",
@@ -136,6 +158,21 @@ const ProductList = () => {
             width: 75,
             editable: true,
         },
+        {
+            field: "caratage",
+            headerName: "Cr.",
+            width: 75,
+            editable: false,
+        },
+
+        {
+            field: "isActive",
+            headerName: "Active",
+            width: 70,
+            type: "boolean",
+            editable: true,
+        },
+
         {
             field: "category",
             headerName: "Category",
@@ -150,7 +187,7 @@ const ProductList = () => {
             editable: true,
             renderCell: (params) => (
                 <>
-                    <ToolsButtons />
+                    <ToolsButtons product={params.row} />
                 </>
             ),
         },
@@ -163,7 +200,7 @@ const ProductList = () => {
             </Box>
 
             <Paper sx={{ p: 1 }}>
-                <Box sx={{ height: 500, width: "100%" }}>
+                <Box sx={{ height: 1500, width: "100%" }}>
                     <ProductsGrid />
                 </Box>
             </Paper>

@@ -20,8 +20,6 @@ const CategoriesList = () => {
 
     const ToolsButtons = ({ category }) => {
 
-        console.log(category);
-
         return (
             <>
                 <Stack spacing={2} direction="row" justifyContent="end">
@@ -71,7 +69,6 @@ const CategoriesList = () => {
             renderCell: (params) => (
                 <>
                     <ToolsButtons category={params.row} />
-                    {/* {params.value.id} */}
                 </>
             ),
         },
@@ -97,7 +94,7 @@ const CategoriesList = () => {
     return (
         <>
             <Paper sx={{ p: 1 }}>
-                <Box sx={{ height: 500, width: "100%" }}>
+                <Box sx={{ height: 1500, width: "100%" }}>
                     <Grid />
                 </Box>
             </Paper>
