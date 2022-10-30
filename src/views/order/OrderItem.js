@@ -1,60 +1,71 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 import {
-    Box,
-    Paper,
-    Button,
-    Stack,
-    Grid,
-    Container,
-    TextField,
-    Tabs,
-    Tab,
-    Typography,
-    MenuItem,
-    FormLabel,
-    FormGroup,
-    FormControl,
-    FormControlLabel,
-    Checkbox,
-    Radio,
-    RadioGroup,
-    IconButton,
+    Alert,
     Autocomplete,
     Avatar,
+    Box,    
+    Button,
+    Checkbox,
+    Container,
+    FormControl,
+    FormControlLabel,
+    FormGroup,
+    FormLabel,
+    Grid,
+    IconButton,
     List,
     ListItem,
-    ListItemIcon,
-    ListItemText,
     ListItemAvatar,
+    ListItemIcon,
     ListItemSecondaryAction,
+    ListItemText,
+    MenuItem,
+    Paper,
+    Radio,
+    RadioGroup,
+    Stack,
+    Tab,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
     TableRow,
+    Tabs,
+    TextField,
+    Typography,
 } from "@mui/material";
 import { IconShoppingCartPlus, IconEdit, IconTrash, IconCopy, IconFolder } from "@tabler/icons";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { useTheme } from "@mui/material/styles";
+import AnimateButton from "ui-component/extended/AnimateButton";
 import Image from "mui-image";
 import React, { useState, useEffect, useCallback } from "react";
+
+import useCustomer from "../../hooks/useCustomer";
 import useOrder from "../../hooks/useOrder";
 import useProduct from "../../hooks/useProduct";
 import useSearch from "../../hooks/useSearch";
-import { useTheme } from "@mui/material/styles";
 
 const OrderItem = () => {
     const theme = useTheme();
     let { id } = useParams();
     let order = useOrder(id);
     let products = useSearch();
-    const [product, setProduct] = useState();
+    let customers = useCustomer();
+    const [product, setProduct] = useState([]);
     const [orderedProducts, setOrderedProducts] = useState([]);
+    const [customer, setCustomer] = useState();
 
     const [dense, setDense] = React.useState(false);
     const [secondary, setSecondary] = React.useState(false);
+
+    const handleSelectCustomer = (customer) => {
+        console.log(customer);
+        setCustomer(customer);
+    };
 
     const handleOnSearch = (string, results) => {
         // onSearch will have as the first callback parameter
@@ -81,7 +92,7 @@ const OrderItem = () => {
     };
 
     const handleQuantity = (e, row) => {
-        if (e.target.value > 0) {
+        if (e.target.value >= 0) {
             const index = orderedProducts.indexOf(row);
             const newProducts = [...orderedProducts];
             newProducts[index].quantity = e.target.value;
@@ -89,8 +100,7 @@ const OrderItem = () => {
         }
     };
 
-    useEffect(() => {
-    }, [orderedProducts]);
+    useEffect(() => {}, [orderedProducts]);
 
     const handleOnSelect = (item) => {
         const ordered = item;
@@ -116,44 +126,71 @@ const OrderItem = () => {
         );
     };
 
-    const AutocompleteInput = () => {
+    const SearchProducts = () => {
         return (
             <>
-                <Box p={1} display="flex" justifyContent="flex-end" alignItems="center">
-                    <Box flexGrow={4}>
-                        <ReactSearchAutocomplete
-                            items={products}
-                            resultStringKeyName={"title"}
-                            fuseOptions={{ keys: ["code", "sku", "title"] }}
-                            onSearch={handleOnSearch}
-                            onHover={handleOnHover}
-                            onSelect={handleOnSelect}
-                            onFocus={handleOnFocus}
-                            formatResult={formatResult}
-                            styling={{
-                                height: "48px",
-                                border: "1px solid #dfe1e5",
-                                borderRadius: "2px",
-                                backgroundColor: "#fafafa",
-                                boxShadow: "rgba(32, 33, 36, 0.28) 0px 1px 1px 0px",
-                                hoverBackgroundColor: "#eee",
-                                color: "#616161",
-                                fontSize: "14px",
-                                fontFamily: "Roboto",
-                                iconColor: "grey",
-                                lineColor: "rgb(232, 234, 237)",
-                                placeholderColor: "grey",
-                                clearIconMargin: "3px 14px 0 0",
-                                searchIconMargin: "0 0 0 16px",
-                                zIndex: "9999",
-                            }}
-                        />
-                    </Box>
-                    <Box flexGrow={1} display="flex" justifyContent="center" alignItems="center">
-                        <Button onClick={handleOnAdd} variant="contained" startIcon={<IconShoppingCartPlus />}>
-                            Add
-                        </Button>
-                    </Box>
+                <Box>
+                    <ReactSearchAutocomplete
+                        items={products}
+                        resultStringKeyName={"title"}
+                        fuseOptions={{ keys: ["code", "sku", "title"] }}
+                        onSearch={handleOnSearch}
+                        onHover={handleOnHover}
+                        onSelect={handleOnSelect}
+                        onFocus={handleOnFocus}
+                        formatResult={formatResult}
+                        styling={{
+                            height: "48px",
+                            border: "1px solid #dfe1e5",
+                            borderRadius: "2px",
+                            backgroundColor: "#fafafa",
+                            boxShadow: "rgba(32, 33, 36, 0.28) 0px 1px 1px 0px",
+                            hoverBackgroundColor: "#eee",
+                            color: "#616161",
+                            fontSize: "14px",
+                            fontFamily: "Roboto",
+                            iconColor: "grey",
+                            lineColor: "rgb(232, 234, 237)",
+                            placeholderColor: "grey",
+                            clearIconMargin: "3px 14px 0 0",
+                            searchIconMargin: "0 0 0 16px",
+                            zIndex: "9999",
+                        }}
+                    />
+                </Box>
+            </>
+        );
+    };
+
+    const SelectCustomer = () => {
+        return (
+            <>
+                <Box>
+                    <Autocomplete
+                        id="customer-select"
+                        options={customers || []}
+                        autoHighlight
+                        defaultValue={customer}
+                        getOptionLabel={(option) => `${option.name} ${option.phone}`}
+                        renderOption={(props, option) => (
+                            <Box component="li" sx={{}} {...props}>
+                                {option.name} {option.phone}
+                            </Box>
+                        )}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Select customer"
+                                inputProps={{
+                                    ...params.inputProps,
+                                    autoComplete: "new-password", // disable autocomplete and autofill
+                                }}
+                            />
+                        )}
+                        onChange={(e, newValue) => {
+                            handleSelectCustomer(newValue);
+                        }}
+                    />
                 </Box>
             </>
         );
@@ -166,36 +203,6 @@ const OrderItem = () => {
             }),
         );
     }
-
-    const ProductList = () => {
-        return (
-            <>
-                <Typography sx={{ mt: 4, mb: 2 }} variant="h2" component="div">
-                    Avatar with text and icon
-                </Typography>
-                <Paper>
-                    <List dense={dense}>
-                        {generate(
-                            <ListItem
-                                secondaryAction={
-                                    <IconButton edge="end" aria-label="delete">
-                                        <IconTrash />
-                                    </IconButton>
-                                }
-                            >
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <IconFolder />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText primary="Single-line item" secondary={secondary ? "Secondary text" : null} />
-                            </ListItem>,
-                        )}
-                    </List>
-                </Paper>
-            </>
-        );
-    };
 
     function ccyFormat(num) {
         return `${num.toFixed(2)}`;
@@ -297,26 +304,11 @@ const OrderItem = () => {
                             <TableCell colSpan={3}>Subtotal</TableCell>
                             <TableCell align="right">{weightSubtotal}</TableCell>
                             <TableCell align="right">{invoiceSubtotal}</TableCell>
-                            <TableCell colSpan={1}/>
+                            <TableCell colSpan={1} />
                         </TableRow>
                     </TableBody>
                 </Table>
             </TableContainer>
-        );
-    };
-
-    const MainForm = () => {
-        return (
-            <>
-                <Box m={3}>
-                    <AutocompleteInput />
-                </Box>
-                <Box sx={{ flexGrow: 1 }}>
-                    <Paper>
-                        <ProductTable />
-                    </Paper>
-                </Box>
-            </>
         );
     };
 
@@ -326,7 +318,7 @@ const OrderItem = () => {
                 <Stack spacing={2} direction="row" justifyContent="end">
                     <AnimateButton>
                         <Button disableElevation size="small" variant="contained" sx={{ background: theme.palette.error.main }}>
-                            Delete
+                            Cancel
                         </Button>
                     </AnimateButton>
                     <AnimateButton>
@@ -340,6 +332,47 @@ const OrderItem = () => {
                         </Button>
                     </AnimateButton>
                 </Stack>
+            </>
+        );
+    };
+
+    const MainForm = () => {
+        return (
+            <>
+                <Box sx={{ flexGrow: 1 }} pt={5}>
+                    <Paper>
+                        <Box m={2}>
+                            <Grid container spacing={5}>
+                                <Grid item xs={12} sm={6}>
+                                    <Box display="flex" justifyContent="flex-start">
+                                    <Alert severity="success">Order created</Alert>
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <Box display="flex" justifyContent="flex-end">
+                                        <Typography variant="h3">Order: 220101</Typography>
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <SearchProducts />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <SelectCustomer />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Paper m={1} variant="outlined" square>
+                                        <ProductTable />
+                                    </Paper>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Box pt={3} pb={5} m={5} display="flex" justifyContent="flex-end">
+                                        <ButtonsArea />
+                                    </Box>
+                                </Grid>
+                            </Grid>
+                        </Box>
+                    </Paper>
+                </Box>
             </>
         );
     };
