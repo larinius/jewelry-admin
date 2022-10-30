@@ -32,7 +32,7 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Dummy from "../../assets/images/dummy.jpg";
 import TinyMCE from "ui-component/TinyMCE";
-import useProduct from "../../lib/useProduct";
+import useProduct from "../../hooks/useProduct";
 import Dropzone, { useDropzone } from "react-dropzone";
 import { Container as ContainerDnd, Draggable } from "react-smooth-dnd";
 import { arrayMoveImmutable as arrayMove } from "array-move";
@@ -96,7 +96,7 @@ const ProductItem = () => {
                 {items.map(({ id, text }) => (
                     <Draggable key={id}>
                         <Item>
-                            <Paper elevation={3} justifycontent="center" sx={{ width: 100 }}>
+                            <Paper elevation={3} justifyContent="center" sx={{ width: 100 }}>
                                 <Stack>
                                     <Paper variant="outlined" m={5}>
                                         <Image src={Dummy} />
@@ -137,7 +137,7 @@ const ProductItem = () => {
     const LanguageSelect = () => {
         return (
             <>
-                <Box display="flex" justifycontent="flex-end">
+                <Box display="flex" justifyContent="flex-end">
                     <FormControl>
                         <FormLabel id="language-select">Language</FormLabel>
                         <RadioGroup row name="language-select">
@@ -159,7 +159,7 @@ const ProductItem = () => {
                         <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
                             {({ getRootProps, getInputProps }) => (
                                 <section>
-                                    <Box {...getRootProps()} m={2} display="flex" alignItems="center" justifycontent="center">
+                                    <Box {...getRootProps()} m={2} display="flex" alignItems="center" justifyContent="center">
                                         <input {...getInputProps()} />
                                         <IconPlus size={100} />
                                     </Box>
@@ -172,7 +172,7 @@ const ProductItem = () => {
         );
     };
 
-    const MainParamsForm = () => {
+    const MainParamsForm = ({product}) => {
         return (
             <>
                 <Box
@@ -183,7 +183,7 @@ const ProductItem = () => {
                     noValidate
                     autoComplete="off"
                 >
-                    <Stack spacing={2} direction="column" justifycontent="start">
+                    <Stack spacing={2} direction="column" justifyContent="start">
                         <TextField required id="sku" label="SKU" defaultValue={product?.sku} />
                         <TextField id="title" label="Title" defaultValue={product?.title} />
                         <TextField
@@ -215,7 +215,7 @@ const ProductItem = () => {
         );
     };
 
-    const SEOParamsForm = () => {
+    const SEOParamsForm = ({product}) => {
         return (
             <>
                 <Box
@@ -227,7 +227,7 @@ const ProductItem = () => {
                     autoComplete="off"
                 >
                     <LanguageSelect />
-                    <Stack spacing={2} direction="column" justifycontent="start">
+                    <Stack spacing={2} direction="column" justifyContent="start">
                         <TextField id="seo_h1" fullWidth label="H1" defaultValue={product?.seoH1} />
                         <TextField id="seo_title" multiline rows={2} fullWidth label="Title" defaultValue={product?.seoTitle} />
                         <TextField id="seo_descr" multiline rows={3} fullWidth label="Descr." defaultValue={product?.seoDescription} />
@@ -249,7 +249,7 @@ const ProductItem = () => {
         );
     };
 
-    const Characteristics = () => {
+    const Characteristics = ({product}) => {
         return (
             <>
                 <Box sx={{ flexGrow: 1 }}>
@@ -263,14 +263,16 @@ const ProductItem = () => {
                         </Grid>
                         <Grid item xs={12} sm={4} md={4} lg={6} xl={6}>
                             <Item>
-                                <Box display="flex" justifycontent="flex-end">
+                                    <Container>
+                                <Box display="flex" justifyContent="flex-end">
                                     <Paper elevation={3}>
                                         <Image
-                                            src={product.image[0].path ? product.image[0].path : Dummy}
+                                            src={product?.image ? product?.image[0]?.path : Dummy}
                                             sx={{ maxHeight: 300, maxWidth: 300, display: { xs: "none", md: "inline" }, fit: "contain" }}
                                         />
                                     </Paper>
                                 </Box>
+                                    </Container>
                             </Item>
                         </Grid>
                     </Grid>
@@ -303,17 +305,17 @@ const ProductItem = () => {
                                 </TabList>
                             </Box>
                             <TabPanel value="1">
-                                <Characteristics />
+                                <Characteristics product={product} />
                             </TabPanel>
                             <TabPanel value="2">
-                                <SEOParamsForm />
+                                <SEOParamsForm product={product} />
                             </TabPanel>
                             <TabPanel value="3">
                                 <Box>
                                     <Box m={2}>
                                         <Stack direction="row">
                                             <DropArea />
-                                            <PhotosArea />
+                                            <PhotosArea product={product} />
                                         </Stack>
                                     </Box>
                                     <Box m={2}>
@@ -337,7 +339,7 @@ const ProductItem = () => {
     const ButtonsArea = () => {
         return (
             <>
-                <Stack spacing={2} direction="row" justifycontent="end">
+                <Stack spacing={2} direction="row" justifyContent="end">
                     <AnimateButton>
                         <Button disableElevation size="small" variant="contained" sx={{ background: theme.palette.error.main }}>
                             Delete

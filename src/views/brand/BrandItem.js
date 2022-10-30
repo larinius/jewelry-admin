@@ -31,7 +31,7 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Dummy from "../../assets/images/dummy.jpg";
 import TinyMCE from "ui-component/TinyMCE";
-import useProduct from "../../lib/useProduct";
+import useProduct from "../../hooks/useProduct";
 import Dropzone, { useDropzone } from "react-dropzone";
 import { Container as ContainerDnd, Draggable } from "react-smooth-dnd";
 import { arrayMoveImmutable as arrayMove } from "array-move";
@@ -41,7 +41,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import { IconGripHorizontal, IconPlus } from "@tabler/icons";
-import useBrand from "../../lib/useBrand";
+import useBrand from "../../hooks/useBrand";
 
 const BrandItem = () => {
     const theme = useTheme();
@@ -76,7 +76,7 @@ const BrandItem = () => {
     const LanguageSelect = () => {
         return (
             <>
-                <Box display="flex" justifycontent="flex-end">
+                <Box display="flex" justifyContent="flex-end">
                     <FormControl>
                         <FormLabel id="language-select">Language</FormLabel>
                         <RadioGroup row name="language-select">
@@ -101,7 +101,7 @@ const BrandItem = () => {
                     noValidate
                     autoComplete="off"
                 >
-                    <Stack spacing={2} direction="column" justifycontent="start">
+                    <Stack spacing={2} direction="column" justifyContent="start">
                         <TextField id="title" label="Title" defaultValue={brand?.title} />
                     </Stack>
                 </Box>
@@ -121,7 +121,7 @@ const BrandItem = () => {
                     autoComplete="off"
                 >
                     <LanguageSelect />
-                    <Stack spacing={2} direction="column" justifycontent="start">
+                    <Stack spacing={2} direction="column" justifyContent="start">
                         <TextField id="seo_h1" fullWidth label="H1" defaultValue={brand?.seoH1} />
                         <TextField id="seo_title" multiline rows={2} fullWidth label="Title" defaultValue={brand?.seoTitle} />
                         <TextField id="seo_descr" multiline rows={3} fullWidth label="Descr." defaultValue={brand?.seoDescription} />
@@ -157,7 +157,7 @@ const BrandItem = () => {
                         </Grid>
                         <Grid item xs={12} sm={4} md={4} lg={6} xl={6}>
                             <Item>
-                                <Box display="flex" justifycontent="flex-end">
+                                <Box display="flex" justifyContent="flex-end">
                                     <Paper elevation={3}>
                                         <Image
                                             src={brand ? brand.logo : Dummy}
@@ -204,7 +204,7 @@ const BrandItem = () => {
     const ButtonsArea = () => {
         return (
             <>
-                <Stack spacing={2} direction="row" justifycontent="end">
+                <Stack spacing={2} direction="row" justifyContent="end">
                     <AnimateButton>
                         <Button disableElevation size="small" variant="contained" sx={{ background: theme.palette.error.main }}>
                             Delete

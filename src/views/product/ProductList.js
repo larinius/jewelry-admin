@@ -11,7 +11,7 @@ import AnimateButton from "ui-component/extended/AnimateButton";
 import { IconEdit, IconTrash, IconCopy } from "@tabler/icons";
 import { DataGrid, GridToolbar, GridColDef, GridValue, GetterParams } from "@mui/x-data-grid";
 import products from "menu-items/products";
-import useProduct from "../../lib/useProduct";
+import useProduct from "../../hooks/useProduct";
 import UploadButton from "@rpldy/upload-button";
 import Dummy from "../../assets/images/dummy.jpg";
 
@@ -51,7 +51,7 @@ const ProductList = () => {
                     rows={data || []}
                     columns={columns}
                     pageSize={50}
-                    rowsPerPageOptions={[50]}
+                    rowsPerPageOptions={[25, 50, 100]}
                     checkboxSelection
                     disableSelectionOnClick
                     experimentalFeatures={{ newEditingApi: true }}
@@ -116,11 +116,10 @@ const ProductList = () => {
             width: 90,
             editable: false,
             renderCell: (params) => {
-                console.log(params.row);
                 return (
                     <>
                         <Link to={`/product/item/${params.row.id}`}>
-                            <Thumb src={params.row.image ? params.row.image[0]?.path.replace('/product/', "/thumb/") : Dummy  } size={75} />
+                            <Thumb src={params.row.image.length !== 0 ? params.row.image[0]?.path.replace('/product/', "/thumb/") : Dummy  } size={75} />
                         </Link>
                     </>
                 );
@@ -181,10 +180,17 @@ const ProductList = () => {
             renderCell: (params) => <>{params.value.title}</>,
         },
         {
+            field: "imageCount",
+            headerName: "Photos",
+            width: 90,
+            editable: false,
+            type: "number",
+        },
+        {
             field: "tools",
             headerName: "Tools",
             width: 200,
-            editable: true,
+            editable: false,
             renderCell: (params) => (
                 <>
                     <ToolsButtons product={params.row} />

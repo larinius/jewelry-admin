@@ -3,13 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 import { IconEdit, IconTrash, IconCopy } from "@tabler/icons";
 import { Box, Paper, Button, Stack, Grid, Container, IconButton } from "@mui/material";
 import { DataGrid, GridToolbar, GridColDef, GridValue, GetterParams } from "@mui/x-data-grid";
-import useCustomer from "../../lib/useCustomer";
+import useCustomer from "../../hooks/useCustomer";
 import { useNavigate, Link } from "react-router-dom";
-
+import AnimateButton from "ui-component/extended/AnimateButton";
+import { useTheme } from "@mui/material/styles";
 const CustomerList = () => {
     const data = useCustomer();
     let navigate = useNavigate();
-
+    const theme = useTheme();
+    
     const handleOpenCategory = (customer) => {
         const url = `/user/item/${customer.id}`;
         navigate(url, { replace: false });
@@ -95,8 +97,36 @@ const CustomerList = () => {
         );
     };
 
+    const ButtonsArea = () => {
+        return (
+            <>
+                <Stack spacing={2} direction="row" justifyContent="end">
+                    <AnimateButton>
+                        <Button disableElevation size="small" variant="contained" sx={{ background: theme.palette.error.main }}>
+                            Delete
+                        </Button>
+                    </AnimateButton>
+                    <AnimateButton></AnimateButton>
+                    <AnimateButton>
+                        <Button disableElevation size="small" variant="contained" sx={{ background: theme.palette.primary.main }}>
+                            Import from CSV
+                        </Button>
+                    </AnimateButton>
+                    <AnimateButton>
+                        <Button disableElevation size="small" variant="contained" sx={{ background: theme.palette.success.main }}>
+                            Create new
+                        </Button>
+                    </AnimateButton>
+                </Stack>
+            </>
+        );
+    };
+
     return (
         <>
+            <Box mb={1} display="flex" justifyContent="flex-end">
+                <ButtonsArea />
+            </Box>
             <Paper sx={{ p: 1 }}>
                 <Box sx={{ height: 1200, width: "100%" }}>
                     <Grid />

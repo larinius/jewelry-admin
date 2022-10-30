@@ -15,14 +15,30 @@ const sales = {
     title: 'Sales',
     type: 'group',
     children: [
-        {
-            id: 'sales-orders',
-            title: 'Orders',
-            type: 'item',
-            url: '/sales/orders',
-            icon: icons.IconReportMoney,
-            breadcrumbs: true
-        },
+        // {
+        //     id: 'orders',
+        //     title: 'Orders',
+        //     type: 'group',
+        //     icon: icons.IconReportMoney,
+        //     breadcrumbs: true,
+            
+        //     children: [
+        //         {
+        //             id: 'new',
+        //             title: 'Creatre new order',
+        //             type: 'item',
+        //             url: '/order/new',
+        //             target: true
+        //         },
+        //         {
+        //             id: 'item',
+        //             title: 'Open order',
+        //             type: 'item',
+        //             url: '/order/item/:id',
+        //             target: true
+        //         },
+        //     ]
+        // },
         {
             id: 'sales-customers',
             title: 'Customers',

@@ -6,10 +6,11 @@ import sales from './sales';
 import products from './products';
 import settings from './settings';
 import content from './content';
+import orders from './orders';
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-    items: [sales, products, content, settings]
+    items: [orders, sales, products, content, settings]
 };
 
 export default menuItems;

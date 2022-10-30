@@ -16,15 +16,30 @@ router
                 image: true,
             },
         });
+
         res.json(data);
     })
     .get("/", async function (req, res, next) {
-        const data = await prisma.product.findMany({
+        console.log("PRODUCT");
+        const pricePerGram = await prisma.Settings.findFirst({
+            where:{
+                title: "price per gram"
+            }
+        });
+        
+        let data = await prisma.product.findMany({
             include: {
                 category: true,
                 image: true,
             },
         });
+        
+        data = data.map(item => {
+            item.imageCount = item.image.length;
+            item.price = (item.weight * pricePerGram.value.price).toFixed(2);
+            return(item);
+        })
+
         res.json(data);
     });
 

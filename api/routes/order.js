@@ -13,7 +13,7 @@ router
             },
             include: {
                 user: true,
-                orderProducts: true,
+                products: true,
             },
         });
         res.json(data);
@@ -22,10 +22,14 @@ router
         const data = await prisma.order.findMany({
             include: {
                 user: true,
-                orderProducts: true,
+                products: true,
             },
         });
         res.json(data);
+    })
+    .post("/", async function (req, res, next) {
+        console.log('Got body:', req.body);
+        res.sendStatus(201);
     });
 
 export default router;

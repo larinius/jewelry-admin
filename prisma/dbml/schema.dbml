@@ -197,13 +197,7 @@ Table OrderProducts {
 Table Settings {
   id Int [pk, increment]
   title String [not null]
-  settingsItems SettingsItems [not null]
-}
-
-Table SettingsItems {
-  id Int [pk, increment]
-  settings Settings
-  settingsId Int
+  value Json [not null]
 }
 
 Table Localisation {
@@ -253,5 +247,3 @@ Ref: Order.detailsId > OrderDetails.id [delete: Cascade]
 Ref: OrderProducts.productId > Product.id
 
 Ref: OrderProducts.orderId > Order.id [delete: Cascade]
-
-Ref: SettingsItems.settingsId > Settings.id

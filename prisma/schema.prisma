@@ -6,7 +6,7 @@ generator dbml {
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextIndex"]
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -103,7 +103,11 @@ model Product {
   cartDetails    CartDetails[]
   orderProducts  OrderProducts[]
 
-  @@fulltext([sku, code, title, description])
+  @@fulltext([sku])
+  @@fulltext([code])
+  @@fulltext([title])
+  @@fulltext([sku, code, title])
+  @@fulltext([description])
 }
 
 model Image {
@@ -209,15 +213,9 @@ model OrderProducts {
 }
 
 model Settings {
-  id            Int             @id @default(autoincrement())
-  title         String          @db.VarChar(32)
-  settingsItems SettingsItems[]
-}
-
-model SettingsItems {
-  id         Int       @id @default(autoincrement())
-  settings   Settings? @relation(fields: [settingsId], references: [id])
-  settingsId Int?
+  id    Int    @id @default(autoincrement())
+  title String @db.VarChar(32)
+  value Json
 }
 
 model Localisation {

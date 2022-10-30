@@ -31,7 +31,7 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Dummy from "../../assets/images/dummy.jpg";
 import TinyMCE from "ui-component/TinyMCE";
-import useProduct from "../../lib/useProduct";
+import useProduct from "../../hooks/useProduct";
 import Dropzone, { useDropzone } from "react-dropzone";
 import { Container as ContainerDnd, Draggable } from "react-smooth-dnd";
 import { arrayMoveImmutable as arrayMove } from "array-move";
@@ -41,7 +41,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import { IconGripHorizontal, IconPlus } from "@tabler/icons";
-import useCustomer from "../../lib/useCustomer";
+import useCustomer from "../../hooks/useCustomer";
 
 const CustomerItem = () => {
     const theme = useTheme();
@@ -84,7 +84,7 @@ const CustomerItem = () => {
                     noValidate
                     autoComplete="off"
                 >
-                    <Stack spacing={2} direction="column" justifycontent="start">
+                    <Stack spacing={2} direction="column" justifyContent="start">
                         <TextField id="title" label="Title" defaultValue={customer?.name} />
                         <TextField id="select-group" select label="User group" value={group} onChange={handleGroup}>
                             {groups.map((option) => (
@@ -113,7 +113,7 @@ const CustomerItem = () => {
                         </Grid>
                         <Grid item xs={12} sm={4} md={4} lg={6} xl={6}>
                             <Item>
-                                <Box display="flex" justifycontent="flex-end">
+                                <Box display="flex" justifyContent="flex-end">
                                     <Paper elevation={3}></Paper>
                                 </Box>
                             </Item>
@@ -153,7 +153,7 @@ const CustomerItem = () => {
     const ButtonsArea = () => {
         return (
             <>
-                <Stack spacing={2} direction="row" justifycontent="end">
+                <Stack spacing={2} direction="row" justifyContent="end">
                     <AnimateButton>
                         <Button disableElevation size="small" variant="contained" sx={{ background: theme.palette.error.main }}>
                             Delete
