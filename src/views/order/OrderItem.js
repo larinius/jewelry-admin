@@ -3,7 +3,7 @@ import {
     Alert,
     Autocomplete,
     Avatar,
-    Box,    
+    Box,
     Button,
     Checkbox,
     Container,
@@ -38,50 +38,35 @@ import {
 import { IconShoppingCartPlus, IconEdit, IconTrash, IconCopy, IconFolder } from "@tabler/icons";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTheme } from "@mui/material/styles";
 import AnimateButton from "ui-component/extended/AnimateButton";
 import Image from "mui-image";
 import React, { useState, useEffect, useCallback } from "react";
-
+import qs from 'qs';
 import useCustomer from "../../hooks/useCustomer";
 import useOrder from "../../hooks/useOrder";
+import useCreateOrder from "../../hooks/useOrder";
 import useProduct from "../../hooks/useProduct";
 import useSearch from "../../hooks/useSearch";
+import axios from "axios";
 
 const OrderItem = () => {
     const theme = useTheme();
     let { id } = useParams();
-    let order = useOrder(id);
     let products = useSearch();
     let customers = useCustomer();
+    const queryClient = useQueryClient();
     const [product, setProduct] = useState([]);
     const [orderedProducts, setOrderedProducts] = useState([]);
     const [customer, setCustomer] = useState();
+    const [order, setOrder] = useState([]);
 
-    const [dense, setDense] = React.useState(false);
-    const [secondary, setSecondary] = React.useState(false);
+    const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/order`;
 
     const handleSelectCustomer = (customer) => {
         console.log(customer);
         setCustomer(customer);
-    };
-
-    const handleOnSearch = (string, results) => {
-        // onSearch will have as the first callback parameter
-        // the string searched and for the second the results.
-        // console.log(string, results);
-    };
-
-    const handleOnHover = (result) => {
-        // the item hovered
-        // console.log(result);
-    };
-
-    const handleOnAdd = () => {
-        const ordered = product;
-        ordered.quantity = 1;
-        setOrderedProducts([...orderedProducts, ordered]);
     };
 
     const handleDelete = (item) => {
@@ -100,17 +85,10 @@ const OrderItem = () => {
         }
     };
 
-    useEffect(() => {}, [orderedProducts]);
-
     const handleOnSelect = (item) => {
         const ordered = item;
         ordered.quantity = 1;
         setOrderedProducts([...orderedProducts, ordered]);
-        // console.log(item);
-    };
-
-    const handleOnFocus = () => {
-        // console.log("Focused");
     };
 
     const formatResult = (item) => {
@@ -126,6 +104,43 @@ const OrderItem = () => {
         );
     };
 
+    useEffect(() => {
+        let newOrder = [...order];
+
+        newOrder.customer = customer;
+        newOrder.products = orderedProducts;
+        setOrder(newOrder);
+        console.log(newOrder);
+    }, [orderedProducts, customer]);
+
+    const addOrder = useMutation((payload) => {
+        let config = {
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+        };
+
+        axios.post(apiUrl, qs.stringify(payload), config),
+            {
+                onSuccess: () => {
+                    queryClient.invalidateQueries([apiUrl]);
+                },
+            };
+
+        console.log(payload);
+    });
+
+    const handlePostOrder = () => {
+        console.log("NEW ORDER", order);
+        addOrder.mutate(order);
+    };
+
+    const createOrder = useMutation((payload) => axios.post(apiUrl, payload), {
+        onSuccess: () => {
+            queryClient.invalidateQueries([apiUrl]);
+        },
+    });
+
     const SearchProducts = () => {
         return (
             <>
@@ -134,10 +149,7 @@ const OrderItem = () => {
                         items={products}
                         resultStringKeyName={"title"}
                         fuseOptions={{ keys: ["code", "sku", "title"] }}
-                        onSearch={handleOnSearch}
-                        onHover={handleOnHover}
                         onSelect={handleOnSelect}
-                        onFocus={handleOnFocus}
                         formatResult={formatResult}
                         styling={{
                             height: "48px",
@@ -195,18 +207,6 @@ const OrderItem = () => {
             </>
         );
     };
-
-    function generate(element) {
-        return orderedProducts.map((value) =>
-            React.cloneElement(element, {
-                key: value,
-            }),
-        );
-    }
-
-    function ccyFormat(num) {
-        return `${num.toFixed(2)}`;
-    }
 
     function price(item) {
         return Number(item.price) * item.quantity;
@@ -327,7 +327,13 @@ const OrderItem = () => {
                         </Button>
                     </AnimateButton>
                     <AnimateButton>
-                        <Button disableElevation size="small" variant="contained" sx={{ background: theme.palette.success.main }}>
+                        <Button
+                            disableElevation
+                            size="small"
+                            variant="contained"
+                            sx={{ background: theme.palette.success.main }}
+                            onClick={handlePostOrder}
+                        >
                             Save
                         </Button>
                     </AnimateButton>
@@ -345,7 +351,9 @@ const OrderItem = () => {
                             <Grid container spacing={5}>
                                 <Grid item xs={12} sm={6}>
                                     <Box display="flex" justifyContent="flex-start">
-                                    <Alert severity="success">Order created</Alert>
+                                        <Alert severity="success" variant="filled">
+                                            Order created
+                                        </Alert>
                                     </Box>
                                 </Grid>
                                 <Grid item xs={12} sm={6}>

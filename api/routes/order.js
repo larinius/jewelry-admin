@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-
+import qs from "qs";
 import prisma from "../prisma";
 
 router
@@ -28,7 +28,7 @@ router
         res.json(data);
     })
     .post("/", async function (req, res, next) {
-        console.log('Got body:', req.body);
+        console.log('Got body:', qs.parse(req.body));
         res.sendStatus(201);
     });
 
