@@ -74,25 +74,15 @@ router.post("/", (req, res) => {
                             weight: row.weight,
                             caratage: row.caratage,
                             category: {
-                                connectOrCreate: {
-                                    where: {
+                                connect: {
                                         title: row.category,
-                                    },
-                                    create: {
-                                        title: row.category,
-                                    },
                                 },
                             },
                             image: {
-                                connectOrCreate: {
-                                    where: {
-                                        path: row.image,
-                                    },
-                                    create: {
-                                        alt: row.title,
-                                        title: row.title,
-                                        path: row.image,
-                                    },
+                                create: {
+                                    alt: row.title,
+                                    title: row.title,
+                                    path: row.image,
                                 },
                             },
                         },
@@ -104,11 +94,11 @@ router.post("/", (req, res) => {
                         },
                     });
 
-                    let image = await prisma.Image.findUnique({
-                        where: {
-                            path: row.image,
-                        },
-                    });
+                    // let image = await prisma.Image.findUnique({
+                    //     where: {
+                    //         path: row.image,
+                    //     },
+                    // });
 
                     console.log(row.category, category);
 

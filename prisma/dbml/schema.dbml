@@ -97,7 +97,7 @@ Table Image {
   title String
   alt String
   order Int [not null, default: 0]
-  path String [unique]
+  path String
   product Product
   productId Int
 }

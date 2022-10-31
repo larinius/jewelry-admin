@@ -24,3 +24,4 @@ yarn-error.log*
 /.idea/
 prisma/migrations/
 .env*.local
+/api/routes/upload

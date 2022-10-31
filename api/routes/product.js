@@ -36,7 +36,7 @@ router
         
         data = data.map(item => {
             item.imageCount = item.image.length;
-            item.price = (item.weight * pricePerGram.value.price).toFixed(2);
+            item.price = (item.weight * 30.841).toFixed(2);
             return(item);
         })
 

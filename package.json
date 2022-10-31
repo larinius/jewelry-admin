@@ -69,7 +69,7 @@
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
-        "server": "npx nodemon  --watch 'api/*' -r esm ./api/app.js"
+        "server": "npx nodemon  --watch api -r esm ./api/app.js"
     },
     "eslintConfig": {
         "extends": [
