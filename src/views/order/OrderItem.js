@@ -109,6 +109,9 @@ const OrderItem = () => {
 
         newOrder.customer = customer;
         newOrder.products = orderedProducts;
+        newOrder.total = invoiceSubtotal;
+        newOrder.discount = 0;
+        newOrder.deliveryPrice = 0;
         setOrder(newOrder);
         console.log(newOrder);
     }, [orderedProducts, customer]);

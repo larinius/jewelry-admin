@@ -160,7 +160,7 @@ Table Order {
   statusId Int [not null, default: 1]
   details OrderDetails [not null]
   products OrderProducts [not null]
-  detailsId Int [not null]
+  detailsId Int [unique, not null]
   cart Cart
 }
 
@@ -187,11 +187,11 @@ Table OrderDetails {
 
 Table OrderProducts {
   id Int [pk, increment]
-  orderId Int [unique, not null]
-  productId Int [unique, not null]
   quantity Int [not null, default: 1]
   product Product [not null]
+  productId Int [not null]
   order Order [not null]
+  orderId Int [unique, not null]
 }
 
 Table Settings {

@@ -73,28 +73,28 @@ router.post("/", (req, res) => {
                             code: row.code,
                             weight: row.weight,
                             caratage: row.caratage,
-                            // category: {
-                            //     connectOrCreate: {
-                            //         where: {
-                            //             title: row.category,
-                            //         },
-                            //         create: {
-                            //             title: row.category,
-                            //         },
-                            //     },
-                            // },
-                            // image: {
-                            //     connectOrCreate: {
-                            //         where: {
-                            //             path: row.image,
-                            //         },
-                            //         create: {
-                            //             alt: row.title,
-                            //             title: row.title,
-                            //             path: row.image,
-                            //         },
-                            //     },
-                            // },
+                            category: {
+                                connectOrCreate: {
+                                    where: {
+                                        title: row.category,
+                                    },
+                                    create: {
+                                        title: row.category,
+                                    },
+                                },
+                            },
+                            image: {
+                                connectOrCreate: {
+                                    where: {
+                                        path: row.image,
+                                    },
+                                    create: {
+                                        alt: row.title,
+                                        title: row.title,
+                                        path: row.image,
+                                    },
+                                },
+                            },
                         },
                     });
                 } else {

@@ -28,7 +28,37 @@ router
         res.json(data);
     })
     .post("/", async function (req, res, next) {
-        console.log('Got body:', qs.parse(req.body));
+        const order = qs.parse(req.body);
+        console.log("Got body:", order);
+
+        const data = await prisma.order.create({
+            data: {
+                user: {
+                    connect: {
+                        id: parseInt(order.customer.id),
+                    },
+                },
+                details: {
+                    create: {
+                        phone: order.customer.phone,
+                    },
+                },
+                products: {
+                    create: {
+                        product: {
+                            connect: {
+                                code: order.products[0].code,
+                            },
+                        },
+                        quantity: parseInt(order.products[0].quantity),
+                    },
+                },
+                total: parseInt(order.total),
+                discount: parseInt(order.discount),
+                deliveryPrice: parseInt(order.deliveryPrice),
+            },
+        });
+
         res.sendStatus(201);
     });
 

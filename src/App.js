@@ -31,7 +31,7 @@ const App = () => {
     const customization = useSelector((state) => state.customization);
 
     return (
-        <Uploady destination={{ url: "http://localhost:3000/api/priceupload" }}>
+        <Uploady destination={{ url: "http://localhost:8080/api/priceupload" }}>
         <QueryClientProvider client={queryClient}>
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={themes(customization)}>
