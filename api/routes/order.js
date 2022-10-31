@@ -23,6 +23,7 @@ router
             include: {
                 user: true,
                 products: true,
+                status: true,
             },
         });
         res.json(data);

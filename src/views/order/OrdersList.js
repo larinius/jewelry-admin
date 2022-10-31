@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { IconEdit, IconTrash, IconCopy } from "@tabler/icons";
 import { Box, Paper, Button, Stack, Grid, Container, IconButton } from "@mui/material";
 import { DataGrid, GridToolbar, GridColDef, GridValue, GetterParams } from "@mui/x-data-grid";
-import useOrder from "../../hooks/useOrder";
+import { IconEdit, IconTrash, IconCopy } from "@tabler/icons";
 import { useNavigate, Link } from "react-router-dom";
-import AnimateButton from "ui-component/extended/AnimateButton";
+import { useQuery } from "@tanstack/react-query";
 import { useTheme } from "@mui/material/styles";
+import AnimateButton from "ui-component/extended/AnimateButton";
+import React, { useState, useEffect } from "react";
+
+import useOrder from "../../hooks/useOrder";
 
 const OrdersList = () => {
     const data = useOrder();
@@ -40,23 +41,32 @@ const OrdersList = () => {
     const columns = [
         { field: "id", headerName: "ID", width: 90 },
         {
-            field: "code",
-            headerName: "Order",
+            field: "params.value.user.name",
+            headerName: "Client",
             width: 150,
-            editable: true,
+            editable: false,
+            renderCell: (params) => <>{params.row.user.name}</>,
         },
         {
             field: "status",
             headerName: "Status",
             type: "number",
             width: 110,
-            editable: true,
+            editable: false,
+            renderCell: (params) => <>{params.row.status.title}</>,
+        },
+        {
+            field: "total",
+            headerName: "Total",
+            type: "number",
+            width: 110,
+            editable: false,
         },
         {
             field: "tools",
             headerName: "Tools",
             width: 200,
-            editable: true,
+            editable: false,
             renderCell: (params) => (
                 <>
                     <ToolsButtons category={params.row} />
