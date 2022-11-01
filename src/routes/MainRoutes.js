@@ -25,6 +25,7 @@ const CustomersList = Loadable(lazy(() => import("views/customer/CustomersList")
 const CustomerItem = Loadable(lazy(() => import("views/customer/CustomerItem")));
 const OrdersList = Loadable(lazy(() => import("views/order/OrdersList")));
 const OrderItem = Loadable(lazy(() => import("views/order/OrderItem")));
+const OrderNew = Loadable(lazy(() => import("views/order/OrderNew")));
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import("views/sample-page")));
@@ -151,8 +152,17 @@ const MainRoutes = {
             path: "order",
             children: [
                 {
-                    path: "new",
+                    path: "item/:id",
                     element: <OrderItem />,
+                },
+            ],
+        },
+        {
+            path: "order",
+            children: [
+                {
+                    path: "new",
+                    element: <OrderNew />,
                 },
             ],
         },

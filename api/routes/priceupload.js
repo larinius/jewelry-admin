@@ -23,16 +23,12 @@ router.post("/", (req, res) => {
     // All good
 
     const schema = {
-        sku: {
-            prop: "sku",
-            type: String,
-        },
         code: {
             prop: "code",
             type: String,
         },
-        title: {
-            prop: "title",
+        sku: {
+            prop: "sku",
             type: String,
         },
         category: {
@@ -46,6 +42,14 @@ router.post("/", (req, res) => {
         weight: {
             prop: "weight",
             type: Number,
+        },
+        price: {
+            prop: "price",
+            type: Number,
+        },
+        title: {
+            prop: "title",
+            type: String,
         },
         image: {
             prop: "image",
@@ -100,7 +104,6 @@ router.post("/", (req, res) => {
                     //     },
                     // });
 
-                    console.log(row.category, category);
 
                     let data = await prisma.Product.update({
                         where: {

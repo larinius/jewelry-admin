@@ -11,7 +11,7 @@ const CustomerList = () => {
     const data = useCustomer();
     let navigate = useNavigate();
     const theme = useTheme();
-    
+
     const handleOpenCategory = (customer) => {
         const url = `/user/item/${customer.id}`;
         navigate(url, { replace: false });
@@ -84,10 +84,10 @@ const CustomerList = () => {
         return (
             <>
                 <DataGrid
+                    autoHeight={true}
                     rows={data || []}
                     columns={columns}
-                    // pageSize={100}
-                    rowsPerPageOptions={[50]}
+                    rowsPerPageOptions={[25, 50, 100]}
                     checkboxSelection
                     disableSelectionOnClick
                     experimentalFeatures={{ newEditingApi: true }}
@@ -128,7 +128,7 @@ const CustomerList = () => {
                 <ButtonsArea />
             </Box>
             <Paper sx={{ p: 1 }}>
-                <Box sx={{ height: 1200, width: "100%" }}>
+                <Box sx={{ height: 700, flexGrow: 1 }}>
                     <Grid />
                 </Box>
             </Paper>

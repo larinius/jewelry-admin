@@ -13,22 +13,22 @@ const OrdersList = () => {
     const data = useOrder();
     let navigate = useNavigate();
     const theme = useTheme();
-    const handleOpenOrder = (category) => {
-        const url = `/order/item/${category.id}`;
+    const handleOpenOrder = (order) => {
+        const url = `/order/item/${order.id}`;
         navigate(url, { replace: false });
     };
 
-    const ToolsButtons = ({ category }) => {
+    const ToolsButtons = ({ order }) => {
         return (
             <>
                 <Stack spacing={2} direction="row" justifyContent="end">
-                    <IconButton>
+                    {/* <IconButton>
                         <IconTrash />
                     </IconButton>
 
                     <IconButton>
                         <IconCopy />
-                    </IconButton>
+                    </IconButton> */}
 
                     <IconButton onClick={() => handleOpenOrder(order)}>
                         <IconEdit />
@@ -40,6 +40,7 @@ const OrdersList = () => {
 
     const columns = [
         { field: "id", headerName: "ID", width: 90 },
+        { field: "code", headerName: "Code", width: 120 },
         {
             field: "params.value.user.name",
             headerName: "Client",
@@ -56,6 +57,32 @@ const OrdersList = () => {
             renderCell: (params) => <>{params.row.status.title}</>,
         },
         {
+            field: "created",
+            headerName: "Date",
+            width: 150,
+            editable: false,
+            renderCell: (params) => {
+                var date = new Date(params.row.created).toLocaleDateString("en-GB", {
+                    localeMatcher: "lookup",
+                    year: "2-digit",
+                    month: "short",
+                    day: "numeric",
+                    hour12: false,
+                    hour: "2-digit",
+                    minute: "2-digit",
+                });
+
+                return <>{date}</>;
+            },
+        },
+        {
+            field: "weight",
+            headerName: "Weight",
+            type: "number",
+            width: 110,
+            editable: false,
+        },
+        {
             field: "total",
             headerName: "Total",
             type: "number",
@@ -69,7 +96,7 @@ const OrdersList = () => {
             editable: false,
             renderCell: (params) => (
                 <>
-                    <ToolsButtons category={params.row} />
+                    <ToolsButtons order={params.row} />
                 </>
             ),
         },
@@ -84,8 +111,7 @@ const OrdersList = () => {
                             Delete
                         </Button>
                     </AnimateButton>
-                    <AnimateButton>
-                    </AnimateButton>
+                    <AnimateButton></AnimateButton>
                     <AnimateButton>
                         <Button disableElevation size="small" variant="contained" sx={{ background: theme.palette.primary.main }}>
                             Import from CSV
@@ -102,13 +128,14 @@ const OrdersList = () => {
     };
 
     const Grid = () => {
+
         return (
             <>
                 <DataGrid
+                    getRowHeight={() => 'auto'}
                     rows={data || []}
                     columns={columns}
-                    pageSize={100}
-                    rowsPerPageOptions={[50]}
+                    rowsPerPageOptions={[25, 50, 100]}
                     checkboxSelection
                     disableSelectionOnClick
                     experimentalFeatures={{ newEditingApi: true }}
@@ -124,7 +151,7 @@ const OrdersList = () => {
                 <ButtonsArea />
             </Box>
             <Paper sx={{ p: 1 }}>
-                <Box sx={{ height: 1500, width: "100%" }}>
+                <Box sx={{ height: 700, flexGrow: 1 }}>
                     <Grid />
                 </Box>
             </Paper>

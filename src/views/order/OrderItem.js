@@ -10,9 +10,12 @@ import {
     FormControl,
     FormControlLabel,
     FormGroup,
+    FormHelperText,
     FormLabel,
     Grid,
+    Grow,
     IconButton,
+    InputLabel,
     List,
     ListItem,
     ListItemAvatar,
@@ -23,6 +26,7 @@ import {
     Paper,
     Radio,
     RadioGroup,
+    Select,
     Stack,
     Tab,
     Table,
@@ -41,182 +45,55 @@ import { useParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTheme } from "@mui/material/styles";
 import AnimateButton from "ui-component/extended/AnimateButton";
+import axios from "axios";
 import Image from "mui-image";
+import qs from "qs";
 import React, { useState, useEffect, useCallback } from "react";
-import qs from 'qs';
+
+import useCreateOrder from "../../hooks/useOrder";
 import useCustomer from "../../hooks/useCustomer";
 import useOrder from "../../hooks/useOrder";
-import useCreateOrder from "../../hooks/useOrder";
+import useOrderStatus from "../../hooks/useOrderStatus";
 import useProduct from "../../hooks/useProduct";
 import useSearch from "../../hooks/useSearch";
-import axios from "axios";
 
 const OrderItem = () => {
     const theme = useTheme();
     let { id } = useParams();
-    let products = useSearch();
-    let customers = useCustomer();
-    const queryClient = useQueryClient();
-    const [product, setProduct] = useState([]);
-    const [orderedProducts, setOrderedProducts] = useState([]);
-    const [customer, setCustomer] = useState();
-    const [order, setOrder] = useState([]);
 
-    const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/order`;
+    const statuses = useOrderStatus();
+    let order = useOrder(id);
+    let customer = useCustomer(order?.user.id);
+    const [products, setProducts] = useState([]);
+    const [status, setStatus] = useState("");
 
-    const handleSelectCustomer = (customer) => {
-        console.log(customer);
-        setCustomer(customer);
-    };
+    const date = new Date(order?.created).toLocaleDateString("en-GB", {
+        localeMatcher: "lookup",
+        year: "2-digit",
+        month: "short",
+        day: "numeric",
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+    });
 
-    const handleDelete = (item) => {
-        const index = orderedProducts.indexOf(item);
-        const newProducts = [...orderedProducts];
-        newProducts.splice(index, 1);
-        setOrderedProducts(newProducts);
-    };
-
-    const handleQuantity = (e, row) => {
-        if (e.target.value >= 0) {
-            const index = orderedProducts.indexOf(row);
-            const newProducts = [...orderedProducts];
-            newProducts[index].quantity = e.target.value;
-            setOrderedProducts(newProducts);
-        }
-    };
-
-    const handleOnSelect = (item) => {
-        const ordered = item;
-        ordered.quantity = 1;
-        setOrderedProducts([...orderedProducts, ordered]);
-    };
-
-    const formatResult = (item) => {
-        return (
-            <>
-                <span style={{ display: "block", textAlign: "left" }}>
-                    {item.sku} - {item.code}
-                </span>
-                <span style={{ display: "block", textAlign: "left" }}>
-                    {item.title} {item.price}
-                </span>
-            </>
-        );
+    const handleSelectStatus = (e) => {
+        setStatus(e.target.value);
     };
 
     useEffect(() => {
-        let newOrder = [...order];
-
-        newOrder.customer = customer;
-        newOrder.products = orderedProducts;
-        newOrder.total = invoiceSubtotal;
-        newOrder.discount = 0;
-        newOrder.deliveryPrice = 0;
-        setOrder(newOrder);
-        console.log(newOrder);
-    }, [orderedProducts, customer]);
-
-    const addOrder = useMutation((payload) => {
-        let config = {
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-        };
-
-        axios.post(apiUrl, qs.stringify(payload), config),
-            {
-                onSuccess: () => {
-                    queryClient.invalidateQueries([apiUrl]);
-                },
-            };
-
-        console.log(payload);
-    });
-
-    const handlePostOrder = () => {
-        console.log("NEW ORDER", order);
-        addOrder.mutate(order);
-    };
-
-    const createOrder = useMutation((payload) => axios.post(apiUrl, payload), {
-        onSuccess: () => {
-            queryClient.invalidateQueries([apiUrl]);
-        },
-    });
-
-    const SearchProducts = () => {
-        return (
-            <>
-                <Box>
-                    <ReactSearchAutocomplete
-                        items={products}
-                        resultStringKeyName={"title"}
-                        fuseOptions={{ keys: ["code", "sku", "title"] }}
-                        onSelect={handleOnSelect}
-                        formatResult={formatResult}
-                        styling={{
-                            height: "48px",
-                            border: "1px solid #dfe1e5",
-                            borderRadius: "2px",
-                            backgroundColor: "#fafafa",
-                            boxShadow: "rgba(32, 33, 36, 0.28) 0px 1px 1px 0px",
-                            hoverBackgroundColor: "#eee",
-                            color: "#616161",
-                            fontSize: "14px",
-                            fontFamily: "Roboto",
-                            iconColor: "grey",
-                            lineColor: "rgb(232, 234, 237)",
-                            placeholderColor: "grey",
-                            clearIconMargin: "3px 14px 0 0",
-                            searchIconMargin: "0 0 0 16px",
-                            zIndex: "9999",
-                        }}
-                    />
-                </Box>
-            </>
-        );
-    };
-
-    const SelectCustomer = () => {
-        return (
-            <>
-                <Box>
-                    <Autocomplete
-                        id="customer-select"
-                        options={customers || []}
-                        autoHighlight
-                        defaultValue={customer}
-                        getOptionLabel={(option) => `${option.name} ${option.phone}`}
-                        renderOption={(props, option) => (
-                            <Box component="li" sx={{}} {...props}>
-                                {option.name} {option.phone}
-                            </Box>
-                        )}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                label="Select customer"
-                                inputProps={{
-                                    ...params.inputProps,
-                                    autoComplete: "new-password", // disable autocomplete and autofill
-                                }}
-                            />
-                        )}
-                        onChange={(e, newValue) => {
-                            handleSelectCustomer(newValue);
-                        }}
-                    />
-                </Box>
-            </>
-        );
-    };
+        if (order !== null) {
+            setProducts(order.products);
+            setStatus(order.status.id);
+        }
+    }, [order]);
 
     function price(item) {
-        return Number(item.price) * item.quantity;
+        return Number(item.product.price) * item.quantity;
     }
 
     function weight(item) {
-        return Number(item.weight) * item.quantity;
+        return Number(item.product.weight) * item.quantity;
     }
 
     function sum(prev, next) {
@@ -224,21 +101,21 @@ const OrderItem = () => {
     }
 
     function subtotal(items) {
-        // let result = orderedProducts.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
-        let result = orderedProducts.map(price).reduce(sum).toFixed(2) || 0;
+        // let result = products.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
+        let result = products.map(price).reduce(sum).toFixed(2) || 0;
         return result;
     }
 
     function weightSum(items) {
-        // let result = orderedProducts.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
-        let result = orderedProducts.map(weight).reduce(sum).toFixed(2) || 0;
+        // let result = products.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
+        let result = products.map(weight).reduce(sum).toFixed(2) || 0;
         return result;
     }
 
-    const invoiceSubtotal = orderedProducts.length !== 0 ? subtotal(orderedProducts) : 0;
+    const invoiceSubtotal = products.length !== 0 ? subtotal(products) : 0;
     //   const invoiceTaxes = TAX_RATE * invoiceSubtotal;
     //   const invoiceTotal = invoiceTaxes + invoiceSubtotal;
-    const weightSubtotal = orderedProducts.length !== 0 ? weightSum(orderedProducts) : 0;
+    const weightSubtotal = products.length !== 0 ? weightSum(products) : 0;
 
     const ProductTable = () => {
         return (
@@ -256,7 +133,7 @@ const OrderItem = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {orderedProducts.map((row) => (
+                        {products.map((row) => (
                             <TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                                 <TableCell align="right" style={{ width: 50 }}>
                                     <IconButton
@@ -268,19 +145,19 @@ const OrderItem = () => {
                                     </IconButton>
                                 </TableCell>
                                 <TableCell component="th" scope="row">
-                                    {row.title}
+                                    {row.product.title}
                                 </TableCell>
                                 <TableCell align="left" style={{ width: 100 }}>
-                                    {row.code}
+                                    {row.product.code}
                                 </TableCell>
                                 <TableCell align="left" style={{ width: 150 }}>
-                                    {row.sku}
+                                    {row.product.sku}
                                 </TableCell>
                                 <TableCell align="right" style={{ width: 100 }}>
-                                    {row.weight}
+                                    {row.product.weight}
                                 </TableCell>
                                 <TableCell align="right" style={{ width: 100 }}>
-                                    {row.price}
+                                    {row?.product.price}
                                 </TableCell>
 
                                 <TableCell align="justify" style={{ width: 80 }}>
@@ -291,7 +168,7 @@ const OrderItem = () => {
                                         }}
                                         id="quantity"
                                         type="number"
-                                        value={row.quantity}
+                                        value={row?.quantity}
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
@@ -326,7 +203,7 @@ const OrderItem = () => {
                     </AnimateButton>
                     <AnimateButton>
                         <Button disableElevation size="small" variant="contained" sx={{ background: theme.palette.primary.main }}>
-                            Save and create new
+                            Delete
                         </Button>
                     </AnimateButton>
                     <AnimateButton>
@@ -335,7 +212,7 @@ const OrderItem = () => {
                             size="small"
                             variant="contained"
                             sx={{ background: theme.palette.success.main }}
-                            onClick={handlePostOrder}
+                            // onClick={handlePostOrder}
                         >
                             Save
                         </Button>
@@ -345,52 +222,85 @@ const OrderItem = () => {
         );
     };
 
+    const StatusSelect = () => {
+        return (
+            <>
+                <FormControl sx={{ minWidth: 120 }}>
+                    <InputLabel id="select-status">Status</InputLabel>
+                    <Select
+                        labelId="select-status-label"
+                        id="select-status-helper"
+                        value={status || ""}
+                        label="Order status"
+                        onChange={handleSelectStatus}
+                    >
+                        {statuses?.map((item) => {
+                            return (
+                                <MenuItem key={item.id} value={item.id}>
+                                    {item.title}
+                                </MenuItem>
+                            );
+                        })}
+                    </Select>
+                </FormControl>
+            </>
+        );
+    };
+
     const MainForm = () => {
         return (
             <>
-                <Box sx={{ flexGrow: 1 }} pt={5}>
-                    <Paper>
                         <Box m={2}>
-                            <Grid container spacing={5}>
-                                <Grid item xs={12} sm={6}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={4}>
                                     <Box display="flex" justifyContent="flex-start">
-                                        <Alert severity="success" variant="filled">
-                                            Order created
-                                        </Alert>
+                                        <TextField id="outlined-basic" label="Name" variant="outlined" defaultValue={order?.user.name} />
                                     </Box>
                                 </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <Box display="flex" justifyContent="flex-end">
-                                        <Typography variant="h3">Order: 220101</Typography>
+                                <Grid item xs={12} sm={4}>
+                                    <Box display="flex" justifyContent="flex-start">
+                                        <TextField id="outlined-basic" label="Order code" variant="outlined" defaultValue={order?.code} />
                                     </Box>
                                 </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <SearchProducts />
+                                <Grid item xs={12} sm={4}>
+                                    <Box display="flex" justifyContent="flex-start">
+                                        <StatusSelect />
+                                    </Box>
                                 </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <SelectCustomer />
+                                <Grid item xs={12} sm={4}>
+                                    <Box display="flex" justifyContent="flex-start">
+                                        <TextField id="outlined-basic" label="Phone" variant="outlined" defaultValue={order?.user.phone} />
+                                    </Box>
                                 </Grid>
+                                <Grid item xs={12} sm={4}>
+                                    <Box display="flex" justifyContent="flex-start">
+                                        <TextField id="outlined-basic" label="Date" variant="outlined" defaultValue={date} />
+                                    </Box>
+                                </Grid>
+
                                 <Grid item xs={12}>
-                                    <Paper m={1} variant="outlined" square>
-                                        <ProductTable />
-                                    </Paper>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <Box pt={3} pb={5} m={5} display="flex" justifyContent="flex-end">
-                                        <ButtonsArea />
+                                    <Box mt={5}>
+                                        <Paper m={1} variant="outlined" square>
+                                            <ProductTable />
+                                        </Paper>
                                     </Box>
                                 </Grid>
                             </Grid>
                         </Box>
-                    </Paper>
-                </Box>
             </>
         );
     };
 
     return (
         <>
-            <MainForm />
+            <Box mb={1} display="flex" justifyContent="flex-end">
+                <ButtonsArea />
+            </Box>
+            <Paper sx={{ p: 1 }}>
+                <Box sx={{ flexGrow: 1 }}>
+                    <MainForm />
+                </Box>
+            </Paper>
         </>
     );
 };

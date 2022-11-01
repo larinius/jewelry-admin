@@ -153,6 +153,8 @@ Table Order {
   updated DateTime
   user User [not null]
   userId Int [not null]
+  code String [unique, not null]
+  weight Decimal [not null]
   total Decimal [not null]
   discount Decimal [not null]
   deliveryPrice Decimal [not null]
@@ -191,7 +193,7 @@ Table OrderProducts {
   product Product [not null]
   productId Int [not null]
   order Order [not null]
-  orderId Int [unique, not null]
+  orderId Int [not null]
 }
 
 Table Settings {

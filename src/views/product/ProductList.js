@@ -50,7 +50,6 @@ const ProductList = () => {
                     rowHeight={80}
                     rows={data || []}
                     columns={columns}
-                    pageSize={50}
                     rowsPerPageOptions={[25, 50, 100]}
                     checkboxSelection
                     disableSelectionOnClick
