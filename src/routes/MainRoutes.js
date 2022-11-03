@@ -1,91 +1,189 @@
-import { lazy } from 'react';
+import { lazy } from "react";
 
 // project imports
-import MainLayout from 'layout/MainLayout';
-import Loadable from 'ui-component/Loadable';
+import MainLayout from "layout/MainLayout";
+import Loadable from "ui-component/Loadable";
 
 // dashboard routing
-const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
+const DashboardDefault = Loadable(lazy(() => import("views/dashboard/Default")));
 
 // utilities routing
-const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
-const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
-const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
-const UtilsMaterialIcons = Loadable(lazy(() => import('views/utilities/MaterialIcons')));
-const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
+const UtilsTypography = Loadable(lazy(() => import("views/utilities/Typography")));
+const UtilsColor = Loadable(lazy(() => import("views/utilities/Color")));
+const UtilsShadow = Loadable(lazy(() => import("views/utilities/Shadow")));
+const UtilsMaterialIcons = Loadable(lazy(() => import("views/utilities/MaterialIcons")));
+const UtilsTablerIcons = Loadable(lazy(() => import("views/utilities/TablerIcons")));
+
+const ProductList = Loadable(lazy(() => import("views/product/ProductList")));
+const ProductItem = Loadable(lazy(() => import("views/product/ProductItem")));
+const CategoriesList = Loadable(lazy(() => import("views/category/CategoryList")));
+const CategoryItem = Loadable(lazy(() => import("views/category/CategoryItem")));
+const BrandsList = Loadable(lazy(() => import("views/brand/BrandsList")));
+const BrandItem = Loadable(lazy(() => import("views/brand/BrandItem")));
+const CartsList = Loadable(lazy(() => import("views/carts/CartsList")));
+const CustomersList = Loadable(lazy(() => import("views/customer/CustomersList")));
+const CustomerItem = Loadable(lazy(() => import("views/customer/CustomerItem")));
+const OrdersList = Loadable(lazy(() => import("views/order/OrdersList")));
+const OrderItem = Loadable(lazy(() => import("views/order/OrderItem")));
+const OrderNew = Loadable(lazy(() => import("views/order/OrderNew")));
 
 // sample page routing
-const SamplePage = Loadable(lazy(() => import('views/sample-page')));
+const SamplePage = Loadable(lazy(() => import("views/sample-page")));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
-    path: '/',
+    path: "/",
     element: <MainLayout />,
     children: [
         {
-            path: '/',
-            element: <DashboardDefault />
+            path: "/",
+            element: <DashboardDefault />,
         },
         {
-            path: 'dashboard',
+            path: "dashboard",
             children: [
                 {
-                    path: 'default',
-                    element: <DashboardDefault />
-                }
-            ]
+                    path: "default",
+                    element: <DashboardDefault />,
+                },
+            ],
         },
         {
-            path: 'utils',
+            path: "user",
             children: [
                 {
-                    path: 'util-typography',
-                    element: <UtilsTypography />
-                }
-            ]
+                    path: "list",
+                    element: <CustomersList />,
+                },
+            ],
         },
         {
-            path: 'utils',
+            path: "user",
             children: [
                 {
-                    path: 'util-color',
-                    element: <UtilsColor />
-                }
-            ]
+                    path: "item/:id",
+                    element: <CustomerItem />,
+                },
+            ],
         },
         {
-            path: 'utils',
+            path: "product",
             children: [
                 {
-                    path: 'util-shadow',
-                    element: <UtilsShadow />
-                }
-            ]
+                    path: "list",
+                    element: <ProductList />,
+                },
+            ],
         },
         {
-            path: 'icons',
+            path: "product",
             children: [
                 {
-                    path: 'tabler-icons',
-                    element: <UtilsTablerIcons />
-                }
-            ]
+                    path: "item/:id",
+                    element: <ProductItem />,
+                },
+            ],
         },
         {
-            path: 'icons',
+            path: "category",
             children: [
                 {
-                    path: 'material-icons',
-                    element: <UtilsMaterialIcons />
-                }
-            ]
+                    path: "list",
+                    element: <CategoriesList />,
+                },
+            ],
         },
         {
-            path: 'sample-page',
-            element: <SamplePage />
-        }
-    ]
+            path: "category",
+            children: [
+                {
+                    path: "item/:id",
+                    element: <CategoryItem />,
+                },
+            ],
+        },
+        {
+            path: "brand",
+            children: [
+                {
+                    path: "list",
+                    element: <BrandsList />,
+                },
+            ],
+        },
+        {
+            path: "brand",
+            children: [
+                {
+                    path: "item/:id",
+                    element: <BrandItem />,
+                },
+            ],
+        },
+        {
+            path: "sales",
+            children: [
+                {
+                    path: "carts",
+                    element: <CartsList />,
+                },
+            ],
+        },
+        {
+            path: "sales",
+            children: [
+                {
+                    path: "customers",
+                    element: <CustomersList />,
+                },
+            ],
+        },
+        {
+            path: "order",
+            children: [
+                {
+                    path: "list",
+                    element: <OrdersList />,
+                },
+            ],
+        },
+        {
+            path: "order",
+            children: [
+                {
+                    path: "item/:id",
+                    element: <OrderItem />,
+                },
+            ],
+        },
+        {
+            path: "order",
+            children: [
+                {
+                    path: "new",
+                    element: <OrderNew />,
+                },
+            ],
+        },
+        {
+            path: "order",
+            children: [
+                {
+                    path: "item/:id",
+                    element: <OrderItem />,
+                },
+            ],
+        },
+        {
+            path: "sample-page",
+            element: <SamplePage />,
+        },
+        {
+            path: "product-list",
+            element: <ProductList />,
+        },
+    ],
 };
 
 export default MainRoutes;
