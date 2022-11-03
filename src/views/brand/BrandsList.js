@@ -79,8 +79,7 @@ const BrandsList = () => {
                 <DataGrid
                     rows={data || []}
                     columns={columns}
-                    pageSize={100}
-                    rowsPerPageOptions={[50]}
+                    rowsPerPageOptions={[25, 50, 100]}
                     checkboxSelection
                     disableSelectionOnClick
                     experimentalFeatures={{ newEditingApi: true }}

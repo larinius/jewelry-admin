@@ -16,6 +16,7 @@ import priceuploadRouter from "./routes/priceupload";
 import productRouter from "./routes/product";
 import searchRouter from "./routes/search";
 import userRouter from "./routes/user";
+import userGroupRouter from "./routes/usergroup";
 
 const start = async () => {
     var app = express();
@@ -35,16 +36,17 @@ const start = async () => {
 
     // All routes
     app.use("/api/brand", brandRouter);
-    app.use("/api/orderstatus", orderstatusRouter);
     app.use("/api/cart", cartRouter);
     app.use("/api/category", categoryRouter);
-    app.use("/api/order", orderRouter);
-    app.use("/api/product", productRouter);
-    app.use("/api/user", userRouter);
     app.use("/api/dummy", dummyRouter);
-    app.use("/api/priceupload", priceuploadRouter);
-    app.use("/api/search", searchRouter);
     app.use("/api/migrate", migrateRouter);
+    app.use("/api/order", orderRouter);
+    app.use("/api/orderstatus", orderstatusRouter);
+    app.use("/api/priceupload", priceuploadRouter);
+    app.use("/api/product", productRouter);
+    app.use("/api/search", searchRouter);
+    app.use("/api/user", userRouter);
+    app.use("/api/usergroup", userGroupRouter);
 
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {

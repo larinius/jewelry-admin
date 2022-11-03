@@ -20,7 +20,6 @@ router
         res.json(data);
     })
     .get("/", async function (req, res, next) {
-        console.log("PRODUCT");
         const pricePerGram = await prisma.Settings.findFirst({
             where:{
                 title: "price per gram"

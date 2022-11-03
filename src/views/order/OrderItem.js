@@ -41,6 +41,7 @@ import {
 } from "@mui/material";
 import { IconShoppingCartPlus, IconEdit, IconTrash, IconCopy, IconFolder } from "@tabler/icons";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
+import { useNavigate, Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTheme } from "@mui/material/styles";
@@ -60,7 +61,7 @@ import useSearch from "../../hooks/useSearch";
 const OrderItem = () => {
     const theme = useTheme();
     let { id } = useParams();
-
+    let navigate = useNavigate();
     const statuses = useOrderStatus();
     let order = useOrder(id);
     let customer = useCustomer(order?.user.id);
@@ -248,45 +249,59 @@ const OrderItem = () => {
     };
 
     const MainForm = () => {
+
+        const handleOpenCustomer = (customer) => {
+            const url = `/user/item/${customer.id}`;
+            navigate(url, { replace: false });
+        };
+
         return (
             <>
-                        <Box m={2}>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} sm={4}>
-                                    <Box display="flex" justifyContent="flex-start">
-                                        <TextField id="outlined-basic" label="Name" variant="outlined" defaultValue={order?.user.name} />
-                                    </Box>
-                                </Grid>
-                                <Grid item xs={12} sm={4}>
-                                    <Box display="flex" justifyContent="flex-start">
-                                        <TextField id="outlined-basic" label="Order code" variant="outlined" defaultValue={order?.code} />
-                                    </Box>
-                                </Grid>
-                                <Grid item xs={12} sm={4}>
-                                    <Box display="flex" justifyContent="flex-start">
-                                        <StatusSelect />
-                                    </Box>
-                                </Grid>
-                                <Grid item xs={12} sm={4}>
-                                    <Box display="flex" justifyContent="flex-start">
-                                        <TextField id="outlined-basic" label="Phone" variant="outlined" defaultValue={order?.user.phone} />
-                                    </Box>
-                                </Grid>
-                                <Grid item xs={12} sm={4}>
-                                    <Box display="flex" justifyContent="flex-start">
-                                        <TextField id="outlined-basic" label="Date" variant="outlined" defaultValue={date} />
-                                    </Box>
-                                </Grid>
+                <Box m={2}>
+                <Typography variant="h2" gutterBottom m={3}>
+                        Order info
+                    </Typography>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={4}>
+                            <Box display="flex" justifyContent="flex-start">
+                                <Stack direction={"row"}>
+                                    <TextField id="outlined-basic" label="Name" variant="outlined" defaultValue={order?.user.name} />
+                                    <IconButton onClick={() => handleOpenCustomer(customer)}>
+                                        <IconEdit />
+                                    </IconButton>
+                                </Stack>
+                            </Box>
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                            <Box display="flex" justifyContent="flex-start">
+                                <TextField id="outlined-basic" label="Order code" variant="outlined" defaultValue={order?.code} />
+                            </Box>
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                            <Box display="flex" justifyContent="flex-start">
+                                <StatusSelect />
+                            </Box>
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                            <Box display="flex" justifyContent="flex-start">
+                                <TextField id="outlined-basic" label="Phone" variant="outlined" defaultValue={order?.user.phone} />
+                            </Box>
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                            <Box display="flex" justifyContent="flex-start">
+                                <TextField id="outlined-basic" label="Date" variant="outlined" defaultValue={date} />
+                            </Box>
+                        </Grid>
 
-                                <Grid item xs={12}>
-                                    <Box mt={5}>
-                                        <Paper m={1} variant="outlined" square>
-                                            <ProductTable />
-                                        </Paper>
-                                    </Box>
-                                </Grid>
-                            </Grid>
-                        </Box>
+                        <Grid item xs={12}>
+                            <Box mt={5}>
+                                <Paper m={1} variant="outlined" square>
+                                    <ProductTable />
+                                </Paper>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </Box>
             </>
         );
     };

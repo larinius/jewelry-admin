@@ -21,7 +21,7 @@ const commerce = {
             type: "item",
             url: "/order/list",
             icon: icons.IconReportMoney,
-            breadcrumbs: true,
+            breadcrumbs: false,
         },
         {
             id: "clients",
@@ -29,7 +29,7 @@ const commerce = {
             type: "item",
             url: "/user/list",
             icon: icons.IconUsers,
-            breadcrumbs: true,
+            breadcrumbs: false,
         }
     ],
 };

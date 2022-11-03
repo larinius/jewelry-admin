@@ -16,7 +16,8 @@ router
                 cart: true,
                 prefs: true,
                 userGroup: true,
-                order: true,
+                // products: { include: { product: true } },
+                order: { include: { status: true}},
             },
         });
         res.json(data);
