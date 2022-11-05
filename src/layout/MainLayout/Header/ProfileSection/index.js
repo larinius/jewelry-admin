@@ -49,7 +49,6 @@ const ProfileSection = () => {
     
     const { logout } = useAuth0();
     const { user } = useAuth0();
-    console.log(user);
     const [sdm, setSdm] = useState(true);
     const [value, setValue] = useState("");
     const [notification, setNotification] = useState(false);
@@ -116,7 +115,7 @@ const ProfileSection = () => {
                 }}
                 icon={
                     <Avatar
-                        src={user.picture}
+                        src={user?.picture}
                         sx={{
                             ...theme.typography.mediumAvatar,
                             margin: "8px 0 8px 8px !important",

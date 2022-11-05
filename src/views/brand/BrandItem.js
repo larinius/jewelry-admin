@@ -20,7 +20,6 @@ import {
     IconButton,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import { useTheme } from "@mui/material/styles";
 import AnimateButton from "ui-component/extended/AnimateButton";
 import Image from "mui-image";
@@ -41,14 +40,35 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import { IconGripHorizontal, IconPlus } from "@tabler/icons";
-import useBrand from "../../hooks/useBrand";
+// import useBrand from "../../hooks/useBrand";
+
+import { useQuery } from "@tanstack/react-query";
+import { useAuth0 } from "@auth0/auth0-react";
+import axios from "axios";
 
 const BrandItem = () => {
     const theme = useTheme();
+
+    // ==== API and Auth0 =============
+
+    const { getAccessTokenSilently } = useAuth0();
+    const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
+    const accessToken = getAccessTokenSilently({
+        audience: audience,
+    });
+
+    const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/brand`;
     let { id } = useParams();
-    let brand = useBrand(id);
+    const query = `${apiUrl}/${id}`;
+
+    const { isLoading, error, data } = useQuery([query], () => axios.get(query));
+
+    // =============================
+
+
 
     const [value, setValue] = React.useState("1");
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -102,7 +122,7 @@ const BrandItem = () => {
                     autoComplete="off"
                 >
                     <Stack spacing={2} direction="column" justifyContent="start">
-                        <TextField id="title" label="Title" defaultValue={brand?.title} />
+                        <TextField id="title" label="Title" defaultValue={data?.data.title} />
                     </Stack>
                 </Box>
             </>
@@ -122,9 +142,9 @@ const BrandItem = () => {
                 >
                     <LanguageSelect />
                     <Stack spacing={2} direction="column" justifyContent="start">
-                        <TextField id="seo_h1" fullWidth label="H1" defaultValue={brand?.seoH1} />
-                        <TextField id="seo_title" multiline rows={2} fullWidth label="Title" defaultValue={brand?.seoTitle} />
-                        <TextField id="seo_descr" multiline rows={3} fullWidth label="Descr." defaultValue={brand?.seoDescription} />
+                        <TextField id="seo_h1" fullWidth label="H1" defaultValue={data?.data.seoH1} />
+                        <TextField id="seo_title" multiline rows={2} fullWidth label="Title" defaultValue={data?.data.seoTitle} />
+                        <TextField id="seo_descr" multiline rows={3} fullWidth label="Descr." defaultValue={data?.data.seoDescription} />
                     </Stack>
                     <Box mt={5}>
                         <Typography m={1} variant="h3" component="h3">
@@ -160,7 +180,7 @@ const BrandItem = () => {
                                 <Box display="flex" justifyContent="flex-end">
                                     <Paper elevation={3}>
                                         <Image
-                                            src={brand ? brand.logo : Dummy}
+                                            src={data?.data ? data?.data.logo : Dummy}
                                             sx={{ maxHeight: 300, maxWidth: 300, display: { xs: "none", md: "inline" }, fit: "contain" }}
                                         />
                                     </Paper>

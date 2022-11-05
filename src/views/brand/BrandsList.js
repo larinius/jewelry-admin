@@ -2,15 +2,59 @@ import React, { useState, useEffect } from "react";
 import { IconEdit, IconTrash, IconCopy } from "@tabler/icons";
 import { Box, Paper, Button, Stack, Grid, Container, IconButton } from "@mui/material";
 import { DataGrid, GridToolbar, GridColDef, GridValue, GetterParams } from "@mui/x-data-grid";
-import useBrand from "../../hooks/useBrand";
+// import useBrand from "../../hooks/useBrand";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate, Link } from "react-router-dom";
 import AnimateButton from "ui-component/extended/AnimateButton";
 import { useTheme } from "@mui/material/styles";
+import axios from "axios";
 
 const BrandsList = () => {
-    const data = useBrand();
     let navigate = useNavigate();
     const theme = useTheme();
+
+    // ==== API and Auth0 =============
+    // const [token, setToken] = useState();
+
+    const { getAccessTokenSilently } = useAuth0();
+    const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
+
+    const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/brand`;
+    const query = `${apiUrl}`;
+
+    // var options = {
+    //     method: "GET",
+    //     url: query,
+    //     headers: { Authorization: `${token}` },
+    // };
+
+    const { isLoading, error, data } = useQuery([query], () => callSecureApi(query));
+
+    // useEffect(async () => {
+    //     const t = await getAccessTokenSilently();
+    //     setToken(t);
+    //     console.log(t);
+    // }, []);
+
+    const callSecureApi = async (query) => {
+        try {
+            const token = await getAccessTokenSilently();
+            console.log(token);
+            const response = await fetch(query, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            return response.json();
+
+        } catch (error) {
+            return null;
+        }
+    };
+
+    // =============================
 
     const handleOpen = (brand) => {
         const url = `/brand/item/${brand.id}`;
@@ -77,7 +121,7 @@ const BrandsList = () => {
         return (
             <>
                 <DataGrid
-                    rows={data || []}
+                    rows={data?.data || []}
                     columns={columns}
                     rowsPerPageOptions={[25, 50, 100]}
                     checkboxSelection
