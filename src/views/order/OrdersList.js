@@ -18,6 +18,11 @@ const OrdersList = () => {
         navigate(url, { replace: false });
     };
 
+    const handleNewOrder = (order) => {
+        const url = `/order/new`;
+        navigate(url, { replace: false });
+    };
+
     const ToolsButtons = ({ order }) => {
         return (
             <>
@@ -114,11 +119,11 @@ const OrdersList = () => {
                     <AnimateButton></AnimateButton>
                     <AnimateButton>
                         <Button disableElevation size="small" variant="contained" sx={{ background: theme.palette.primary.main }}>
-                            Import from CSV
+                            Save
                         </Button>
                     </AnimateButton>
                     <AnimateButton>
-                        <Button disableElevation size="small" variant="contained" sx={{ background: theme.palette.success.main }}>
+                        <Button onClick={handleNewOrder} disableElevation size="small" variant="contained" sx={{ background: theme.palette.success.main }}>
                             Create new
                         </Button>
                     </AnimateButton>
