@@ -31,7 +31,7 @@ const App = () => {
     const customization = useSelector((state) => state.customization);
 
     return (
-        <Uploady destination={{ url: "http://139.59.132.107:8080/api/priceupload" }}>
+        <Uploady destination={{ url: process.env.REACT_APP_UPLOAD_ENDPOINT }}>
         <QueryClientProvider client={queryClient}>
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={themes(customization)}>
