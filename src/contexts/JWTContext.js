@@ -1,17 +1,18 @@
-import PropTypes from 'prop-types';
-import { createContext, useEffect, useReducer } from 'react';
+import PropTypes from "prop-types";
+import { createContext, useEffect, useReducer } from "react";
 
 // third-party
-import { Chance } from 'chance';
-import jwtDecode from 'jwt-decode';
+import { Chance } from "chance";
+import jwtDecode from "jwt-decode";
 
 // reducer - state management
-import { LOGIN, LOGOUT } from 'store/actions';
-import accountReducer from 'store/accountReducer';
+import { LOGIN, LOGOUT } from "store/actions";
+import accountReducer from "store/accountReducer";
 
 // project imports
-import Loader from 'ui-component/Loader';
-import axios from 'utils/axios';
+import Loader from "ui-component/Loader";
+// import axios from 'utils/axios';
+import axios from "axios";
 
 const chance = new Chance();
 
@@ -19,7 +20,7 @@ const chance = new Chance();
 const initialState = {
     isLoggedIn: false,
     isInitialized: false,
-    user: null
+    user: null,
 };
 
 const verifyToken = (serviceToken) => {
@@ -35,10 +36,10 @@ const verifyToken = (serviceToken) => {
 
 const setSession = (serviceToken) => {
     if (serviceToken) {
-        localStorage.setItem('serviceToken', serviceToken);
+        localStorage.setItem("serviceToken", serviceToken);
         axios.defaults.headers.common.Authorization = `Bearer ${serviceToken}`;
     } else {
-        localStorage.removeItem('serviceToken');
+        localStorage.removeItem("serviceToken");
         delete axios.defaults.headers.common.Authorization;
     }
 };
@@ -52,7 +53,7 @@ export const JWTProvider = ({ children }) => {
     useEffect(() => {
         const init = async () => {
             try {
-                const serviceToken = window.localStorage.getItem('serviceToken');
+                const serviceToken = window.localStorage.getItem("serviceToken");
                 if (serviceToken && verifyToken(serviceToken)) {
                     setSession(serviceToken);
                     const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/account/me`);
@@ -61,18 +62,18 @@ export const JWTProvider = ({ children }) => {
                         type: LOGIN,
                         payload: {
                             isLoggedIn: true,
-                            user
-                        }
+                            user,
+                        },
                     });
                 } else {
                     dispatch({
-                        type: LOGOUT
+                        type: LOGOUT,
                     });
                 }
             } catch (err) {
                 console.error(err);
                 dispatch({
-                    type: LOGOUT
+                    type: LOGOUT,
                 });
             }
         };
@@ -81,15 +82,18 @@ export const JWTProvider = ({ children }) => {
     }, []);
 
     const login = async (email, password) => {
-        const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/account/login`, { email, password });
+        const q = `${process.env.REACT_APP_API_BASE_URL}/account/login`;
+        console.log(q);
+        const response = await axios.post(q, { email, password });
+        console.log(response);
         const { serviceToken, user } = response.data;
         setSession(serviceToken);
         dispatch({
             type: LOGIN,
             payload: {
                 isLoggedIn: true,
-                user
-            }
+                user,
+            },
         });
     };
 
@@ -101,24 +105,24 @@ export const JWTProvider = ({ children }) => {
             email,
             password,
             firstName,
-            lastName
+            lastName,
         });
         let users = response.data;
 
-        if (window.localStorage.getItem('users') !== undefined && window.localStorage.getItem('users') !== null) {
-            const localUsers = window.localStorage.getItem('users');
+        if (window.localStorage.getItem("users") !== undefined && window.localStorage.getItem("users") !== null) {
+            const localUsers = window.localStorage.getItem("users");
             users = [
                 ...JSON.parse(localUsers),
                 {
                     id,
                     email,
                     password,
-                    name: `${firstName} ${lastName}`
-                }
+                    name: `${firstName} ${lastName}`,
+                },
             ];
         }
 
-        window.localStorage.setItem('users', JSON.stringify(users));
+        window.localStorage.setItem("users", JSON.stringify(users));
     };
 
     const logout = () => {
@@ -140,7 +144,7 @@ export const JWTProvider = ({ children }) => {
 };
 
 JWTProvider.propTypes = {
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
 };
 
 export default JWTContext;

@@ -1,11 +1,11 @@
-// auth
-import './account';
+// // auth
+// import './account';
 
-// user activity
-import './user-profile';
+// // user activity
+// import './user-profile';
 
-// app pages
-import './mail';
-import './calendar';
-import './chat';
-import './e-commerce';
+// // app pages
+// import './mail';
+// import './calendar';
+// import './chat';
+// import './e-commerce';
