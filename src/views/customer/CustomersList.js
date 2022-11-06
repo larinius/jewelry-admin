@@ -8,7 +8,7 @@ import { useNavigate, Link } from "react-router-dom";
 import AnimateButton from "ui-component/extended/AnimateButton";
 import { useTheme } from "@mui/material/styles";
 const CustomerList = () => {
-    const data = useCustomer();
+    const data = useCustomer()?.data;
     let navigate = useNavigate();
     const theme = useTheme();
 

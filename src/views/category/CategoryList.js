@@ -9,7 +9,7 @@ import AnimateButton from "ui-component/extended/AnimateButton";
 import { useTheme } from "@mui/material/styles";
 
 const CategoriesList = () => {
-    const data = useCategory();
+    const data = useCategory()?.data;
     let navigate = useNavigate();
     const theme = useTheme();
 

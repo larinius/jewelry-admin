@@ -58,7 +58,7 @@ const ProductItem = () => {
 
     const theme = useTheme();
     let { id } = useParams();
-    let product = useProduct(id);
+    let product = useProduct(id)?.data;
 
     const categories = [
         { id: 1, title: "Rings" },
@@ -173,6 +173,7 @@ const ProductItem = () => {
     };
 
     const MainParamsForm = ({product}) => {
+        console.log(product);
         return (
             <>
                 <Box
@@ -250,6 +251,7 @@ const ProductItem = () => {
     };
 
     const Characteristics = ({product}) => {
+        console.log(product);
         return (
             <>
                 <Box sx={{ flexGrow: 1 }}>
@@ -257,7 +259,7 @@ const ProductItem = () => {
                         <Grid item xs={12} sm={8} md={8} lg={6} xl={6}>
                             <Item>
                                 <Paper variant="outlined" elevation={0}>
-                                    <MainParamsForm />
+                                    <MainParamsForm product={product} />
                                 </Paper>
                             </Item>
                         </Grid>
@@ -291,7 +293,7 @@ const ProductItem = () => {
         );
     };
 
-    const PropertyTabs = () => {
+    const PropertyTabs = ({product}) => {
         return (
             <>
                 <Box sx={{ width: "100%", typography: "body1" }}>
@@ -362,7 +364,7 @@ const ProductItem = () => {
 
     return (
         <>
-            <PropertyTabs />
+            <PropertyTabs product={product} />
         </>
     );
 };

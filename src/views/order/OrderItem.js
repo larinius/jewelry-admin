@@ -62,9 +62,9 @@ const OrderItem = () => {
     const theme = useTheme();
     let { id } = useParams();
     let navigate = useNavigate();
-    const statuses = useOrderStatus();
-    let order = useOrder(id);
-    let customer = useCustomer(order?.user.id);
+    const statuses = useOrderStatus()?.data;
+    let order = useOrder(id)?.data;
+    let customer = useCustomer(order?.user.id)?.data;
     const [products, setProducts] = useState([]);
     const [status, setStatus] = useState("");
 
@@ -84,8 +84,8 @@ const OrderItem = () => {
 
     useEffect(() => {
         if (order !== null) {
-            setProducts(order.products);
-            setStatus(order.status.id);
+            setProducts(order?.products);
+            setStatus(order?.status.id);
         }
     }, [order]);
 
@@ -103,20 +103,20 @@ const OrderItem = () => {
 
     function subtotal(items) {
         // let result = products.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
-        let result = products.map(price).reduce(sum).toFixed(2) || 0;
+        let result = products?.map(price).reduce(sum).toFixed(2) || 0;
         return result;
     }
 
     function weightSum(items) {
         // let result = products.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
-        let result = products.map(weight).reduce(sum).toFixed(2) || 0;
+        let result = products?.map(weight).reduce(sum).toFixed(2) || 0;
         return result;
     }
 
-    const invoiceSubtotal = products.length !== 0 ? subtotal(products) : 0;
+    const invoiceSubtotal = products?.length !== 0 ? subtotal(products) : 0;
     //   const invoiceTaxes = TAX_RATE * invoiceSubtotal;
     //   const invoiceTotal = invoiceTaxes + invoiceSubtotal;
-    const weightSubtotal = products.length !== 0 ? weightSum(products) : 0;
+    const weightSubtotal = products?.length !== 0 ? weightSum(products) : 0;
 
     const ProductTable = () => {
         return (
@@ -134,7 +134,7 @@ const OrderItem = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {products.map((row) => (
+                        {products?.map((row) => (
                             <TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                                 <TableCell align="right" style={{ width: 50 }}>
                                     <IconButton
