@@ -64,8 +64,8 @@ import Dummy from "../../assets/images/dummy.jpg";
 const CustomerItem = () => {
     const theme = useTheme();
     let { id } = useParams();
-    const customer = useCustomer(id);
-    const customerGroups = useCustomerGroup();
+    const customer = useCustomer(id)?.data;
+    const customerGroups = useCustomerGroup()?.data;
     const [group, setGroup] = useState("");
     const [orders, setOrders] = useState([]);
     let navigate = useNavigate();
@@ -85,13 +85,13 @@ const CustomerItem = () => {
 
     useEffect(() => {
         if (customer !== null) {
-            setOrders(customer.order);
+            setOrders(customer?.order);
         }
     }, [customer]);
 
     useEffect(() => {
         if (customerGroups !== null && customer !== null) {
-            setGroup(customer.userGroupId);
+            setGroup(customer?.userGroupId);
         }
     }, [customerGroups, customer]);
 
@@ -244,7 +244,7 @@ const CustomerItem = () => {
                         <Grid item xs={12}>
                             <Box mt={5}>
                                 <Paper m={1} variant="outlined" square>
-                                    {orders.length ? (
+                                    {orders?.length ? (
                                         <OrdersTable />
                                     ) : (
                                         <Typography variant="subtitle1" m={3}>

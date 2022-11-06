@@ -16,7 +16,7 @@ import UploadButton from "@rpldy/upload-button";
 import Dummy from "../../assets/images/dummy.jpg";
 
 const ProductList = () => {
-    const data = useProduct();
+    const data = useProduct()?.data;
     let navigate = useNavigate();
 
     useEffect(() => {}, [data]);

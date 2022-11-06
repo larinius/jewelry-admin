@@ -10,7 +10,7 @@ import React, { useState, useEffect } from "react";
 import useOrder from "../../hooks/useOrder";
 
 const OrdersList = () => {
-    const data = useOrder();
+    const data = useOrder()?.data;
     let navigate = useNavigate();
     const theme = useTheme();
     const handleOpenOrder = (order) => {

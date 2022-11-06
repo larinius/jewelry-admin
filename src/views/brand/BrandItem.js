@@ -46,7 +46,7 @@ import useBrand from "../../hooks/useBrand";
 const BrandItem = () => {
     const theme = useTheme();
     let { id } = useParams();
-    let brand = useBrand(id);
+    let brand = useBrand(id)?.data;
 
     const [value, setValue] = React.useState("1");
     const handleChange = (event, newValue) => {

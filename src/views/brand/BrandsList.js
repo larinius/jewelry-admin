@@ -77,7 +77,7 @@ const BrandsList = () => {
         return (
             <>
                 <DataGrid
-                    rows={data || []}
+                    rows={data?.data || []}
                     columns={columns}
                     rowsPerPageOptions={[25, 50, 100]}
                     checkboxSelection
