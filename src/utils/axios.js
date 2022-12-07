@@ -14,29 +14,50 @@
 
 // export default axiosServices;
 
-
-import axios from 'axios';
+import axios from "axios";
 
 const fetchClient = () => {
-  const defaultOptions = {
-    baseURL: process.env.REACT_APP_API_BASE_URL,
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
+    const defaultOptions = {
+        baseURL: process.env.REACT_APP_API_BASE_URL,
+        method: "get",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    };
 
-  // Create instance
-  let instance = axios.create(defaultOptions);
+    // Create instance
+    let instance = axios.create(defaultOptions);
 
-  // Set the AUTH token for any request
-  instance.interceptors.request.use(function (config) {
-    const token = localStorage.getItem('serviceToken');
-    config.headers.Authorization =  token ? `Bearer ${token}` : '';
-    return config;
-  });
+    // Set the AUTH token for any request
+    instance.interceptors.request.use(function (config) {
+        const token = localStorage.getItem("serviceToken");
+        config.headers.Authorization = token ? `Bearer ${token}` : "";
+        return config;
+    });
 
-  return instance;
+    return instance;
 };
 
-export default fetchClient();
+const postClient = () => {
+    const defaultOptions = {
+        baseURL: process.env.REACT_APP_API_BASE_URL,
+        method: "post",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+    };
+
+    // Create instance
+    let instance = axios.create(defaultOptions);
+
+    // Set the AUTH token for any request
+    instance.interceptors.request.use(function (config) {
+        const token = localStorage.getItem("serviceToken");
+        config.headers.Authorization = token ? `Bearer ${token}` : "";
+        return config;
+    });
+
+    return instance;
+};
+
+export  {fetchClient, postClient};

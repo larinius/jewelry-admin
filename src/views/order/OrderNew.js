@@ -51,6 +51,7 @@ import useCreateOrder from "../../hooks/useOrder";
 import useProduct from "../../hooks/useProduct";
 import useSearch from "../../hooks/useSearch";
 import axios from "axios";
+import { fetchClient, postClient } from "./../../utils/axios";
 
 const OrderItem = () => {
     const theme = useTheme();
@@ -85,6 +86,14 @@ const OrderItem = () => {
         }
         console.log(orderCode);
     }, []);
+
+    console.log(products);
+    console.log(customers);
+
+    useEffect(() => {
+        console.log(products);
+        console.log(customers);
+    }, [products, customers]);
 
     const handleSelectCustomer = (customer) => {
         console.log(customer);
@@ -163,13 +172,7 @@ const OrderItem = () => {
     };
 
     const addOrder = useMutation((payload) => {
-        let config = {
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-        };
-
-        axios.post(apiUrl, qs.stringify(payload), config).then((response) => {
+        postClient(apiUrl, qs.stringify(payload)).then((response) => {
             console.log(response.status);
             if (response.status === 201) {
                 showNotification("Order created", severity.success);
