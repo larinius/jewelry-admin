@@ -16,10 +16,12 @@ import UploadButton from "@rpldy/upload-button";
 import Dummy from "../../assets/images/dummy.jpg";
 
 const ProductList = () => {
-    const data = useProduct()?.data;
+    const data = useProduct().data.data;
     let navigate = useNavigate();
 
-    useEffect(() => {}, [data]);
+    useEffect(() => {
+        console.log(data);
+    }, [data]);
 
     const handleOpenProduct = (product) => {
         console.log(product);
@@ -48,7 +50,7 @@ const ProductList = () => {
             <>
                 <DataGrid
                     rowHeight={80}
-                    rows={data || []}
+                    rows={data?.products || []}
                     columns={columns}
                     rowsPerPageOptions={[25, 50, 100]}
                     checkboxSelection
