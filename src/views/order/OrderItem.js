@@ -1,70 +1,32 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 import {
-    Alert,
-    Autocomplete,
-    Avatar,
     Box,
-    Button,
-    Checkbox,
-    Container,
-    FormControl,
-    FormControlLabel,
-    FormGroup,
-    FormHelperText,
-    FormLabel,
-    Grid,
-    Grow,
-    IconButton,
-    InputLabel,
-    List,
-    ListItem,
-    ListItemAvatar,
-    ListItemIcon,
-    ListItemSecondaryAction,
-    ListItemText,
-    MenuItem,
-    Paper,
-    Radio,
-    RadioGroup,
-    Select,
-    Stack,
-    Tab,
-    Table,
+    Button, FormControl, Grid, IconButton,
+    InputLabel, MenuItem,
+    Paper, Select,
+    Stack, Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
-    TableRow,
-    Tabs,
-    TextField,
-    Typography,
+    TableRow, TextField,
+    Typography
 } from "@mui/material";
-import { IconShoppingCartPlus, IconEdit, IconTrash, IconCopy, IconFolder } from "@tabler/icons";
-import { ReactSearchAutocomplete } from "react-search-autocomplete";
-import { useNavigate, Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTheme } from "@mui/material/styles";
+import { IconEdit, IconTrash } from "@tabler/icons";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import AnimateButton from "ui-component/extended/AnimateButton";
-import axios from "axios";
-import Image from "mui-image";
-import qs from "qs";
-import React, { useState, useEffect, useCallback } from "react";
 
-import useCreateOrder from "../../hooks/useOrder";
-import useCustomer from "../../hooks/useCustomer";
-import useOrder from "../../hooks/useOrder";
-import useOrderStatus from "../../hooks/useOrderStatus";
-import useProduct from "../../hooks/useProduct";
-import useSearch from "../../hooks/useSearch";
+import { useCustomer, useOrder, useOrderStatus } from "../../hooks/apiHooks";
 
 const OrderItem = () => {
     const theme = useTheme();
     let { id } = useParams();
     let navigate = useNavigate();
-    const statuses = useOrderStatus()?.data;
-    let order = useOrder(id)?.data;
-    let customer = useCustomer(order?.user.id)?.data;
+    const {status : orderStatus} = useOrderStatus();
+    let {order} = useOrder(id);
+    let {customer} = useCustomer(order?.user.id);
     const [products, setProducts] = useState([]);
     const [status, setStatus] = useState("");
 

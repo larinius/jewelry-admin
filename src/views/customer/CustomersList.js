@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { IconEdit, IconTrash, IconCopy } from "@tabler/icons";
-import { Box, Paper, Button, Stack, Grid, Container, IconButton } from "@mui/material";
-import { DataGrid, GridToolbar, GridColDef, GridValue, GetterParams } from "@mui/x-data-grid";
-import useCustomer from "../../hooks/useCustomer";
-import { useNavigate, Link } from "react-router-dom";
-import AnimateButton from "ui-component/extended/AnimateButton";
+import { Box, Button, IconButton, Paper, Stack } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { IconCopy, IconEdit, IconTrash } from "@tabler/icons";
+import { useNavigate } from "react-router-dom";
+import AnimateButton from "ui-component/extended/AnimateButton";
+import {useCustomer} from "../../hooks/apiHooks";
+
 const CustomerList = () => {
-    const data = useCustomer()?.data;
+    const {customer} = useCustomer();
     let navigate = useNavigate();
     const theme = useTheme();
 

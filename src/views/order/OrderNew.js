@@ -2,63 +2,40 @@
 import {
     Alert,
     Autocomplete,
-    Avatar,
     Box,
     Button,
-    Checkbox,
-    Container,
-    FormControl,
-    FormControlLabel,
-    FormGroup,
-    FormLabel,
     Grid,
     Grow,
     IconButton,
-    List,
-    ListItem,
-    ListItemAvatar,
-    ListItemIcon,
-    ListItemSecondaryAction,
-    ListItemText,
-    MenuItem,
     Paper,
-    Radio,
-    RadioGroup,
     Stack,
-    Tab,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
     TableRow,
-    Tabs,
     TextField,
-    Typography,
+    Typography
 } from "@mui/material";
-import { IconShoppingCartPlus, IconEdit, IconTrash, IconCopy, IconFolder } from "@tabler/icons";
-import { ReactSearchAutocomplete } from "react-search-autocomplete";
-import { useParams } from "react-router-dom";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTheme } from "@mui/material/styles";
-import AnimateButton from "ui-component/extended/AnimateButton";
-import Image from "mui-image";
-import React, { useState, useEffect, useCallback } from "react";
+import { IconTrash } from "@tabler/icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import qs from "qs";
-import useCustomer from "../../hooks/useCustomer";
-import useOrder from "../../hooks/useOrder";
-import useCreateOrder from "../../hooks/useOrder";
-import useProduct from "../../hooks/useProduct";
-import useSearch from "../../hooks/useSearch";
-import axios from "axios";
-import { fetchClient, postClient } from "./../../utils/axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { ReactSearchAutocomplete } from "react-search-autocomplete";
+import AnimateButton from "ui-component/extended/AnimateButton";
+import { useCustomer, useSearch } from "../../hooks/apiHooks";
+import { postClient } from "./../../utils/axios";
 
 const OrderItem = () => {
     const theme = useTheme();
     let { id } = useParams();
-    let products = useSearch();
-    let customers = useCustomer();
+    let { search: products } = useSearch();
+    let { customer : customers } = useCustomer();
     const queryClient = useQueryClient();
+
     const [product, setProduct] = useState([]);
     const [orderedProducts, setOrderedProducts] = useState([]);
     const [customer, setCustomer] = useState();

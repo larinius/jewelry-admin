@@ -1,16 +1,14 @@
-import { Box, Paper, Button, Stack, Grid, Container, IconButton } from "@mui/material";
-import { DataGrid, GridToolbar, GridColDef, GridValue, GetterParams } from "@mui/x-data-grid";
-import { IconEdit, IconTrash, IconCopy } from "@tabler/icons";
-import { useNavigate, Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { Box, Button, IconButton, Paper, Stack } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { IconEdit } from "@tabler/icons";
+import { useNavigate } from "react-router-dom";
 import AnimateButton from "ui-component/extended/AnimateButton";
-import React, { useState, useEffect } from "react";
 
-import useOrder from "../../hooks/useOrder";
+import {useOrder} from "../../hooks/apiHooks";
 
 const OrdersList = () => {
-    const data = useOrder()?.data;
+    const {order} = useOrder();
     let navigate = useNavigate();
     const theme = useTheme();
     const handleOpenOrder = (order) => {

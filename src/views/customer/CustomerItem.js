@@ -1,71 +1,30 @@
 import {
-    Alert,
-    Autocomplete,
-    Avatar,
     Box,
-    Button,
-    Checkbox,
-    Container,
-    DataGrid,
-    FormControl,
-    FormControlLabel,
-    FormGroup,
-    FormHelperText,
-    FormLabel,
-    GetterParams,
-    Grid,
-    Grow,
-    IconButton,
-    InputLabel,
-    List,
-    ListItem,
-    ListItemAvatar,
-    ListItemIcon,
-    ListItemSecondaryAction,
-    ListItemText,
-    MenuItem,
-    Paper,
-    Radio,
-    RadioGroup,
-    Select,
-    Stack,
-    Tab,
-    Table,
+    Button, FormControl, Grid, IconButton,
+    InputLabel, MenuItem,
+    Paper, Select,
+    Stack, Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
-    TableRow,
-    Tabs,
-    TextField,
-    Typography,
+    TableRow, TextField,
+    Typography
 } from "@mui/material";
-import { arrayMoveImmutable as arrayMove } from "array-move";
-import { Container as ContainerDnd, Draggable } from "react-smooth-dnd";
-import { IconEdit, IconTrash, IconCopy } from "@tabler/icons";
-import { styled } from "@mui/material/styles";
-import { TabList, TabPanel, TabContext } from "@mui/lab";
-import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import { useTheme } from "@mui/material/styles";
+import { IconEdit } from "@tabler/icons";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import AnimateButton from "ui-component/extended/AnimateButton";
-import Dropzone, { useDropzone } from "react-dropzone";
-import Image from "mui-image";
-import React, { useState, useEffect, useCallback } from "react";
-import TinyMCE from "ui-component/TinyMCE";
-import { useNavigate, Link } from "react-router-dom";
 
-import useCustomer from "../../hooks/useCustomer";
-import useCustomerGroup from "../../hooks/useCustomerGroup";
-import useProduct from "../../hooks/useProduct";
+import { useCustomer, useCustomerGroup } from "../../hooks/apiHooks";
 
-import Dummy from "../../assets/images/dummy.jpg";
 
 const CustomerItem = () => {
     const theme = useTheme();
     let { id } = useParams();
-    const customer = useCustomer(id)?.data;
-    const customerGroups = useCustomerGroup()?.data;
+    const {customer} = useCustomer(id);
+    const {customerGroup} = useCustomerGroup();
     const [group, setGroup] = useState("");
     const [orders, setOrders] = useState([]);
     let navigate = useNavigate();
@@ -90,10 +49,10 @@ const CustomerItem = () => {
     }, [customer]);
 
     useEffect(() => {
-        if (customerGroups !== null && customer !== null) {
+        if (customerGroup !== null && customer !== null) {
             setGroup(customer?.userGroupId);
         }
-    }, [customerGroups, customer]);
+    }, [customerGroup, customer]);
 
     const handleSelectGroup = (e) => {
         setGroup(e.target.value);

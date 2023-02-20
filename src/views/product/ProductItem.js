@@ -1,47 +1,24 @@
 /* eslint-disable react/prop-types */
-import {
-    Box,
-    Paper,
-    Button,
-    Stack,
-    Grid,
-    Container,
-    TextField,
-    Tabs,
-    Tab,
-    Typography,
-    MenuItem,
-    FormLabel,
-    FormGroup,
-    FormControl,
-    FormControlLabel,
-    Checkbox,
-    Radio,
-    RadioGroup,
-    IconButton,
-} from "@mui/material";
-import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { useTheme } from "@mui/material/styles";
-import AnimateButton from "ui-component/extended/AnimateButton";
-import Image from "mui-image";
-import React, { useState, useEffect, useCallback } from "react";
-import { styled } from "@mui/material/styles";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import Dummy from "../../assets/images/dummy.jpg";
-import TinyMCE from "ui-component/TinyMCE";
-import useProduct from "../../hooks/useProduct";
-import Dropzone, { useDropzone } from "react-dropzone";
-import { Container as ContainerDnd, Draggable } from "react-smooth-dnd";
-import { arrayMoveImmutable as arrayMove } from "array-move";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
+import {
+    Box, Button, Checkbox, Container, FormControl,
+    FormControlLabel, FormLabel, Grid, IconButton, MenuItem, Paper, Radio,
+    RadioGroup, Stack, Tab, TextField, Typography
+} from "@mui/material";
+import { styled, useTheme } from "@mui/material/styles";
 import { IconGripHorizontal, IconPlus } from "@tabler/icons";
+import { arrayMoveImmutable as arrayMove } from "array-move";
+import Image from "mui-image";
+import React, { useCallback, useEffect, useState } from "react";
+import Dropzone, { useDropzone } from "react-dropzone";
+import { useParams } from "react-router-dom";
+import { Container as ContainerDnd, Draggable } from "react-smooth-dnd";
+import AnimateButton from "ui-component/extended/AnimateButton";
+import TinyMCE from "ui-component/TinyMCE";
+import Dummy from "../../assets/images/dummy.jpg";
+import {useProduct} from "../../hooks/apiHooks";
 
 const ProductItem = () => {
     const [value, setValue] = React.useState("1");
@@ -58,7 +35,7 @@ const ProductItem = () => {
 
     const theme = useTheme();
     let { id } = useParams();
-    let product = useProduct(id)?.data;
+    let {product} = useProduct(id);
 
     const categories = [
         { id: 1, title: "Rings" },
@@ -69,7 +46,7 @@ const ProductItem = () => {
     useEffect(() => {
         console.log("URL:", id);
         console.log(product);
-        setCategory(product?.category.title);
+        setCategory(product?.category?.title || "");
     }, [id, product]);
 
     const [items, setItems] = useState([
