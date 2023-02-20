@@ -136,7 +136,7 @@ const OrdersList = () => {
             <>
                 <DataGrid
                     getRowHeight={() => 'auto'}
-                    rows={data || []}
+                    rows={order || []}
                     columns={columns}
                     rowsPerPageOptions={[25, 50, 100]}
                     checkboxSelection

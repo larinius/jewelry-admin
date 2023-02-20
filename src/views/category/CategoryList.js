@@ -12,13 +12,8 @@ const CategoriesList = () => {
     let navigate = useNavigate();
     const theme = useTheme();
 
-    useEffect(() => {
-        console.log(category);
-    }, [category]);
-
     const handleOpenCategory = (category) => {
         const url = `/category/item/${category.id}`;
-        console.log("CLICK:", category.id);
         navigate(url, { replace: false });
     };
 

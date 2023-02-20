@@ -84,7 +84,7 @@ const CustomerList = () => {
             <>
                 <DataGrid
                     autoHeight={true}
-                    rows={data || []}
+                    rows={customer || []}
                     columns={columns}
                     rowsPerPageOptions={[25, 50, 100]}
                     checkboxSelection

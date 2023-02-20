@@ -26,14 +26,14 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import AnimateButton from "ui-component/extended/AnimateButton";
-import { useCustomer, useSearch } from "../../hooks/apiHooks";
+import { useCustomer, useProduct } from "../../hooks/apiHooks";
 import { postClient } from "./../../utils/axios";
 
 const OrderItem = () => {
     const theme = useTheme();
-    let { id } = useParams();
-    let { search: products } = useSearch();
-    let { customer : customers } = useCustomer();
+    const { id } = useParams();
+    const { product: products } = useProduct();
+    const { customer : customers } = useCustomer();
     const queryClient = useQueryClient();
 
     const [product, setProduct] = useState([]);
@@ -61,19 +61,9 @@ const OrderItem = () => {
         if (!orderCode) {
             setOrderCode(generateOrderCode());
         }
-        console.log(orderCode);
     }, []);
 
-    console.log(products);
-    console.log(customers);
-
-    useEffect(() => {
-        console.log(products);
-        console.log(customers);
-    }, [products, customers]);
-
     const handleSelectCustomer = (customer) => {
-        console.log(customer);
         setCustomer(customer);
     };
 
@@ -161,7 +151,7 @@ const OrderItem = () => {
             {
                 onSuccess: (data) => {
                     console.log(data.status);
-                    queryClient.invalidateQueries([apiUrl]);
+                    queryClient.invalidateQueries(["order"]);
                 },
             };
 
@@ -177,7 +167,7 @@ const OrderItem = () => {
             <>
                 <Box>
                     <ReactSearchAutocomplete
-                        items={products}
+                        items={products.products || []}
                         resultStringKeyName={"title"}
                         fuseOptions={{ keys: ["code", "sku", "title"] }}
                         onSelect={handleOnSelect}
@@ -214,10 +204,10 @@ const OrderItem = () => {
                         options={customers || []}
                         autoHighlight
                         defaultValue={customer}
-                        getOptionLabel={(option) => `${option.name} ${option.phone}`}
+                        getOptionLabel={(option) => `${option.name} ${option.phone} ${option.email}`}
                         renderOption={(props, option) => (
                             <Box component="li" sx={{}} {...props}>
-                                {option.name} {option.phone}
+                                {option.name} | {option.phone} | {option.email}
                             </Box>
                         )}
                         renderInput={(params) => (

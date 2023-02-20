@@ -44,8 +44,6 @@ const ProductItem = () => {
     ];
 
     useEffect(() => {
-        console.log("URL:", id);
-        console.log(product);
         setCategory(product?.category?.title || "");
     }, [id, product]);
 
@@ -73,7 +71,7 @@ const ProductItem = () => {
                 {items.map(({ id, text }) => (
                     <Draggable key={id}>
                         <Item>
-                            <Paper elevation={3} justifyContent="center" sx={{ width: 100 }}>
+                            <Paper elevation={3} justifycontent="center" sx={{ width: 100 }}>
                                 <Stack>
                                     <Paper variant="outlined" m={5}>
                                         <Image src={Dummy} />
@@ -150,7 +148,7 @@ const ProductItem = () => {
     };
 
     const MainParamsForm = ({product}) => {
-        console.log(product);
+
         return (
             <>
                 <Box
@@ -228,7 +226,7 @@ const ProductItem = () => {
     };
 
     const Characteristics = ({product}) => {
-        console.log(product);
+
         return (
             <>
                 <Box sx={{ flexGrow: 1 }}>

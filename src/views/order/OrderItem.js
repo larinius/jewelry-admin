@@ -24,7 +24,7 @@ const OrderItem = () => {
     const theme = useTheme();
     let { id } = useParams();
     let navigate = useNavigate();
-    const {status : orderStatus} = useOrderStatus();
+    const {orderStatus } = useOrderStatus() || [];
     let {order} = useOrder(id);
     let {customer} = useCustomer(order?.user.id);
     const [products, setProducts] = useState([]);
@@ -197,7 +197,7 @@ const OrderItem = () => {
                         label="Order status"
                         onChange={handleSelectStatus}
                     >
-                        {statuses?.map((item) => {
+                        {orderStatus?.map((item) => {
                             return (
                                 <MenuItem key={item.id} value={item.id}>
                                     {item.title}

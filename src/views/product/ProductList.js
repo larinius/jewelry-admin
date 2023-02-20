@@ -17,10 +17,6 @@ const ProductList = () => {
     const {product : products} = useProduct();
     let navigate = useNavigate();
 
-    useEffect(() => {
-        console.log(products);
-    }, [products]);
-
     const handleOpenProduct = (product) => {
         console.log(product);
         const url = `/product/item/${product.id}`;
@@ -48,7 +44,7 @@ const ProductList = () => {
             <>
                 <DataGrid
                     rowHeight={80}
-                    rows={products || []}
+                    rows={products?.products || []}
                     columns={columns}
                     rowsPerPageOptions={[25, 50, 100]}
                     checkboxSelection
