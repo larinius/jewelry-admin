@@ -139,22 +139,22 @@ const OrderItem = () => {
     };
 
     const addOrder = useMutation((payload) => {
-        postClient(apiUrl, qs.stringify(payload)).then((response) => {
-            console.log(response.status);
-            if (response.status === 201) {
-                showNotification("Order created", severity.success);
-            } else {
-                showNotification("Order not created. Error", severity.error);
-            }
-            return response; // this response will be passed as the first parameter of onSuccess
-        }),
-            {
-                onSuccess: (data) => {
-                    console.log(data.status);
-                    queryClient.invalidateQueries(["order"]);
-                },
-            };
 
+        console.log(postClient);
+        postClient(apiUrl, qs.stringify(payload))
+            .then((response) => {
+                console.log(response.status);
+                if (response.status === 201) {
+                    showNotification("Order created", severity.success);
+                } else {
+                    showNotification("Order not created. Error", severity.error);
+                }
+                return response; // this response will be passed as the first parameter of onSuccess
+            })
+            .then((data) => {
+                console.log(data.status);
+                queryClient.invalidateQueries(["order"]);
+            });
         console.log(payload);
     });
 

@@ -15,7 +15,7 @@ import axios from 'axios';
 // export default axiosServices;
 
 
-const fetchClient = () => {
+export const fetchClient = () => {
     const defaultOptions = {
         baseURL: process.env.REACT_APP_API_BASE_URL,
         method: "get",
@@ -37,7 +37,7 @@ const fetchClient = () => {
     return instance;
 };
 
-const postClient = () => {
+export const postClient = () => {
     const defaultOptions = {
         baseURL: process.env.REACT_APP_API_BASE_URL,
         method: "post",
@@ -58,5 +58,3 @@ const postClient = () => {
 
     return instance;
 };
-
-export  {fetchClient, postClient};
