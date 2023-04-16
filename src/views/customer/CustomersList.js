@@ -4,19 +4,19 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { IconCopy, IconEdit, IconTrash } from "@tabler/icons";
 import { useNavigate } from "react-router-dom";
 import AnimateButton from "ui-component/extended/AnimateButton";
-import {useCustomer} from "../../hooks/apiHooks";
+import {useUser} from "../../hooks/apiHooks";
 
 const CustomerList = () => {
-    const {customer} = useCustomer();
+    const {user} = useUser();
     let navigate = useNavigate();
     const theme = useTheme();
 
-    const handleOpenCategory = (customer) => {
-        const url = `/user/item/${customer.id}`;
+    const handleOpenCategory = (user) => {
+        const url = `/user/item/${user.id}`;
         navigate(url, { replace: false });
     };
 
-    const ToolsButtons = ({ customer }) => {
+    const ToolsButtons = ({ user }) => {
         return (
             <>
                 <Stack spacing={2} direction="row" justifyContent="end">
@@ -28,7 +28,7 @@ const CustomerList = () => {
                         <IconCopy />
                     </IconButton>
 
-                    <IconButton onClick={() => handleOpenCategory(customer)}>
+                    <IconButton onClick={() => handleOpenCategory(user)}>
                         <IconEdit />
                     </IconButton>
                 </Stack>
@@ -73,7 +73,7 @@ const CustomerList = () => {
             editable: true,
             renderCell: (params) => (
                 <>
-                    <ToolsButtons customer={params.row} />
+                    <ToolsButtons user={params.row} />
                 </>
             ),
         },
@@ -84,7 +84,7 @@ const CustomerList = () => {
             <>
                 <DataGrid
                     autoHeight={true}
-                    rows={customer || []}
+                    rows={user || []}
                     columns={columns}
                     rowsPerPageOptions={[25, 50, 100]}
                     checkboxSelection
@@ -127,7 +127,7 @@ const CustomerList = () => {
                 <ButtonsArea />
             </Box>
             <Paper sx={{ p: 1 }}>
-                <Box sx={{ height: 700, flexGrow: 1 }}>
+                <Box sx={{ minHeight: 700, flexGrow: 1 }}>
                     <Grid />
                 </Box>
             </Paper>

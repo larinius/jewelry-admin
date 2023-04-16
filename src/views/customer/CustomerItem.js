@@ -17,15 +17,15 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AnimateButton from "ui-component/extended/AnimateButton";
 
-import { useCustomer, useCustomerGroup } from "../../hooks/apiHooks";
+import { useUser, useUserGroup } from "../../hooks/apiHooks";
 
 
 const CustomerItem = () => {
     const theme = useTheme();
     let { id } = useParams();
-    const {customer} = useCustomer(id);
-    const {customerGroup} = useCustomerGroup();
-    const [group, setGroup] = useState("");
+    const {user} = useUser(id);
+    const {group: groups} = useUserGroup();
+    const [groupSelected, setGroupSelected] = useState("");
     const [orders, setOrders] = useState([]);
     let navigate = useNavigate();
     const toDate = (date) => {
@@ -43,19 +43,19 @@ const CustomerItem = () => {
     };
 
     useEffect(() => {
-        if (customer !== null) {
-            setOrders(customer?.order);
+        if (user !== null) {
+            setOrders(user?.order);
         }
-    }, [customer]);
+    }, [user]);
 
     useEffect(() => {
-        if (customerGroup !== null && customer !== null) {
-            setGroup(customer?.userGroupId);
+        if (groups !== null && user !== null) {
+            setGroupSelected(user?.userGroupId);
         }
-    }, [customerGroup, customer]);
+    }, [groups, user]);
 
     const handleSelectGroup = (e) => {
-        setGroup(e.target.value);
+        setGroupSelected(e.target.value);
     };
 
     const GroupSelect = () => {
@@ -66,11 +66,11 @@ const CustomerItem = () => {
                     <Select
                         labelId="select-group-label"
                         id="select-group-helper"
-                        value={group || ""}
+                        value={groupSelected || ""}
                         label="Customer group"
                         onChange={handleSelectGroup}
                     >
-                        {customerGroups?.map((item) => {
+                        {groups?.map((item) => {
                             return (
                                 <MenuItem key={item.id} value={item.id}>
                                     {item.title}
@@ -174,7 +174,7 @@ const CustomerItem = () => {
                         <Grid item xs={12} sm={4}>
                             <Box display="flex" justifyContent="flex-start">
                                 <Stack direction={"row"}>
-                                    <TextField id="outlined-basic" label="Name" variant="outlined" defaultValue={customer?.name} />
+                                    <TextField id="outlined-basic" label="Name" variant="outlined" defaultValue={user?.name} />
                                 </Stack>
                             </Box>
                         </Grid>
@@ -184,7 +184,7 @@ const CustomerItem = () => {
                                     id="outlined-basic"
                                     label="Registered date"
                                     variant="outlined"
-                                    defaultValue={toDate(customer?.created)}
+                                    defaultValue={toDate(user?.created)}
                                 />
                             </Box>
                         </Grid>
@@ -195,7 +195,7 @@ const CustomerItem = () => {
                         </Grid>
                         <Grid item xs={12} sm={4}>
                             <Box display="flex" justifyContent="flex-start">
-                                <TextField id="outlined-basic" label="Phone" variant="outlined" defaultValue={customer?.phone} />
+                                <TextField id="outlined-basic" label="Phone" variant="outlined" defaultValue={user?.phone} />
                             </Box>
                         </Grid>
                         <Grid item xs={12} sm={4}></Grid>

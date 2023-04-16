@@ -1,22 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchClient, postClient } from "utils/axios";
+import { axiosProvider } from "utils/axios";
 
-import axios from "axios";
-
-// export const fetchClient = () => {
-//     const baseURL = process.env.REACT_APP_API_BASE_URL;
-
-//     const fetchClient = axios.create({
-//         baseURL,
-//     });
-
-//     console.log(baseURL, fetchClient);
-
-//     return { fetchClient };
-// };
 
 export function useBrand(id) {
-    // const { instance: axios } = fetchClient();
+    const { axiosInstance: axios } = axiosProvider();
 
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/brand`;
 
@@ -30,7 +17,7 @@ export function useBrand(id) {
 }
 
 export function useProduct(id) {
-    // const { instance: axios } = fetchClient();
+    const { axiosInstance: axios } = axiosProvider();
 
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/product`;
 
@@ -46,7 +33,7 @@ export function useProduct(id) {
 }
 
 export function useCategory(id) {
-    // const { instance: axios } = fetchClient();
+    const { axiosInstance: axios } = axiosProvider();
 
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/category`;
 
@@ -59,8 +46,8 @@ export function useCategory(id) {
     return { isLoading, error, refetch, category };
 }
 
-export function useCustomer(id) {
-    // const { instance: axios } = fetchClient();
+export function useUser(id) {
+    const { axiosInstance: axios } = axiosProvider();
 
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/user`;
 
@@ -68,27 +55,27 @@ export function useCustomer(id) {
 
     const { isLoading, error, data, refetch } = useQuery(["user", id], () => axios.get(query).then((res) => res.data));
 
-    const customer = data || null;
+    const user = data || null;
 
-    return { isLoading, error, refetch, customer };
+    return { isLoading, error, refetch, user };
 }
 
-export function useCustomerGroup(id) {
-    // const { instance: axios } = fetchClient();
+export function useUserGroup(id) {
+    const { axiosInstance: axios } = axiosProvider();
 
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/usergroup`;
 
     const query = id ? `${apiUrl}/${id}` : `${apiUrl}`;
 
-    const { isLoading, error, data, refetch } = useQuery(["customer group", id], () => axios.get(query).then((res) => res.data));
+    const { isLoading, error, data, refetch } = useQuery(["user group", id], () => axios.get(query).then((res) => res.data));
 
-    const customerGroup = data || null;
+    const group = data || null;
 
-    return { isLoading, error, refetch, customerGroup };
+    return { isLoading, error, refetch, group };
 }
 
 export function useOrder(id) {
-    // const { instance: axios } = fetchClient();
+    const { axiosInstance: axios } = axiosProvider();
 
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/order`;
 
@@ -102,7 +89,7 @@ export function useOrder(id) {
 }
 
 export function useOrderStatus(id) {
-    // const { instance: axios } = fetchClient();
+    const { axiosInstance: axios } = axiosProvider();
 
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/orderstatus`;
 
@@ -115,8 +102,23 @@ export function useOrderStatus(id) {
     return { isLoading, error, refetch, orderStatus };
 }
 
+export function useOrderCode() {
+    const { axiosInstance: axios } = axiosProvider();
+
+    const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/ordercode`;
+
+    const query = apiUrl;
+
+    const { isLoading, error, data, refetch } = useQuery(["new ordercode"], () => axios.get(query).then((res) => res.data));
+
+    const ordercode = data || null;
+
+    return { isLoading, error, refetch, ordercode };
+}
+
 export function useCreateOrder(order) {
-    const { postClient: axios } = postClient();
+
+    const { axiosInstance: axios } = axiosProvider();
 
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/order`;
 
@@ -136,6 +138,8 @@ export function useCreateOrder(order) {
 }
 
 export function useSearch(term) {
+
+    const { axiosInstance: axios } = axiosProvider();
 
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/search-product`;
 

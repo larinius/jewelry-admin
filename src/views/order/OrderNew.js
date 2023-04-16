@@ -16,7 +16,7 @@ import {
     TableHead,
     TableRow,
     TextField,
-    Typography
+    Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { IconTrash } from "@tabler/icons";
@@ -26,45 +26,48 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import AnimateButton from "ui-component/extended/AnimateButton";
-import { useCustomer, useProduct } from "../../hooks/apiHooks";
-import { postClient } from "./../../utils/axios";
+import { useUser, useProduct, useOrderCode, useOrder } from "../../hooks/apiHooks";
+import { axiosProvider } from "utils/axios";
 
 const OrderItem = () => {
+    const { axiosInstance: axios } = axiosProvider();
     const theme = useTheme();
     const { id } = useParams();
     const { product: products } = useProduct();
-    const { customer : customers } = useCustomer();
+    const { user: users } = useUser();
+    const { order: orders, refetch:refetchOrders, isLoading: isOrdersLoading } = useOrder(id);
+    const { ordercode : newCode } = useOrderCode();
     const queryClient = useQueryClient();
 
     const [product, setProduct] = useState([]);
     const [orderedProducts, setOrderedProducts] = useState([]);
-    const [customer, setCustomer] = useState();
+    const [user, setUser] = useState();
     const [order, setOrder] = useState([]);
     const [orderCode, setOrderCode] = useState();
     const [orderWeight, setOrderWeigt] = useState();
 
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/order`;
 
-    const generateOrderCode = () => {
-        let date = new Date();
-        let month = date.getMonth() + 1 < 10 ? `0` : "" + `${date.getMonth() + 1}`;
-        let year = date.getFullYear().toString().substr(-2);
+    // const generateOrderCode = () => {
+    //     let date = new Date();
+    //     let month = date.getMonth() + 1 < 10 ? `0` : "" + `${date.getMonth() + 1}`;
+    //     let year = date.getFullYear().toString().substr(-2);
 
-        const rnd = Math.floor(Math.random() * (1000 - 1) + 1);
+    //     const rnd = Math.floor(Math.random() * (1000 - 1) + 1);
 
-        const code = `${year}${month}${rnd}`;
+    //     const code = `${year}${month}${rnd}`;
 
-        return code;
-    };
+    //     return code;
+    // };
 
     useEffect(() => {
-        if (!orderCode) {
-            setOrderCode(generateOrderCode());
+        if (!orderCode) {            
+            setOrderCode(newCode);
         }
     }, []);
 
-    const handleSelectCustomer = (customer) => {
-        setCustomer(customer);
+    const handleSelectUser = (user) => {
+        setUser(user);
     };
 
     const handleDelete = (item) => {
@@ -110,14 +113,16 @@ const OrderItem = () => {
         let newOrder = [...order];
 
         newOrder.code = orderCode;
-        newOrder.customer = customer;
+        newOrder.user = user;
         newOrder.products = orderedProducts;
         newOrder.total = invoiceSubtotal;
         newOrder.weight = weightSubtotal;
         newOrder.discount = 0;
         newOrder.deliveryPrice = 0;
         setOrder(newOrder);
-    }, [orderedProducts, customer, orderCode, orderWeight]);
+
+        console.log(newOrder);
+    }, [orderedProducts, user, orderCode, orderWeight]);
 
     const severity = { error: "error", warning: "warning", info: "info", success: "success" };
     const [alert, setAlert] = useState(false);
@@ -139,9 +144,8 @@ const OrderItem = () => {
     };
 
     const addOrder = useMutation((payload) => {
-
-        console.log(postClient);
-        postClient(apiUrl, qs.stringify(payload))
+        axios
+            .post(apiUrl, qs.stringify(payload))
             .then((response) => {
                 console.log(response.status);
                 if (response.status === 201) {
@@ -152,10 +156,8 @@ const OrderItem = () => {
                 return response; // this response will be passed as the first parameter of onSuccess
             })
             .then((data) => {
-                console.log(data.status);
-                queryClient.invalidateQueries(["order"]);
+                refetchOrders();
             });
-        console.log(payload);
     });
 
     const handlePostOrder = () => {
@@ -201,9 +203,9 @@ const OrderItem = () => {
                 <Box>
                     <Autocomplete
                         id="customer-select"
-                        options={customers || []}
+                        options={users || []}
                         autoHighlight
-                        defaultValue={customer}
+                        defaultValue={user}
                         getOptionLabel={(option) => `${option.name} ${option.phone} ${option.email}`}
                         renderOption={(props, option) => (
                             <Box component="li" sx={{}} {...props}>
@@ -221,7 +223,7 @@ const OrderItem = () => {
                             />
                         )}
                         onChange={(e, newValue) => {
-                            handleSelectCustomer(newValue);
+                            handleSelectUser(newValue);
                         }}
                     />
                 </Box>

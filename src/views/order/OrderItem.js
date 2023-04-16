@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AnimateButton from "ui-component/extended/AnimateButton";
 
-import { useCustomer, useOrder, useOrderStatus } from "../../hooks/apiHooks";
+import { useUser, useOrder, useOrderStatus } from "../../hooks/apiHooks";
 
 const OrderItem = () => {
     const theme = useTheme();
@@ -26,7 +26,7 @@ const OrderItem = () => {
     let navigate = useNavigate();
     const {orderStatus } = useOrderStatus() || [];
     let {order} = useOrder(id);
-    let {customer} = useCustomer(order?.user.id);
+    let {user} = useUser(order?.user.id);
     const [products, setProducts] = useState([]);
     const [status, setStatus] = useState("");
 
@@ -212,8 +212,8 @@ const OrderItem = () => {
 
     const MainForm = () => {
 
-        const handleOpenCustomer = (customer) => {
-            const url = `/user/item/${customer.id}`;
+        const handleOpenUser = (user) => {
+            const url = `/user/item/${user.id}`;
             navigate(url, { replace: false });
         };
 
@@ -228,7 +228,7 @@ const OrderItem = () => {
                             <Box display="flex" justifyContent="flex-start">
                                 <Stack direction={"row"}>
                                     <TextField id="outlined-basic" label="Name" variant="outlined" defaultValue={order?.user.name} />
-                                    <IconButton onClick={() => handleOpenCustomer(customer)}>
+                                    <IconButton onClick={() => handleOpenUser(user)}>
                                         <IconEdit />
                                     </IconButton>
                                 </Stack>
