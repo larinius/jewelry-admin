@@ -1,10 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { axiosProvider } from "utils/axios";
-
+const { axiosInstance: axios } = axiosProvider();
 
 export function useBrand(id) {
-    const { axiosInstance: axios } = axiosProvider();
-
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/brand`;
 
     const query = id ? `${apiUrl}/${id}` : `${apiUrl}`;
@@ -17,8 +15,6 @@ export function useBrand(id) {
 }
 
 export function useProduct(id) {
-    const { axiosInstance: axios } = axiosProvider();
-
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/product`;
 
     const query = id ? `${apiUrl}/${id}` : `${apiUrl}`;
@@ -33,8 +29,6 @@ export function useProduct(id) {
 }
 
 export function useCategory(id) {
-    const { axiosInstance: axios } = axiosProvider();
-
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/category`;
 
     const query = id ? `${apiUrl}/${id}` : `${apiUrl}`;
@@ -47,8 +41,6 @@ export function useCategory(id) {
 }
 
 export function useUser(id) {
-    const { axiosInstance: axios } = axiosProvider();
-
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/user`;
 
     const query = id ? `${apiUrl}/${id}` : `${apiUrl}`;
@@ -61,8 +53,6 @@ export function useUser(id) {
 }
 
 export function useUserGroup(id) {
-    const { axiosInstance: axios } = axiosProvider();
-
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/usergroup`;
 
     const query = id ? `${apiUrl}/${id}` : `${apiUrl}`;
@@ -75,8 +65,6 @@ export function useUserGroup(id) {
 }
 
 export function useOrder(id) {
-    const { axiosInstance: axios } = axiosProvider();
-
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/order`;
 
     const query = id ? `${apiUrl}/${id}` : `${apiUrl}`;
@@ -89,8 +77,6 @@ export function useOrder(id) {
 }
 
 export function useOrderStatus(id) {
-    const { axiosInstance: axios } = axiosProvider();
-
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/orderstatus`;
 
     const query = id ? `${apiUrl}/${id}` : `${apiUrl}`;
@@ -103,8 +89,6 @@ export function useOrderStatus(id) {
 }
 
 export function useOrderCode() {
-    const { axiosInstance: axios } = axiosProvider();
-
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/ordercode`;
 
     const query = apiUrl;
@@ -117,9 +101,6 @@ export function useOrderCode() {
 }
 
 export function useCreateOrder(order) {
-
-    const { axiosInstance: axios } = axiosProvider();
-
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/order`;
 
     const query = `${apiUrl}`;
@@ -138,9 +119,6 @@ export function useCreateOrder(order) {
 }
 
 export function useSearch(term) {
-
-    const { axiosInstance: axios } = axiosProvider();
-
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/search-product`;
 
     const query = `${apiUrl}/?q=${term}`;
@@ -150,4 +128,14 @@ export function useSearch(term) {
     const search = data || null;
 
     return { isLoading, error, refetch, search };
+}
+
+export function useSettings() {
+    const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/settings`;
+
+    const { isLoading, error, data, refetch } = useQuery(["settings"], () => axios.get(apiUrl).then((res) => res.data));
+
+    const settings = data || [];
+
+    return { isLoading, error, refetch, settings };
 }

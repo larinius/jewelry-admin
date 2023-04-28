@@ -174,7 +174,7 @@ const CustomerItem = () => {
                         <Grid item xs={12} sm={4}>
                             <Box display="flex" justifyContent="flex-start">
                                 <Stack direction={"row"}>
-                                    <TextField id="outlined-basic" label="Name" variant="outlined" defaultValue={user?.name} />
+                                    <TextField id="outlined-basic" readOnly={true} disabled={true} label="Name" variant="outlined" defaultValue={user?.name} />
                                 </Stack>
                             </Box>
                         </Grid>
@@ -184,6 +184,8 @@ const CustomerItem = () => {
                                     id="outlined-basic"
                                     label="Registered date"
                                     variant="outlined"
+                                    readOnly={true}
+                                    disabled={true}
                                     defaultValue={toDate(user?.created)}
                                 />
                             </Box>
@@ -195,10 +197,21 @@ const CustomerItem = () => {
                         </Grid>
                         <Grid item xs={12} sm={4}>
                             <Box display="flex" justifyContent="flex-start">
-                                <TextField id="outlined-basic" label="Phone" variant="outlined" defaultValue={user?.phone} />
+                                <TextField id="outlined-basic" readOnly={true} disabled={true} label="Phone" variant="outlined" defaultValue={user?.phone} />
                             </Box>
                         </Grid>
-                        <Grid item xs={12} sm={4}></Grid>
+                        <Grid item xs={12} sm={4}>
+                        <Box display="flex" justifyContent="flex-start">
+                                <TextField
+                                    id="outlined-basic"
+                                    label="Email"
+                                    variant="outlined"
+                                    readOnly={true}
+                                    disabled={true}
+                                    defaultValue={user?.email}
+                                />
+                            </Box>
+                        </Grid>
 
                         <Grid item xs={12}>
                             <Box mt={5}>
