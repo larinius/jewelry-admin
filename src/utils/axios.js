@@ -30,5 +30,3 @@ export const axiosProvider = () => {
 
     return { axiosInstance };
 };
-
-export  {fetchClient, postClient};
