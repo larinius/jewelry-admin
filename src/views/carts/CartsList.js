@@ -4,7 +4,7 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { IconCopy, IconEdit, IconTrash } from "@tabler/icons";
 import { useNavigate } from "react-router-dom";
 import AnimateButton from "ui-component/extended/AnimateButton";
-import {useOrder} from "../../hooks/apiHooks";
+import { useOrder } from "hooks/apiHooks";
 
 const OrdersList = () => {
     const {order} = useOrder();
