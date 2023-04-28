@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { IconEdit, IconTrash, IconCopy } from "@tabler/icons";
-import { Box, Paper, Button, Stack, Grid, Container, IconButton } from "@mui/material";
-import { DataGrid, GridToolbar, GridColDef, GridValue, GetterParams } from "@mui/x-data-grid";
-import useCategory from "../../hooks/useCategory";
-import { useNavigate, Link } from "react-router-dom";
-import AnimateButton from "ui-component/extended/AnimateButton";
+import { Box, Button, IconButton, Paper, Stack } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { IconCopy, IconEdit, IconTrash } from "@tabler/icons";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import AnimateButton from "ui-component/extended/AnimateButton";
+import {useCategory} from "../../hooks/apiHooks";
 
 const CategoriesList = () => {
-    const data = useCategory()?.data;
+    const {category} = useCategory();
     let navigate = useNavigate();
     const theme = useTheme();
 
     const handleOpenCategory = (category) => {
         const url = `/category/item/${category.id}`;
-        console.log("CLICK:", category.id);
         navigate(url, { replace: false });
     };
 
@@ -78,7 +76,7 @@ const CategoriesList = () => {
         return (
             <>
                 <DataGrid
-                    rows={data || []}
+                    rows={category || []}
                     columns={columns}                    
                     rowsPerPageOptions={[25, 50, 100]}
                     checkboxSelection

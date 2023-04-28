@@ -1,27 +1,21 @@
 /* eslint-disable react/prop-types */
-import { useNavigate, Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 // import Img from 'react-optimized-image';
-import Image from "mui-image";
+import { Box, Button, IconButton, Paper, Stack } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { Box, Paper, Button, Stack, Grid, Container, IconButton } from "@mui/material";
-import AnimateButton from "ui-component/extended/AnimateButton";
-import { IconEdit, IconTrash, IconCopy } from "@tabler/icons";
-import { DataGrid, GridToolbar, GridColDef, GridValue, GetterParams } from "@mui/x-data-grid";
-import products from "menu-items/products";
-import useProduct from "../../hooks/useProduct";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import UploadButton from "@rpldy/upload-button";
+import { IconCopy, IconEdit, IconTrash } from "@tabler/icons";
+import Image from "mui-image";
+import AnimateButton from "ui-component/extended/AnimateButton";
 import Dummy from "../../assets/images/dummy.jpg";
+import {useProduct} from "../../hooks/apiHooks";
 
 const ProductList = () => {
-    const data = useProduct().data.data;
+    const {product : products} = useProduct();
     let navigate = useNavigate();
-
-    useEffect(() => {
-        console.log(data);
-    }, [data]);
 
     const handleOpenProduct = (product) => {
         console.log(product);
@@ -50,7 +44,7 @@ const ProductList = () => {
             <>
                 <DataGrid
                     rowHeight={80}
-                    rows={data?.products || []}
+                    rows={products?.products || []}
                     columns={columns}
                     rowsPerPageOptions={[25, 50, 100]}
                     checkboxSelection

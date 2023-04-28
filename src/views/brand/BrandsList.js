@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { IconEdit, IconTrash, IconCopy } from "@tabler/icons";
-import { Box, Paper, Button, Stack, Grid, Container, IconButton } from "@mui/material";
-import { DataGrid, GridToolbar, GridColDef, GridValue, GetterParams } from "@mui/x-data-grid";
-import useBrand from "../../hooks/useBrand";
-import { useNavigate, Link } from "react-router-dom";
-import AnimateButton from "ui-component/extended/AnimateButton";
+import { Box, Button, IconButton, Paper, Stack } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { IconCopy, IconEdit, IconTrash } from "@tabler/icons";
+import { useNavigate } from "react-router-dom";
+import AnimateButton from "ui-component/extended/AnimateButton";
+import {useBrand} from "../../hooks/apiHooks";
 
 const BrandsList = () => {
-    const data = useBrand();
+    const {brand} = useBrand();
     let navigate = useNavigate();
     const theme = useTheme();
 
@@ -77,7 +76,7 @@ const BrandsList = () => {
         return (
             <>
                 <DataGrid
-                    rows={data?.data || []}
+                    rows={brand || []}
                     columns={columns}
                     rowsPerPageOptions={[25, 50, 100]}
                     checkboxSelection

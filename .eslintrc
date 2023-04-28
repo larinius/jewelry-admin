@@ -12,13 +12,15 @@
             }
         }
     },
-    "parser": "@babel/eslint-parser",
+
     "parserOptions": {
+        "sourceType": "module",
         "ecmaFeatures": {
             "experimentalObjectRestSpread": true,
             "impliedStrict": true
         },
-        "ecmaVersion": 12
+        "ecmaVersion": 12,
+        "parser": "@babel/eslint-parser"
     },
     "plugins": ["prettier", "react", "react-hooks"],
     "rules": {
@@ -48,8 +50,6 @@
                 "useTabs": false,
                 "endOfLine": "auto"
             }
-            
-
         ]
     }
 }

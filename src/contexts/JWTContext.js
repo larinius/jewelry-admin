@@ -1,22 +1,19 @@
 import PropTypes from "prop-types";
 import { createContext, useEffect, useReducer } from "react";
+import { useQuery } from "@tanstack/react-query";
 
-// third-party
 import { Chance } from "chance";
 import jwtDecode from "jwt-decode";
 
-// reducer - state management
 import { LOGIN, LOGOUT } from "store/actions";
 import accountReducer from "store/accountReducer";
 
-// project imports
 import Loader from "ui-component/Loader";
-// import axios from 'utils/axios';
 import axios from "axios";
 
 const chance = new Chance();
 
-// constant
+
 const initialState = {
     isLoggedIn: false,
     isInitialized: false,
@@ -28,9 +25,6 @@ const verifyToken = (serviceToken) => {
         return false;
     }
     const decoded = jwtDecode(serviceToken);
-    /**
-     * Property 'exp' does not exist on type '<T = unknown>(token: string, options?: JwtDecodeOptions | undefined) => T'.
-     */
     return decoded.exp > Date.now() / 1000;
 };
 
@@ -50,6 +44,9 @@ const JWTContext = createContext(null);
 export const JWTProvider = ({ children }) => {
     const [state, dispatch] = useReducer(accountReducer, initialState);
 
+    const query = `${process.env.REACT_APP_API_BASE_URL}/account/me`;
+    // const { isLoading, error, data, refetch } = useQuery(["account", "me"], () => axios.get(query).then((res) => res.data));
+
     useEffect(() => {
         const init = async () => {
             try {
@@ -57,14 +54,18 @@ export const JWTProvider = ({ children }) => {
                 if (serviceToken && verifyToken(serviceToken)) {
                     setSession(serviceToken);
                     const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/account/me`);
-                    const { user } = response.data;
-                    dispatch({
-                        type: LOGIN,
-                        payload: {
-                            isLoggedIn: true,
-                            user,
-                        },
-                    });
+
+                    if (response) {
+                        const { user } = response.data;
+
+                        dispatch({
+                            type: LOGIN,
+                            payload: {
+                                isLoggedIn: true,
+                                user,
+                            },
+                        });
+                    }
                 } else {
                     dispatch({
                         type: LOGOUT,
@@ -82,10 +83,8 @@ export const JWTProvider = ({ children }) => {
     }, []);
 
     const login = async (email, password) => {
-        const q = `${process.env.REACT_APP_API_BASE_URL}/account/login`;
-        console.log(q);
-        const response = await axios.post(q, { email, password });
-        console.log(response);
+        const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/account/login`;
+        const response = await axios.post(apiUrl, { email, password });
         const { serviceToken, user } = response.data;
         setSession(serviceToken);
         dispatch({

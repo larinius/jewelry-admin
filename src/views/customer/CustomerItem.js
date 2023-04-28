@@ -1,72 +1,31 @@
 import {
-    Alert,
-    Autocomplete,
-    Avatar,
     Box,
-    Button,
-    Checkbox,
-    Container,
-    DataGrid,
-    FormControl,
-    FormControlLabel,
-    FormGroup,
-    FormHelperText,
-    FormLabel,
-    GetterParams,
-    Grid,
-    Grow,
-    IconButton,
-    InputLabel,
-    List,
-    ListItem,
-    ListItemAvatar,
-    ListItemIcon,
-    ListItemSecondaryAction,
-    ListItemText,
-    MenuItem,
-    Paper,
-    Radio,
-    RadioGroup,
-    Select,
-    Stack,
-    Tab,
-    Table,
+    Button, FormControl, Grid, IconButton,
+    InputLabel, MenuItem,
+    Paper, Select,
+    Stack, Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
-    TableRow,
-    Tabs,
-    TextField,
-    Typography,
+    TableRow, TextField,
+    Typography
 } from "@mui/material";
-import { arrayMoveImmutable as arrayMove } from "array-move";
-import { Container as ContainerDnd, Draggable } from "react-smooth-dnd";
-import { IconEdit, IconTrash, IconCopy } from "@tabler/icons";
-import { styled } from "@mui/material/styles";
-import { TabList, TabPanel, TabContext } from "@mui/lab";
-import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import { useTheme } from "@mui/material/styles";
+import { IconEdit } from "@tabler/icons";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import AnimateButton from "ui-component/extended/AnimateButton";
-import Dropzone, { useDropzone } from "react-dropzone";
-import Image from "mui-image";
-import React, { useState, useEffect, useCallback } from "react";
-import TinyMCE from "ui-component/TinyMCE";
-import { useNavigate, Link } from "react-router-dom";
 
-import useCustomer from "../../hooks/useCustomer";
-import useCustomerGroup from "../../hooks/useCustomerGroup";
-import useProduct from "../../hooks/useProduct";
+import { useUser, useUserGroup } from "../../hooks/apiHooks";
 
-import Dummy from "../../assets/images/dummy.jpg";
 
 const CustomerItem = () => {
     const theme = useTheme();
     let { id } = useParams();
-    const customer = useCustomer(id)?.data;
-    const customerGroups = useCustomerGroup()?.data;
-    const [group, setGroup] = useState("");
+    const {user} = useUser(id);
+    const {group: groups} = useUserGroup();
+    const [groupSelected, setGroupSelected] = useState("");
     const [orders, setOrders] = useState([]);
     let navigate = useNavigate();
     const toDate = (date) => {
@@ -84,19 +43,19 @@ const CustomerItem = () => {
     };
 
     useEffect(() => {
-        if (customer !== null) {
-            setOrders(customer?.order);
+        if (user !== null) {
+            setOrders(user?.order);
         }
-    }, [customer]);
+    }, [user]);
 
     useEffect(() => {
-        if (customerGroups !== null && customer !== null) {
-            setGroup(customer?.userGroupId);
+        if (groups !== null && user !== null) {
+            setGroupSelected(user?.userGroupId);
         }
-    }, [customerGroups, customer]);
+    }, [groups, user]);
 
     const handleSelectGroup = (e) => {
-        setGroup(e.target.value);
+        setGroupSelected(e.target.value);
     };
 
     const GroupSelect = () => {
@@ -107,11 +66,11 @@ const CustomerItem = () => {
                     <Select
                         labelId="select-group-label"
                         id="select-group-helper"
-                        value={group || ""}
+                        value={groupSelected || ""}
                         label="Customer group"
                         onChange={handleSelectGroup}
                     >
-                        {customerGroups?.map((item) => {
+                        {groups?.map((item) => {
                             return (
                                 <MenuItem key={item.id} value={item.id}>
                                     {item.title}
@@ -215,7 +174,7 @@ const CustomerItem = () => {
                         <Grid item xs={12} sm={4}>
                             <Box display="flex" justifyContent="flex-start">
                                 <Stack direction={"row"}>
-                                    <TextField id="outlined-basic" label="Name" variant="outlined" defaultValue={customer?.name} />
+                                    <TextField id="outlined-basic" readOnly={true} disabled={true} label="Name" variant="outlined" defaultValue={user?.name} />
                                 </Stack>
                             </Box>
                         </Grid>
@@ -225,7 +184,9 @@ const CustomerItem = () => {
                                     id="outlined-basic"
                                     label="Registered date"
                                     variant="outlined"
-                                    defaultValue={toDate(customer?.created)}
+                                    readOnly={true}
+                                    disabled={true}
+                                    defaultValue={toDate(user?.created)}
                                 />
                             </Box>
                         </Grid>
@@ -236,10 +197,21 @@ const CustomerItem = () => {
                         </Grid>
                         <Grid item xs={12} sm={4}>
                             <Box display="flex" justifyContent="flex-start">
-                                <TextField id="outlined-basic" label="Phone" variant="outlined" defaultValue={customer?.phone} />
+                                <TextField id="outlined-basic" readOnly={true} disabled={true} label="Phone" variant="outlined" defaultValue={user?.phone} />
                             </Box>
                         </Grid>
-                        <Grid item xs={12} sm={4}></Grid>
+                        <Grid item xs={12} sm={4}>
+                        <Box display="flex" justifyContent="flex-start">
+                                <TextField
+                                    id="outlined-basic"
+                                    label="Email"
+                                    variant="outlined"
+                                    readOnly={true}
+                                    disabled={true}
+                                    defaultValue={user?.email}
+                                />
+                            </Box>
+                        </Grid>
 
                         <Grid item xs={12}>
                             <Box mt={5}>

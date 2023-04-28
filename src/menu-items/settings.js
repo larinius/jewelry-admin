@@ -4,7 +4,7 @@ import { IconSettings } from '@tabler/icons';
 // constant
 const icons = { IconSettings };
 
-// ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
+// ==============================|| SETTINGS PAGE & MENU ITEMS ||============================== //
 
 const other = {
     id: 'settings',
@@ -14,7 +14,7 @@ const other = {
             id: 'site-settings',
             title: 'Settings',
             type: 'item',
-            url: '/settings',
+            url: '/settings/list',
             icon: icons.IconSettings,
             breadcrumbs: false
         }

@@ -1,63 +1,34 @@
-/**
- * axios setup to use mock service
- */
-
-// import axios from 'axios';
-
-// const axiosServices = axios.create();
-
-// // interceptor for http
-// axiosServices.interceptors.response.use(
-//     (response) => response,
-//     (error) => Promise.reject((error.response && error.response.data) || 'Wrong Services')
-// );
-
-// export default axiosServices;
-
 import axios from "axios";
 
-const fetchClient = () => {
-    const defaultOptions = {
-        baseURL: process.env.REACT_APP_API_BASE_URL,
-        method: "get",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    };
+export const axiosProvider = () => {
+    const serviceToken = window.localStorage.getItem("serviceToken");
 
-    // Create instance
-    let instance = axios.create(defaultOptions);
+    const baseURL = process.env.REACT_APP_API_BASE;
 
-    // Set the AUTH token for any request
-    instance.interceptors.request.use(function (config) {
-        const token = localStorage.getItem("serviceToken");
-        config.headers.Authorization = token ? `Bearer ${token}` : "";
-        return config;
+    const axiosInstance = axios.create({
+        baseURL,
+        headers: { Authorization: `Bearer ${serviceToken}` },
     });
 
-    return instance;
-};
+    axiosInstance.interceptors.request.use(async (req) => {
+        if (serviceToken) {
+            req.headers.Authorization = `Bearer ${serviceToken}`;
+        }
 
-const postClient = () => {
-    const defaultOptions = {
-        baseURL: process.env.REACT_APP_API_BASE_URL,
-        method: "post",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-    };
-
-    // Create instance
-    let instance = axios.create(defaultOptions);
-
-    // Set the AUTH token for any request
-    instance.interceptors.request.use(function (config) {
-        const token = localStorage.getItem("serviceToken");
-        config.headers.Authorization = token ? `Bearer ${token}` : "";
-        return config;
+        return req;
     });
 
-    return instance;
+    axiosInstance.interceptors.response.use(
+        function (response) {
+            return response;
+        },
+        function (error) {
+            console.log(`Response error ${error.response?.status}`);
+            return Promise.reject(error);
+        },
+    );
+
+    return { axiosInstance };
 };
 
 export  {fetchClient, postClient};

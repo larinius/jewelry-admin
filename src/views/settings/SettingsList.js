@@ -7,12 +7,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AnimateButton from "ui-component/extended/AnimateButton";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useOrder } from "../../hooks/apiHooks";
+import { useSettings } from "../../hooks/apiHooks";
 import { axiosProvider } from "utils/axios";
 
-const OrdersList = () => {
+const SettingsList = () => {
     const { axiosInstance: axios } = axiosProvider();
-    const { order } = useOrder();
+    const { settings } = useSettings();
     const [selectionModel, setSelectionModel] = useState([]);
 
     let navigate = useNavigate();
@@ -20,7 +20,7 @@ const OrdersList = () => {
 
     const [selectedRows, setSelectedRows] = useState([]);
 
-    const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/order`;
+    const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/settings`;
     const queryClient = useQueryClient();
 
     const severity = { error: "error", warning: "warning", info: "info", success: "success" };
@@ -45,44 +45,44 @@ const OrdersList = () => {
     const handleSelection = (newSelection) => {
         setSelectionModel(newSelection);
         const selectedIDs = new Set(newSelection);
-        const newSelectedRows = order.filter((r) => selectedIDs.has(r.id));
+        const newSelectedRows = settings.filter((r) => selectedIDs.has(r.id));
         setSelectedRows(newSelectedRows);
     };
 
-    const handleOpenOrder = (order) => {
-        const url = `/order/item/${order.id}`;
+    const handleOpen = (setting) => {
+        const url = `/settings/item/${setting.id}`;
         navigate(url, { replace: false });
     };
 
-    const handleNewOrder = (order) => {
-        const url = `/order/new`;
+    const handleNew = (setting) => {
+        const url = `/settings/new`;
         navigate(url, { replace: false });
     };
 
-    const handleDelete = (order) => {
+    const handleDelete = (setting) => {
         selectedRows.map((item) => {
-            removeOrder.mutate(item.id);
+            removeSetting.mutate(item.id);
         });
     };
 
-    const removeOrder = useMutation((payload) => {
+    const removeSetting = useMutation((payload) => {
         axios
             .delete(`${apiUrl}/${payload}`)
             .then((response) => {
                 if (response.status === 204) {
-                    showNotification(`Order ${payload} deleted`, severity.success);
+                    showNotification(`Setting ${payload} deleted`, severity.success);
                 } else {
-                    showNotification(`Order ${payload} not deleted. Error`, severity.error);
+                    showNotification(`Setting ${payload} not deleted. Error`, severity.error);
                 }
-                return response; // this response will be passed as the first parameter of onSuccess
+                return response; 
             })
             .then((data) => {
                 console.log(data.status);
-                queryClient.invalidateQueries(["order"]);
+                queryClient.invalidateQueries(["settings"]);
             });
     });
 
-    const ToolsButtons = ({ order }) => {
+    const ToolsButtons = ({ setting }) => {
         return (
             <>
                 <Stack spacing={2} direction="row" justifyContent="end">
@@ -94,7 +94,7 @@ const OrdersList = () => {
                         <IconCopy />
                     </IconButton> */}
 
-                    <IconButton onClick={() => handleOpenOrder(order)}>
+                    <IconButton onClick={() => handleOpen(setting)}>
                         <IconEdit />
                     </IconButton>
                 </Stack>
@@ -104,55 +104,21 @@ const OrdersList = () => {
 
     const columns = [
         { field: "id", headerName: "ID", width: 90 },
-        { field: "code", headerName: "Code", width: 120 },
         {
-            field: "params.value.user.name",
-            headerName: "Client",
+            field: "params.value",
+            headerName: "Title",
             width: 150,
             editable: false,
-            renderCell: (params) => <>{params.row.user.name}</>,
+            renderCell: (params) => <>{params.row.title}</>,
         },
         {
-            field: "status",
-            headerName: "Status",
-            type: "number",
-            width: 110,
+            field: "value",
+            headerName: "Value",
+            width: 200,
             editable: false,
-            renderCell: (params) => <>{params.row.status.title}</>,
+            renderCell: (params) => <>{params.row.value}</>,
         },
-        {
-            field: "created",
-            headerName: "Date",
-            width: 150,
-            editable: false,
-            renderCell: (params) => {
-                var date = new Date(params.row.created).toLocaleDateString("en-GB", {
-                    localeMatcher: "lookup",
-                    year: "2-digit",
-                    month: "short",
-                    day: "numeric",
-                    hour12: false,
-                    hour: "2-digit",
-                    minute: "2-digit",
-                });
 
-                return <>{date}</>;
-            },
-        },
-        {
-            field: "weight",
-            headerName: "Weight",
-            type: "number",
-            width: 110,
-            editable: false,
-        },
-        {
-            field: "total",
-            headerName: "Total",
-            type: "number",
-            width: 110,
-            editable: false,
-        },
         {
             field: "tools",
             headerName: "Tools",
@@ -160,7 +126,7 @@ const OrdersList = () => {
             editable: false,
             renderCell: (params) => (
                 <>
-                    <ToolsButtons order={params.row} />
+                    <ToolsButtons setting={params.row} />
                 </>
             ),
         },
@@ -192,7 +158,7 @@ const OrdersList = () => {
                     <AnimateButton></AnimateButton>
                     <AnimateButton>
                         <Button
-                            onClick={handleNewOrder}
+                            onClick={handleNew}
                             disableElevation
                             size="small"
                             variant="contained"
@@ -211,7 +177,7 @@ const OrdersList = () => {
             <>
                 <DataGrid
                     getRowHeight={() => "auto"}
-                    rows={order || []}
+                    rows={settings || []}
                     columns={columns}
                     rowsPerPageOptions={[25, 50, 100]}
                     checkboxSelection
@@ -239,4 +205,4 @@ const OrdersList = () => {
     );
 };
 
-export default OrdersList;
+export default SettingsList;

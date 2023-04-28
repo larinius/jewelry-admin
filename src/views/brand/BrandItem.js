@@ -1,52 +1,24 @@
-import {
-    Box,
-    Paper,
-    Button,
-    Stack,
-    Grid,
-    Container,
-    TextField,
-    Tabs,
-    Tab,
-    Typography,
-    MenuItem,
-    FormLabel,
-    FormGroup,
-    FormControl,
-    FormControlLabel,
-    Checkbox,
-    Radio,
-    RadioGroup,
-    IconButton,
-} from "@mui/material";
-import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { useTheme } from "@mui/material/styles";
-import AnimateButton from "ui-component/extended/AnimateButton";
-import Image from "mui-image";
-import React, { useState, useEffect, useCallback } from "react";
-import { styled } from "@mui/material/styles";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import Dummy from "../../assets/images/dummy.jpg";
+import {
+    Box, Button, Checkbox, FormControl,
+    FormControlLabel, FormLabel, Grid, Paper, Radio,
+    RadioGroup, Stack, Tab, TextField, Typography
+} from "@mui/material";
+import { styled, useTheme } from "@mui/material/styles";
+import Image from "mui-image";
+import React from "react";
+import { useParams } from "react-router-dom";
+import AnimateButton from "ui-component/extended/AnimateButton";
 import TinyMCE from "ui-component/TinyMCE";
-import useProduct from "../../hooks/useProduct";
-import Dropzone, { useDropzone } from "react-dropzone";
-import { Container as ContainerDnd, Draggable } from "react-smooth-dnd";
-import { arrayMoveImmutable as arrayMove } from "array-move";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
-import { IconGripHorizontal, IconPlus } from "@tabler/icons";
-import useBrand from "../../hooks/useBrand";
+import Dummy from "../../assets/images/dummy.jpg";
+import {useBrand} from "../../hooks/apiHooks";
 
 const BrandItem = () => {
     const theme = useTheme();
     let { id } = useParams();
-    let brand = useBrand(id)?.data;
+    let {brand} = useBrand(id);
 
     const [value, setValue] = React.useState("1");
     const handleChange = (event, newValue) => {
