@@ -11,14 +11,19 @@ import { IconCopy, IconEdit, IconTrash } from "@tabler/icons";
 import Image from "mui-image";
 import AnimateButton from "ui-component/extended/AnimateButton";
 import Dummy from "../../assets/images/dummy.jpg";
-import {useProduct} from "../../hooks/apiHooks";
+import { useProduct } from "../../hooks/apiHooks";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 const ProductList = () => {
-    const {product : products} = useProduct();
+    const location = useLocation().pathname;
+    const search = useSelector((state) => state.search);
+    const searchString = search.pages[location] || "";
+
+    const { product: products } = useProduct({ params: searchString });
     let navigate = useNavigate();
 
     const handleOpenProduct = (product) => {
-        console.log(product);
         const url = `/product/item/${product.id}`;
         navigate(url, { replace: false });
     };
@@ -114,7 +119,10 @@ const ProductList = () => {
                 return (
                     <>
                         <Link to={`/product/item/${params.row.id}`}>
-                            <Thumb src={params.row.image.length !== 0 ? params.row.image[0]?.path.replace('/product/', "/thumb/") : Dummy  } size={75} />
+                            <Thumb
+                                src={params.row.image.length !== 0 ? params.row.image[0]?.path.replace("/product/", "/thumb/") : Dummy}
+                                size={75}
+                            />
                         </Link>
                     </>
                 );

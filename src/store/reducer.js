@@ -7,21 +7,30 @@ import customizationReducer from './customizationReducer';
 import snackbarReducer from './snackbarReducer';
 import cartReducer from './cartReducer';
 import kanbanReducer from './kanbanReducer';
+import searchReducer from './searchReducer';
 
 // ==============================|| COMBINE REDUCER ||============================== //
 
-const reducer = combineReducers({
+const searchPersistConfig = {
+    key: 'search',
+    storage,
+    keyPrefix: 'berry-',
+  };
+
+
+  const reducer = combineReducers({
     customization: customizationReducer,
     snackbar: snackbarReducer,
     cart: persistReducer(
-        {
-            key: 'cart',
-            storage,
-            keyPrefix: 'berry-'
-        },
-        cartReducer
+      {
+        key: 'cart',
+        storage,
+        keyPrefix: 'berry-',
+      },
+      cartReducer
     ),
-    kanban: kanbanReducer
-});
+    kanban: kanbanReducer,
+    search: persistReducer(searchPersistConfig, searchReducer),
+  });
 
 export default reducer;

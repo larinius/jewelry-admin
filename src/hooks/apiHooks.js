@@ -14,14 +14,23 @@ export function useBrand(id) {
     return { isLoading, error, refetch, brand };
 }
 
-export function useProduct(id) {
+export function useProduct({id=null, params=""}) {
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/product`;
 
-    const query = id ? `${apiUrl}/${id}` : `${apiUrl}`;
+    let query = id ? `${apiUrl}/${id}` : `${apiUrl}`;
+
+    if(!id && params !== ""){
+        query = query + `?q=${params}`;
+    }
 
     const key = id ? id : "all";
 
-    const { isLoading, error, data, refetch } = useQuery(["product", key], () => axios.get(query).then((res) => res.data));
+    const { isLoading, error, data, refetch } = useQuery(["product", key, params], () => axios.get(query).then((res) => res.data), {
+        retry: 0,
+        refetchOnWindowFocus: false,
+        refetchOnMount: false,
+        staleTime: 10000,
+      });
 
     const product = !isLoading && !error ? data : [];
 
