@@ -35,7 +35,7 @@ const ProductItem = () => {
 
     const theme = useTheme();
     let { id } = useParams();
-    let {product} = useProduct(id);
+    let {product} = useProduct({id:id});
 
     const categories = [
         { id: 1, title: "Rings" },
