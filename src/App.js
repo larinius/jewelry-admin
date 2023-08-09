@@ -23,10 +23,8 @@ import { JWTProvider } from "contexts/JWTContext";
 // ==== Custom packages ==============================================//
 
 import Uploady from "@rpldy/uploady";
-
-import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 // ==============================|| APP ||============================== //
 
 const queryClient = new QueryClient();

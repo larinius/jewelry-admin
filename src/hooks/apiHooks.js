@@ -14,14 +14,23 @@ export function useBrand(id) {
     return { isLoading, error, refetch, brand };
 }
 
-export function useProduct(id) {
+export function useProduct({ id = null, params = "" }) {
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/product`;
 
-    const query = id ? `${apiUrl}/${id}` : `${apiUrl}`;
+    let query = id ? `${apiUrl}/${id}` : `${apiUrl}`;
+
+    if (!id && params !== "") {
+        query = query + `?q=${params}`;
+    }
 
     const key = id ? id : "all";
 
-    const { isLoading, error, data, refetch } = useQuery(["product", key], () => axios.get(query).then((res) => res.data));
+    const { isLoading, error, data, refetch } = useQuery(["product", key, params], () => axios.get(query).then((res) => res.data), {
+        retry: 0,
+        refetchOnWindowFocus: false,
+        refetchOnMount: false,
+        staleTime: 10000,
+    });
 
     const product = !isLoading && !error ? data : [];
 
@@ -40,12 +49,23 @@ export function useCategory(id) {
     return { isLoading, error, refetch, category };
 }
 
-export function useUser(id) {
+export function useUser({ id = null, params = "" }) {
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/user`;
 
-    const query = id ? `${apiUrl}/${id}` : `${apiUrl}`;
+    let query = id ? `${apiUrl}/${id}` : `${apiUrl}`;
 
-    const { isLoading, error, data, refetch } = useQuery(["user", id], () => axios.get(query).then((res) => res.data));
+    if (!id && params !== "") {
+        query = query + `?q=${params}`;
+    }
+
+    const key = id ? id : "all";
+
+    const { isLoading, error, data, refetch } = useQuery(["user", key, params], () => axios.get(query).then((res) => res.data), {
+        retry: 0,
+        refetchOnWindowFocus: false,
+        refetchOnMount: false,
+        staleTime: 10000,
+    });
 
     const user = data || null;
 
@@ -64,12 +84,23 @@ export function useUserGroup(id) {
     return { isLoading, error, refetch, group };
 }
 
-export function useOrder(id) {
+export function useOrder({ id = null, params = "" }) {
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/order`;
 
-    const query = id ? `${apiUrl}/${id}` : `${apiUrl}`;
+    let query = id ? `${apiUrl}/${id}` : `${apiUrl}`;
 
-    const { isLoading, error, data, refetch } = useQuery(["order", id], () => axios.get(query).then((res) => res.data));
+    if (!id && params !== "") {
+        query = query + `?q=${params}`;
+    }
+
+    const key = id ? id : "all";
+
+    const { isLoading, error, data, refetch } = useQuery(["order", key, params], () => axios.get(query).then((res) => res.data), {
+        retry: 0,
+        refetchOnWindowFocus: false,
+        refetchOnMount: false,
+        staleTime: 10000,
+    });
 
     const order = data || null;
 

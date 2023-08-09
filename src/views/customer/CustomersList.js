@@ -5,9 +5,15 @@ import { IconCopy, IconEdit, IconTrash } from "@tabler/icons";
 import { useNavigate } from "react-router-dom";
 import AnimateButton from "ui-component/extended/AnimateButton";
 import {useUser} from "../../hooks/apiHooks";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 const CustomerList = () => {
-    const {user} = useUser();
+    const location = useLocation().pathname;
+    const search = useSelector((state) => state.search);
+    const searchString = search.pages[location] || "";
+
+    const {user} = useUser({ params: searchString });
     let navigate = useNavigate();
     const theme = useTheme();
 
@@ -41,6 +47,12 @@ const CustomerList = () => {
         {
             field: "name",
             headerName: "Name",
+            width: 150,
+            editable: true,
+        },
+        {
+            field: "phone",
+            headerName: "Phone",
             width: 150,
             editable: true,
         },
