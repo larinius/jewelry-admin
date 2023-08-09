@@ -32,11 +32,12 @@ import { axiosProvider } from "utils/axios";
 const OrderItem = () => {
     const { axiosInstance: axios } = axiosProvider();
     const theme = useTheme();
+
     const { id } = useParams();
     const { product: products } = useProduct();
     const { user: users } = useUser();
-    const { order: orders, refetch:refetchOrders, isLoading: isOrdersLoading } = useOrder(id);
-    const { ordercode : newCode } = useOrderCode();
+    const { order: orders, refetch: refetchOrders, isLoading: isOrdersLoading } = useOrder({ id: id });
+    const { ordercode: newCode } = useOrderCode();
 
     const [product, setProduct] = useState([]);
     const [orderedProducts, setOrderedProducts] = useState([]);
@@ -60,7 +61,7 @@ const OrderItem = () => {
     // };
 
     useEffect(() => {
-        if (!orderCode) {            
+        if (!orderCode) {
             setOrderCode(newCode);
         }
     }, []);
