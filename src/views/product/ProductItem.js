@@ -3,9 +3,23 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import {
-    Box, Button, Checkbox, Container, FormControl,
-    FormControlLabel, FormLabel, Grid, IconButton, MenuItem, Paper, Radio,
-    RadioGroup, Stack, Tab, TextField, Typography
+    Box,
+    Button,
+    Checkbox,
+    Container,
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    Grid,
+    IconButton,
+    MenuItem,
+    Paper,
+    Radio,
+    RadioGroup,
+    Stack,
+    Tab,
+    TextField,
+    Typography,
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 import { IconGripHorizontal, IconPlus } from "@tabler/icons";
@@ -18,7 +32,7 @@ import { Container as ContainerDnd, Draggable } from "react-smooth-dnd";
 import AnimateButton from "ui-component/extended/AnimateButton";
 import TinyMCE from "ui-component/TinyMCE";
 import Dummy from "../../assets/images/dummy.jpg";
-import {useProduct} from "../../hooks/apiHooks";
+import { useProduct } from "../../hooks/apiHooks";
 
 const ProductItem = () => {
     const [value, setValue] = React.useState("1");
@@ -34,8 +48,8 @@ const ProductItem = () => {
     };
 
     const theme = useTheme();
-    let { id } = useParams();
-    let {product} = useProduct({id:id});
+    const { id } = useParams();
+    const { product } = useProduct({ id: id });
 
     const categories = [
         { id: 1, title: "Rings" },
@@ -147,8 +161,7 @@ const ProductItem = () => {
         );
     };
 
-    const MainParamsForm = ({product}) => {
-
+    const MainParamsForm = ({ product }) => {
         return (
             <>
                 <Box
@@ -191,7 +204,7 @@ const ProductItem = () => {
         );
     };
 
-    const SEOParamsForm = ({product}) => {
+    const SEOParamsForm = ({ product }) => {
         return (
             <>
                 <Box
@@ -225,8 +238,7 @@ const ProductItem = () => {
         );
     };
 
-    const Characteristics = ({product}) => {
-
+    const Characteristics = ({ product }) => {
         return (
             <>
                 <Box sx={{ flexGrow: 1 }}>
@@ -240,16 +252,21 @@ const ProductItem = () => {
                         </Grid>
                         <Grid item xs={12} sm={4} md={4} lg={6} xl={6}>
                             <Item>
-                                    <Container>
-                                <Box display="flex" justifyContent="flex-end">
-                                    <Paper elevation={3}>
-                                        <Image
-                                            src={product?.image ? product?.image[0]?.path : Dummy}
-                                            sx={{ maxHeight: 300, maxWidth: 300, display: { xs: "none", md: "inline" }, fit: "contain" }}
-                                        />
-                                    </Paper>
-                                </Box>
-                                    </Container>
+                                <Container>
+                                    <Box display="flex" justifyContent="flex-end">
+                                        <Paper elevation={3}>
+                                            <Image
+                                                src={product?.image ? product?.image[0]?.path : Dummy}
+                                                sx={{
+                                                    maxHeight: 300,
+                                                    maxWidth: 300,
+                                                    display: { xs: "none", md: "inline" },
+                                                    fit: "contain",
+                                                }}
+                                            />
+                                        </Paper>
+                                    </Box>
+                                </Container>
                             </Item>
                         </Grid>
                     </Grid>
@@ -268,7 +285,7 @@ const ProductItem = () => {
         );
     };
 
-    const PropertyTabs = ({product}) => {
+    const PropertyTabs = ({ product }) => {
         return (
             <>
                 <Box sx={{ width: "100%", typography: "body1" }}>
@@ -298,7 +315,7 @@ const ProductItem = () => {
                                     <Box m={2}>
                                         <Paper variant="outlined">
                                             {/* <Image src={product.image[0].path? product.image[0].path: Dummy} sx={{ fit: "contain" }} /> */}
-                                            <Image src={ Dummy} sx={{ fit: "contain" }} />
+                                            <Image src={Dummy} sx={{ fit: "contain" }} />
                                         </Paper>
                                     </Box>
                                 </Box>

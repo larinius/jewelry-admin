@@ -1,16 +1,23 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 import {
     Box,
-    Button, FormControl, Grid, IconButton,
-    InputLabel, MenuItem,
-    Paper, Select,
-    Stack, Table,
+    Button,
+    FormControl,
+    Grid,
+    IconButton,
+    InputLabel,
+    MenuItem,
+    Paper,
+    Select,
+    Stack,
+    Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
-    TableRow, TextField,
-    Typography
+    TableRow,
+    TextField,
+    Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { IconEdit, IconTrash } from "@tabler/icons";
@@ -22,11 +29,13 @@ import { useUser, useOrder, useOrderStatus } from "../../hooks/apiHooks";
 
 const OrderItem = () => {
     const theme = useTheme();
-    let { id } = useParams();
-    let navigate = useNavigate();
-    const {orderStatus } = useOrderStatus() || [];
-    let {order} = useOrder({id:id});
-    let {user} = useUser(order?.user.id);
+    const navigate = useNavigate();
+
+    const { id } = useParams();
+    const { orderStatus } = useOrderStatus() || [];
+    const { order } = useOrder({ id: id });
+    const { user } = useUser({ id: order?.user.id });
+
     const [products, setProducts] = useState([]);
     const [status, setStatus] = useState("");
 
@@ -211,7 +220,6 @@ const OrderItem = () => {
     };
 
     const MainForm = () => {
-
         const handleOpenUser = (user) => {
             const url = `/user/item/${user.id}`;
             navigate(url, { replace: false });
@@ -220,7 +228,7 @@ const OrderItem = () => {
         return (
             <>
                 <Box m={2}>
-                <Typography variant="h2" gutterBottom m={3}>
+                    <Typography variant="h2" gutterBottom m={3}>
                         Order info
                     </Typography>
                     <Grid container spacing={2}>

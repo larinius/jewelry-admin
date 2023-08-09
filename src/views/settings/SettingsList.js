@@ -15,7 +15,7 @@ const SettingsList = () => {
     const { settings } = useSettings();
     const [selectionModel, setSelectionModel] = useState([]);
 
-    let navigate = useNavigate();
+    const navigate = useNavigate();
     const theme = useTheme();
 
     const [selectedRows, setSelectedRows] = useState([]);
