@@ -9,10 +9,16 @@ import AnimateButton from "ui-component/extended/AnimateButton";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useOrder } from "../../hooks/apiHooks";
 import { axiosProvider } from "utils/axios";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 const OrdersList = () => {
+    const location = useLocation().pathname;
+    const search = useSelector((state) => state.search);
+    const searchString = search.pages[location] || "";
+
     const { axiosInstance: axios } = axiosProvider();
-    const { order } = useOrder();
+    const { order } = useOrder({ params: searchString });
     const [selectionModel, setSelectionModel] = useState([]);
 
     let navigate = useNavigate();
