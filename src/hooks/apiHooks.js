@@ -52,7 +52,7 @@ export function useCategory(id) {
 export function useUser({ id = null, params = "" }) {
     const apiUrl = `${process.env.REACT_APP_API_BASE_URL}/user`;
 
-    let query = id ? `${apiUrl}/${id}` : `${apiUrl}`;
+    let query = id !== undefined && id !== null ? `${apiUrl}/${id}` : `${apiUrl}`;
 
     if (!id && params !== "") {
         query = query + `?q=${params}`;

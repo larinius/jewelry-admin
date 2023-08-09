@@ -9,7 +9,6 @@ const initialState = {
 // ==============================|| SEARCH REDUCER ||============================== //
 
 const searchReducer = (state = initialState, action) => {
-    console.log(action);
     switch (action.type) {
         case actionTypes.SEARCH_SAVE:
             const updatedPages = {

@@ -138,8 +138,6 @@ const SearchSection = () => {
         } else {
             setValue("");
         }
-
-        console.log(search);
     }, [search.pages, location]);
 
     const handleSubmit = (event) => {

@@ -22,11 +22,13 @@ import { useUser, useOrder, useOrderStatus } from "../../hooks/apiHooks";
 
 const OrderItem = () => {
     const theme = useTheme();
-    let { id } = useParams();
-    let navigate = useNavigate();
+    const navigate = useNavigate();
+
+    const { id } = useParams();
     const {orderStatus } = useOrderStatus() || [];
-    let {order} = useOrder(id);
-    let {user} = useUser(order?.user.id);
+    const {order} = useOrder({id:id});
+    const {user} = useUser({id:order?.user.id});
+    
     const [products, setProducts] = useState([]);
     const [status, setStatus] = useState("");
 

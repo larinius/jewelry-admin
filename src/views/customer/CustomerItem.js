@@ -23,7 +23,7 @@ import { useUser, useUserGroup } from "../../hooks/apiHooks";
 const CustomerItem = () => {
     const theme = useTheme();
     let { id } = useParams();
-    const {user} = useUser(id);
+    const {user} = useUser({id:id});
     const {group: groups} = useUserGroup();
     const [groupSelected, setGroupSelected] = useState("");
     const [orders, setOrders] = useState([]);

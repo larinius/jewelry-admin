@@ -25,7 +25,7 @@ const OrderItem = () => {
     let { id } = useParams();
     let navigate = useNavigate();
     const {orderStatus } = useOrderStatus() || [];
-    let {order} = useOrder(id);
+    let {order} = useOrder({id:id});
     let {user} = useUser(order?.user.id);
     const [products, setProducts] = useState([]);
     const [status, setStatus] = useState("");
